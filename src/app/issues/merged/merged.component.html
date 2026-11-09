@@ -1,0 +1,54 @@
+@if (hashes().length > 1) {
+  <gt-panel flush>
+    <span slot="actions" class="merged__count" i18n
+      >{{ selectedCount() // i18n(ph="selected") }} of
+      {{ hashes().length // i18n(ph="total") }} selected</span
+    >
+    <button
+      slot="actions"
+      mat-stroked-button
+      type="button"
+      (click)="unmerge()"
+      [disabled]="!allowUnmerge()"
+      i18n
+      >Unmerge</button
+    >
+    <gt-list flush>
+      @for (hash of hashes(); track hash.id) {
+        <gt-list-row>
+          <mat-checkbox
+            class="merged__check"
+            (change)="toggleCheck(hash.id)"
+            [checked]="false"
+            i18n-aria-label
+            aria-label="Select {{ hash.id // i18n(ph='hash') }}"
+          />
+          <span class="merged__title">
+            @if (hash.latestEvent?.title) {
+              {{ hash.latestEvent?.title }}
+            } @else {
+              <ng-container i18n
+                >No title found for this merged issue</ng-container
+              >
+            }
+          </span>
+          <span slot="description" class="gt-mono merged__hash">{{ hash.id }}</span>
+        </gt-list-row>
+      }
+    </gt-list>
+    <span slot="footer-hint" i18n
+      >Unmerging moves the selected hashes and their events to a new issue. Keep
+      at least one hash on this issue.</span
+    >
+  </gt-panel>
+} @else if (!loading() && !failed()) {
+  <gt-panel>
+    <gt-empty-state
+      icon="breaking_news"
+      i18n-title
+      title="Nothing merged"
+      i18n-message
+      message="Merge similar issues from the issue list. Their hashes show here and can be split off again."
+    />
+  </gt-panel>
+}

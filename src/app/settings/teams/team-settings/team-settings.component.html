@@ -1,49 +1,64 @@
-<mat-card *ngIf="team$ | async as team">
-  <mat-card-title i18n>Settings</mat-card-title>
+@if (team(); as team) {
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <gt-settings-section #slugSection i18n-title title="Slug" panel>
+      @if (canWriteTeam()) {
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <input
+            matInput
+            formControlName="slug"
+            [attr.aria-labelledby]="slugSection.titleId"
+          />
+          <mat-error>
+            @if (slug?.errors?.required) {
+              <span i18n>Enter a team name</span>
+            }
+            @if (slug?.errors?.pattern) {
+              <span i18n
+                >Use only letters, numbers, underscores and/or hyphens</span
+              >
+            }
+            @if (slug?.errors?.serverError) {
+              <span>{{ slug?.errors?.serverError }}</span>
+            }
+          </mat-error>
+        </mat-form-field>
+      } @else {
+        <span class="body-text">#{{ team.slug }}</span>
+      }
+      @if (canWriteTeam()) {
+        <gt-loading-button
+          slot="actions"
+          i18n-buttonText
+          buttonText="Save slug"
+          buttonStyle="stroked"
+          [loading]="loading().updateName"
+          [disabled]="slug?.value === team.slug"
+          id="update-team-slug"
+        />
+      }
+    </gt-settings-section>
+  </form>
 
-  <mat-divider></mat-divider>
-  <mat-card-content>
-    <mat-error
-      *ngIf="(errors$ | async)?.updateName"
-      class="server-error center-text"
-      >{{ (errors$ | async)?.updateName }}</mat-error
-    >
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-      <mat-form-field>
-        <mat-label>Slug</mat-label>
-        <input matInput formControlName="slug" [value]="team.slug" />
-        <mat-error>
-          <span *ngIf="this.form.get('slug')?.errors?.required" i18n
-            >Enter a team name</span
-          ></mat-error
-        >
-      </mat-form-field>
+  @if (canAdminTeam()) {
+    <gt-settings-section i18n-title title="Delete team" panel tone="danger">
+      <span slot="description" i18n
+        >Deletes <strong>#{{ team.slug // i18n(ph="team") }}</strong>. Its
+        projects and members stay in the organization. This cannot be
+        undone.</span
+      >
+      @if (errors().deleteTeam) {
+        <gt-form-error slot="error" [errors]="errors().deleteTeam" />
+      }
       <gt-loading-button
-        [disabled]="this.form.get('slug')?.value === team.slug"
-        [loading]="(loading$ | async)?.updateName"
-        buttonText="Update Name"
-        id="update-project-name"
-      >
-      </gt-loading-button>
-    </form>
-  </mat-card-content>
-</mat-card>
-<mat-card>
-  <mat-card-title i18n>Delete Team</mat-card-title>
-  <mat-divider></mat-divider>
-  <mat-card-content class="remove-content">
-    <div>
-      <p i18n
-        >By deleting your team, you will lose all associated data. This cannot
-        be undone.</p
-      >
-      <mat-error></mat-error>
-    </div>
-    <gt-loading-button
-      buttonText="Delete Team"
-      [loading]="(loading$ | async)?.deleteTeam"
-      (click)="deleteTeam()"
-    >
-    </gt-loading-button>
-  </mat-card-content>
-</mat-card>
+        slot="actions"
+        i18n-buttonText
+        buttonText="Delete team"
+        buttonStyle="stroked"
+        color="warn"
+        [loading]="loading().deleteTeam"
+        (buttonClick)="deleteTeam()"
+        id="delete-team"
+      />
+    </gt-settings-section>
+  }
+}

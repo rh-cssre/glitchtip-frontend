@@ -1,73 +1,123 @@
-<section class="l-body" *ngIf="memberDetail$ | async as member">
-  <header class="page-header">
-    <h1 class="mat-display-1">
-      {{ member.email }}
-    </h1>
-    <a mat-flat-button [routerLink]="['..']">
-      <mat-icon>keyboard_arrow_left</mat-icon>
-      Back to Members
-    </a>
-  </header>
-  <mat-card>
-    <mat-card-title>Basics</mat-card-title><mat-divider></mat-divider>
-    <mat-card-content class="basics-content">
-      <div class="column">
-        <div class="mat-body-strong">Email</div>
-        <div>{{ member.email }}</div>
-      </div>
-      <div class="column">
-        <div class="mat-body-strong">Role</div>
-        <div>{{ member.roleName }}</div>
-      </div>
-      <div class="column">
-        <div class="mat-body-strong">Added</div>
-        <div>{{ member.dateCreated | date }}</div>
-      </div>
-    </mat-card-content>
-  </mat-card>
-  <mat-card>
-    <mat-card-title>Role</mat-card-title>
-    <mat-divider></mat-divider>
-    <mat-card-content>
-      <form [formGroup]="form" (ngSubmit)="onSubmit()">
-        <mat-error *ngIf="updateMemberError$ | async as error">{{
-          error
-        }}</mat-error>
-        <div>
-          <mat-radio-group formControlName="role">
-            <mat-radio-button value="member">Member</mat-radio-button>
-            <mat-radio-button value="admin">Admin</mat-radio-button>
-            <mat-radio-button value="manager">Manager</mat-radio-button>
-            <mat-radio-button value="owner">Owner</mat-radio-button>
+<gt-top-app-bar>
+  <ng-container slot="left">
+    <gt-back-link i18n-backLinkText backLinkText="Members" />
+  </ng-container>
+</gt-top-app-bar>
+@if (member(); as member) {
+  <section class="l-body">
+    <gt-page-header
+      compact
+      icon="people"
+      [title]="member.email"
+      [status]="headerStatus()"
+    >
+      <span slot="meta">
+        <span>{{ roleName(member.role) ?? member.roleName }}</span>
+        <span i18n
+          >Joined
+          {{
+            member.dateCreated | date: "mediumDate" // i18n(ph="date")
+          }}</span
+        >
+      </span>
+    </gt-page-header>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <gt-settings-section #roleSection i18n-title title="Role" panel>
+        @if (canEditRole()) {
+          <mat-radio-group
+            formControlName="role"
+            class="gt-radio-row"
+            [attr.aria-labelledby]="roleSection.titleId"
+            aria-describedby="role-description"
+          >
+            @for (role of roles(); track role) {
+              <mat-radio-button [value]="role">{{
+                roleName(role)
+              }}</mat-radio-button>
+            }
           </mat-radio-group>
+        } @else {
+          <span class="body-text">{{
+            roleName(member.role) ?? member.roleName
+          }}</span>
+        }
+        <p id="role-description" class="gt-field-hint" aria-live="polite">
+          {{ roleDescription(canEditRole() ? formRole.value : member.role) }}
+        </p>
+        @if (ownerOnly()) {
+          <p class="gt-field-hint" i18n>
+            Only owners can grant the Owner role or change an owner's role.
+          </p>
+        }
+        @if (updateMemberError(); as error) {
+          <gt-form-error slot="error" [errors]="error" />
+        }
+        @if (canEditRole()) {
           <gt-loading-button
-            *ngIf="member.role !== form.get('role')?.value"
-            [loading]="(updateMemberLoading$ | async) === true"
-            buttonText="Update Member"
-          ></gt-loading-button>
-        </div>
-      </form>
-    </mat-card-content>
-  </mat-card>
-  <mat-card>
-    <mat-card-title>Team(s)</mat-card-title>
-    <mat-divider></mat-divider>
-    <mat-card-content>
-      <ng-container *ngIf="member.teams.length === 0; else listMembers">
-        <p class="center-text">This user isn't on any teams.</p>
-      </ng-container>
-      <ng-template #listMembers>
-        <mat-list>
-          <mat-list-item *ngFor="let team of member?.teams">
-            <a
-              mat-line
-              [routerLink]="['teams', team, 'members']"
-              [relativeTo]="this.route.parent?.parent"
-              >{{ team }}</a
-            >
-          </mat-list-item>
-        </mat-list></ng-template
+            slot="actions"
+            i18n-buttonText
+            buttonText="Save role"
+            buttonStyle="stroked"
+            [loading]="updateMemberLoading()"
+          />
+        }
+      </gt-settings-section>
+    </form>
+
+    <gt-settings-section
+      i18n-title
+      title="Teams"
+      panel
+      [flush]="!!memberTeams()?.length"
+    >
+      <span slot="description" i18n
+        >Members of a team get email alerts for the team's projects.</span
       >
-    </mat-card-content>
-  </mat-card>
-</section>
+      @if (memberTeams(); as memberTeams) {
+        @if (memberTeams.length) {
+          <gt-list flush>
+            @for (team of memberTeams; track team) {
+              <gt-list-row>
+                <a
+                  gtListRowLink
+                  [routerLink]="['teams', team, 'members']"
+                  [relativeTo]="$safeNavigationMigration(route.parent?.parent)"
+                  >#{{ team }}</a
+                >
+              </gt-list-row>
+            }
+          </gt-list>
+        } @else {
+          <gt-empty-state
+            icon="group"
+            i18n-title
+            title="No teams"
+            i18n-message
+            message="This user isn't on any teams."
+          />
+        }
+      }
+    </gt-settings-section>
+
+    @if (canTransfer()) {
+      <gt-settings-section i18n-title title="Account ownership" panel>
+        <span slot="description" i18n
+          >The account owner holds the organization's subscription. Nobody's
+          role changes.</span
+        >
+        @if (transferOrgOwnershipError(); as error) {
+          <gt-form-error slot="error" [errors]="error" />
+        }
+        <gt-loading-button
+          slot="actions"
+          i18n-buttonText
+          buttonText="Transfer ownership"
+          buttonStyle="stroked"
+          [loading]="transferOrgOwnershipLoading()"
+          (buttonClick)="transferOrgOwnership(member.email)"
+        />
+      </gt-settings-section>
+    }
+  </section>
+}

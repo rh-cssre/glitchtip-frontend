@@ -1,159 +1,215 @@
-<section class="l-body">
-  <ng-container *ngIf="monitor$ | async as monitor">
-    <header>
-      <a mat-stroked-button [routerLink]="['..']">
-        <mat-icon>keyboard_arrow_left</mat-icon>
-        View all uptime monitors
-      </a>
-      <h1 class="mat-display-1">Uptime details for {{ monitor.name }}</h1>
-    </header>
-    <mat-card>
-      <mat-card-title>
-        <span *ngIf="monitor.isUp" i18n="Uptime check reports up">Up</span>
-        <span *ngIf="monitor.isUp === false" i18n="Uptime check reports down"
-          >Down</span
-        >
-        <span *ngIf="monitor.isUp === null" i18n>No data</span>
-        <ng-container *ngIf="monitor.lastChange">
-          {{ monitor.lastChange | timeFor }}
-        </ng-container>
-      </mat-card-title>
-      <gt-monitor-chart [data]="monitor.checks"></gt-monitor-chart>
-      <div class="mat-caption" i18n>
-        Uptime check interval: {{ monitor.interval | humanizeDuration: true }}
-      </div>
-      <mat-card-content class="reduced-padding">
-        <div>
-          <div class="url-display">
-            <a href="{{ monitor.url }}" target="_blank">{{ monitor.url }}</a>
-          </div>
-          <button
-            id="monitor-settings"
-            mat-flat-button
-            color="primary"
-            [disabled]="false"
-            [routerLink]="['./update']"
-            i18n
-          >
-            Settings
-          </button>
-        </div>
-      </mat-card-content>
-    </mat-card>
-
-    <ng-container *ngIf="activeMonitorRecentChecksSeries$ | async as data">
-      <ng-container *ngIf="responseChartScale$ | async as scale">
-        <mat-card>
-          <mat-card-title i18n>Response Time</mat-card-title>
-          <mat-divider></mat-divider>
-          <mat-card-content>
-            <div>
-              <gt-monitor-response-chart
-                [data]="data"
-                [scale]="scale"
-              ></gt-monitor-response-chart>
-            </div>
-          </mat-card-content>
-        </mat-card>
-      </ng-container>
-    </ng-container>
-
-    <mat-card>
-      <mat-card-title i18n>Alerts</mat-card-title>
-      <mat-divider></mat-divider>
-      <mat-card-content>
-        <ng-container *ngIf="monitor.projectName; else noProject">
-          <ng-container
-            *ngIf="alertCountLoading$ | async; else loadingComplete"
-          >
-            <mat-progress-spinner
-              [diameter]="20"
-              color="primary"
-              mode="indeterminate"
-            ></mat-progress-spinner>
-          </ng-container>
-        </ng-container>
-        <ng-template #loadingComplete>
-          <ng-container
-            *ngIf="(uptimeAlertCount$ | async) === 0; else hasAlerts"
-          >
-            <ng-container
-              *ngIf="associatedProjectSlug$ | async as associatedProjectSlug"
-            >
-              <p>
-                This monitor is associated with the
-                <b>{{ monitor.projectName }}</b> project. This project has no
-                uptime alerts configured, so no notifications will be sent for
-                monitor events. Visit the
-                <a
-                  [routerLink]="[
-                    '../../settings/projects/',
-                    associatedProjectSlug
-                  ]"
-                  >project settings</a
-                >
-                page to configure alerts.
-              </p>
-            </ng-container>
-          </ng-container>
-          <ng-template #hasAlerts>
-            <ng-container
-              *ngIf="associatedProjectSlug$ | async as associatedProjectSlug"
-            >
-              <p>
-                This monitor is associated with the
-                <b>{{ monitor.projectName }}</b> project. There
-                {{
-                  uptimeAlertCount$
-                    | async
-                    | i18nPlural: alertCountPluralMapping
-                }}
-                set up for this project. Visit the
-                <a
-                  [routerLink]="[
-                    '../../settings/projects/',
-                    associatedProjectSlug
-                  ]"
-                  >project settings</a
-                >
-                page to change your alerts.
-              </p>
-            </ng-container>
-          </ng-template>
-        </ng-template>
-        <ng-template #noProject
-          ><p>
-            There is no project associated with this monitor, so no
-            notifications will be sent for monitor events. Visit the
-            <a [routerLink]="['./update']">monitor settings</a> page to
-            associate this monitor with a project.
-          </p>
-        </ng-template>
-      </mat-card-content>
-    </mat-card>
-    <gt-monitor-checks
-      [monitor]="monitor"
-      [monitorChecks]="monitorChecks$ | async"
-      [loading]="loading$ | async"
-      [paginator]="paginator$ | async"
-    ></gt-monitor-checks>
-    <mat-card
-      id="heartbeat-endpoint"
-      class="heartbeat-card"
-      *ngIf="monitor.monitorType === 'Heartbeat' && monitor.heartbeatEndpoint"
-    >
-      <mat-card-title>Heartbeat URL endpoint</mat-card-title>
-      <mat-divider></mat-divider>
-      <p>
-        Configure your project to send a POST request with no content to the
-        following URL at your specified interval. If GlitchTip does not receive
-        this request within the interval, your site status will be marked as
-        down.
-      </p>
-      <gt-copy-input
-        [value]="monitor.heartbeatEndpoint"
-        placeholder="Endpoint URL"
-      ></gt-copy-input>
-    </mat-card>
+<gt-top-app-bar>
+  <ng-container slot="left">
+    <gt-back-link [backLinkText]="uptimeMonitorsText" />
   </ng-container>
+
+  <ng-container slot="right">
+    @if (canWriteProject()) {
+      <a
+        id="monitor-settings"
+        mat-stroked-button
+        class="gt-bar-button"
+        [routerLink]="['./update']"
+        aria-label="Edit monitor"
+        i18n-aria-label
+      >
+        <mat-icon>edit</mat-icon>
+        <span class="gt-bar-button__label" i18n>Edit monitor</span>
+      </a>
+      <span class="gt-bar-divider" aria-hidden="true"></span>
+      <button
+        mat-icon-button
+        matTooltip="Delete monitor"
+        i18n-matTooltip
+        aria-label="Delete monitor"
+        i18n-aria-label
+        (click)="delete()"
+      >
+        <mat-icon>delete</mat-icon>
+      </button>
+    }
+  </ng-container>
+</gt-top-app-bar>
+
+<section class="l-body l-body--full-width">
+  @if (monitor(); as monitor) {
+    <ng-template #facts>
+      @if (uptimePercent() !== null) {
+        <span
+          class="gt-band-fact gt-has-tip"
+          tabindex="0"
+          [matTooltip]="uptimeTip()"
+          i18n
+          ><b
+            >{{ uptimePercent()! | number: "1.0-1" // i18n(ph="percent") }}%</b
+          >
+          uptime</span
+        >
+      }
+      @if (avgResponseMs() !== null) {
+        <span class="gt-band-fact" i18n
+          ><b
+            >{{
+              avgResponseMs()! | number: "1.0-0" // i18n(ph="milliseconds")
+            }}ms</b
+          >
+          avg response</span
+        >
+      }
+    </ng-template>
+    <gt-record-band>
+      <gt-page-header
+        [title]="monitor.name"
+        [status]="statusLabel()"
+        [statusColor]="statusColor()"
+      >
+        <span slot="meta">
+          @if (monitor.lastChange) {
+            <span class="no-sep">{{ monitor.lastChange | timeFor }}</span>
+          }
+          @if (monitor.url) {
+            <span
+              ><a class="chip" [href]="monitor.url" target="_blank">{{
+                monitor.url
+              }}</a></span
+            >
+          }
+          <span>{{ intervalLabel() }}</span>
+          <ng-container [ngTemplateOutlet]="facts" />
+        </span>
+      </gt-page-header>
+      <span slot="stats" class="gt-band-facts"
+        ><ng-container [ngTemplateOutlet]="facts"
+      /></span>
+      <gt-monitor-chart slot="summary" [data]="monitor.checks" stretch />
+      <nav
+        slot="tabs"
+        mat-tab-nav-bar
+        mat-stretch-tabs="false"
+        [tabPanel]="monitorPanel"
+      >
+        <a
+          mat-tab-link
+          [active]="tab() === 'overview'"
+          [routerLink]="[]"
+          [queryParams]="{ tab: null }"
+          queryParamsHandling="merge"
+          replaceUrl
+          i18n
+          >Overview</a
+        >
+        <a
+          mat-tab-link
+          [active]="tab() === 'checks'"
+          [routerLink]="[]"
+          [queryParams]="{ tab: 'checks' }"
+          queryParamsHandling="merge"
+          replaceUrl
+          i18n
+          >Checks</a
+        >
+        <a
+          mat-tab-link
+          [active]="tab() === 'alerts'"
+          [routerLink]="[]"
+          [queryParams]="{ tab: 'alerts' }"
+          queryParamsHandling="merge"
+          replaceUrl
+          ><span i18n>Alerts</span>
+          @if (alertCountKnown()) {
+            <span class="tab-count">{{ uptimeAlertCount() }}</span>
+          }
+        </a>
+      </nav>
+    </gt-record-band>
+    <mat-tab-nav-panel #monitorPanel class="monitor-panel">
+      @switch (tab()) {
+        @case ("overview") {
+          @if (monitor.monitorType !== "Heartbeat") {
+            @if (activeMonitorRecentChecksSeries(); as data) {
+              @if (responseChartScale(); as scale) {
+                <gt-panel i18n-title title="Response time">
+                  <gt-monitor-response-chart
+                    class="response-chart"
+                    [data]="data"
+                    [scale]="scale"
+                  />
+                </gt-panel>
+              }
+            }
+          }
+          @if (
+            monitor.monitorType === "Heartbeat" && monitor.heartbeatEndpoint
+          ) {
+            <gt-panel
+              #heartbeatPanel
+              id="heartbeat-endpoint"
+              i18n-title
+              title="Heartbeat URL"
+            >
+              <p class="heartbeat-description" i18n>
+                Send a POST with no body to this URL
+                {{ intervalLabel() // i18n(ph="interval") }}. If none arrives in
+                time, the monitor is marked down.
+              </p>
+              <gt-copy-input
+                class="heartbeat-endpoint"
+                [value]="monitor.heartbeatEndpoint"
+                [labelledBy]="heartbeatPanel.titleId"
+              />
+            </gt-panel>
+          }
+        }
+        @case ("checks") {
+          <gt-monitor-checks
+            [monitor]="monitor"
+            [orgSlug]="orgSlug()"
+            [monitorID]="monitorID()"
+            [isChange]="isChange()"
+            [cursor]="cursor()"
+          ></gt-monitor-checks>
+        }
+        @case ("alerts") {
+          @if (!monitor.projectName) {
+            <gt-panel>
+              <gt-empty-state
+                icon="share_eta"
+                i18n-title
+                title="No associated project"
+                [message]="noProjectMessage()"
+              >
+                @if (canWriteProject()) {
+                  <a mat-stroked-button [routerLink]="['./update']" i18n
+                    >Edit monitor</a
+                  >
+                }
+              </gt-empty-state>
+            </gt-panel>
+          } @else if (alertsError()) {
+            <gt-form-error
+              i18n-errors
+              errors="The alerts could not be loaded. Reload the page to try again."
+            />
+          } @else if (alertCountLoading()) {
+            <div class="initial-loading">
+              <mat-progress-spinner [diameter]="40" mode="indeterminate" />
+            </div>
+          } @else if (associatedProjectSlug(); as associatedProjectSlug) {
+            <!-- Alerts are edited on the project's Alerts tab. -->
+            <gt-alert-list
+              [alerts]="monitorAlerts()"
+              [projectName]="monitor.projectName"
+              [canWrite]="canWriteProject()"
+              [link]="['../../settings/projects/', associatedProjectSlug]"
+              [linkParams]="{ tab: 'alerts' }"
+              i18n-emptyTitle
+              emptyTitle="No uptime alerts"
+              i18n-emptyMessage
+              emptyMessage="None of this project's alerts fire when this monitor goes down."
+            />
+          }
+        }
+      }
+    </mat-tab-nav-panel>
+  }
 </section>

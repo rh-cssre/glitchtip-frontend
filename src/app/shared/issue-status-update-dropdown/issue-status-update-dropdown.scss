@@ -1,0 +1,52 @@
+@use "@angular/material" as mat;
+@use "controls";
+
+// Neutral outlined button; remove once !832 makes outlined buttons neutral.
+:host {
+  @include mat.button-overrides(
+    (
+      outlined-label-text-color: var(--mat-sys-on-surface),
+      outlined-state-layer-color: var(--mat-sys-on-surface),
+      outlined-ripple-color: controls.state-layer-color(pressed),
+    )
+  );
+}
+
+// Narrow bar: tighter padding, so the back link keeps its label.
+@include controls.narrow-bar {
+  :host {
+    @include mat.button-overrides(
+      (
+        outlined-horizontal-padding: var(--gt-space-3, 12px),
+      )
+    );
+  }
+}
+
+.invisible {
+  visibility: hidden;
+}
+
+// All labels in one grid cell: the button is as wide as the longest.
+.status-label {
+  display: inline-grid;
+
+  > * {
+    grid-area: 1 / 1;
+  }
+}
+
+.status-label__sizer {
+  visibility: hidden;
+}
+
+// Dot and label centred on one line.
+.status-content {
+  display: inline-flex;
+  align-items: center;
+}
+
+.status-dot {
+  @include controls.status-dot;
+  margin-inline-end: var(--gt-space-2, 8px);
+}

@@ -1,5 +1,5 @@
 import { requestLogin, seedBackend } from "./utils.cy";
-import { project } from "../fixtures/variables";
+import { seededProject1 } from "../fixtures/variables";
 
 describe("Home page", () => {
   beforeEach(() => {
@@ -9,6 +9,6 @@ describe("Home page", () => {
   it("should show a list of projects", () => {
     requestLogin();
     cy.visit("/");
-    cy.contains(project.name);
+    cy.contains(seededProject1.name);
   });
 });

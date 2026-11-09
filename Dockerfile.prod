@@ -2,6 +2,6 @@ FROM registry.gitlab.com/glitchtip/glitchtip-backend:master
 ARG FRONTEND_GLITCHTIP_VERSION=local
 ENV GLITCHTIP_VERSION ${FRONTEND_GLITCHTIP_VERSION}
 
-COPY dist/glitchtip-frontend /code/dist
+COPY dist/glitchtip-frontend/browser /code/dist
 
 RUN SECRET_KEY=ci ./manage.py collectstatic --noinput

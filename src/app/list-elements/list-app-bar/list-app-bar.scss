@@ -1,0 +1,85 @@
+@use "controls";
+@use "variables" as vars;
+
+// Keep layout aligned with gt-top-app-bar, on which this is based.
+:host {
+  @include controls.compact-buttons;
+}
+
+.list-app-bar-primary-content {
+  display: flex;
+  height: vars.$top-app-bar-height;
+  align-items: center;
+  gap: var(--gt-space-4, 16px);
+  padding: 0 var(--gt-space-5, 24px);
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+}
+
+.left-section,
+.right-section {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.left-section {
+  flex: 1;
+  min-width: 0;
+}
+
+.right-section {
+  gap: var(--gt-space-5, 24px);
+}
+
+.list-app-bar-expanded-content {
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+}
+
+.add-project-button {
+  width: 150px;
+}
+
+.project-multiselect-container {
+  display: flex;
+  gap: var(--gt-space-1, 4px);
+  align-items: center;
+}
+
+.time-range-select-container {
+  display: flex;
+  align-items: center;
+}
+
+@media screen and (min-width: vars.$small) {
+  @media screen and (max-width: vars.$medium - 1) {
+    .list-app-bar-expanded-content {
+      display: flex;
+      align-items: center;
+      gap: var(--gt-space-4, 16px);
+      padding: var(--gt-space-2, 8px) var(--gt-space-5, 24px);
+    }
+
+    .project-multiselect-container {
+      flex: 1;
+      justify-content: flex-start;
+    }
+
+    .time-range-select-container {
+      flex: 1;
+      justify-content: flex-end;
+    }
+  }
+}
+
+@media screen and (max-width: vars.$small - 1) {
+  .list-app-bar-expanded-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gt-space-2, 8px);
+    padding: var(--gt-space-2, 8px) var(--gt-space-4, 16px);
+  }
+
+  .time-range-select-container {
+    display: block;
+  }
+}

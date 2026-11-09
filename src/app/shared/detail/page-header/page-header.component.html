@@ -1,0 +1,29 @@
+<header class="gt-page-header">
+  @if (icon()) {
+    <div class="gt-page-header__icon" aria-hidden="true">
+      <mat-icon>{{ icon() }}</mat-icon>
+    </div>
+  }
+  <div class="gt-page-header__text">
+    <div class="gt-page-header__heading">
+      <h1 class="gt-page-header__title section-header-text">
+        {{ title() }}
+      </h1>
+      @if (subtitle(); as subtitle) {
+        <p class="gt-page-header__subtitle" [title]="subtitle">{{
+          subtitle
+        }}</p>
+      }
+    </div>
+    <div class="gt-page-header__meta">
+      @if (status(); as status) {
+        <gt-status-pill
+          class="gt-page-header__pill"
+          [label]="status"
+          [color]="statusColor()"
+        />
+      }
+      <ng-content select="[slot=meta]" />
+    </div>
+  </div>
+</header>

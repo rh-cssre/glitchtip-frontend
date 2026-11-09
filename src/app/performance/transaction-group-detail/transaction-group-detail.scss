@@ -1,0 +1,129 @@
+@use "variables" as vars;
+
+// The table runs edge to edge; the summary above it keeps the panel padding.
+.span-breakdown-intro {
+  padding: var(--gt-space-4, 16px) var(--gt-space-4, 16px) 0;
+}
+
+.section-label {
+  margin: 0 0 10px;
+  font: var(--mat-sys-label-medium);
+  letter-spacing: var(--mat-sys-label-medium-tracking);
+  text-transform: uppercase;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.op-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
+  align-items: center;
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    padding: 8px 16px;
+    border-radius: 4px;
+    border: 1px solid var(--mat-sys-outline-variant);
+    background: none;
+    cursor: pointer;
+    transition: border-color 0.15s, background-color 0.15s;
+    text-align: left;
+    font: inherit;
+
+    &:hover {
+      border-color: var(--mat-sys-outline);
+    }
+
+    &--selected {
+      border-color: var(--mat-sys-primary);
+      background-color: color-mix(in srgb, var(--mat-sys-primary) 8%, transparent);
+    }
+
+    &--other {
+      cursor: default;
+      color: var(--mat-sys-on-surface-variant);
+    }
+  }
+
+  &__name {
+    font: var(--mat-sys-body-small);
+    font-family: vars.$font-mono, monospace;
+    font-weight: 500;
+  }
+
+  &__pct {
+    font: var(--mat-sys-body-large);
+    font-weight: 600;
+  }
+
+  &__time {
+    font: var(--mat-sys-body-small);
+    color: var(--mat-sys-on-surface-variant);
+  }
+
+  &__clear {
+    background: none;
+    border: none;
+    color: var(--mat-sys-primary);
+    cursor: pointer;
+    font: var(--mat-sys-body-small);
+    padding: 4px 8px;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.op-cell {
+  font: var(--mat-sys-body-small);
+  font-family: vars.$font-mono, monospace;
+  white-space: nowrap;
+}
+
+.table-scroll-container {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 40px;
+    pointer-events: none;
+    background: linear-gradient(
+      to right,
+      transparent,
+      var(--mat-sys-surface)
+    );
+    display: none;
+
+    @media screen and (max-width: vars.$medium - 1) {
+      display: block;
+    }
+  }
+}
+
+.table-scroll-wrapper {
+  overflow-x: auto;
+}
+
+.span-breakdown-table {
+  width: 100%;
+  min-width: 700px;
+
+  .num {
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .span-description {
+    font: var(--mat-sys-body-small);
+    font-family: vars.$font-mono, monospace;
+    word-break: break-word;
+  }
+}
+

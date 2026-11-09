@@ -1,0 +1,29 @@
+@if (show()) {
+  <mat-card appearance="outlined" class="terms-update-banner" role="status">
+    <mat-card-content class="banner-content">
+      <p class="banner-text" i18n>
+        Our legal terms are changing. The new
+        <a
+          href="https://glitchtip.com/legal/tos"
+          target="_blank"
+          rel="noopener"
+          >Terms of Service</a
+        >,
+        <a
+          href="https://glitchtip.com/legal/privacy"
+          target="_blank"
+          rel="noopener"
+          >Privacy Policy</a
+        >, and
+        <a
+          href="https://glitchtip.com/legal/data-processing-agreement"
+          target="_blank"
+          rel="noopener"
+          >DPA</a
+        >
+        take effect for your account on November 21, 2026.
+      </p>
+      <button mat-button (click)="dismiss()" i18n>Dismiss</button>
+    </mat-card-content>
+  </mat-card>
+}

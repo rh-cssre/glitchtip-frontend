@@ -1,0 +1,32 @@
+.form-center {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.l-body {
+  max-width: 650px;
+}
+
+mat-form-field {
+  display: block;
+  width: 100%;
+}
+
+.teams {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+
+  .icon-button-shift {
+    margin-bottom: 19.75px;
+  }
+}
+
+.project-name {
+  margin: 10px 0;
+}
+
+gt-loading-button {
+  margin-top: 10px;
+}

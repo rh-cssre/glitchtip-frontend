@@ -1,704 +1,223 @@
-import { Injectable } from "@angular/core";
+import { Injectable, computed, inject, signal } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { HttpErrorResponse } from "@angular/common/http";
-import { combineLatest, EMPTY } from "rxjs";
-import {
-  tap,
-  map,
-  mergeMap,
-  take,
-  catchError,
-  exhaustMap,
-  distinctUntilChanged,
-} from "rxjs/operators";
-import { OrganizationsService } from "../../../../api/organizations/organizations.service";
-import { ProjectAlertsAPIService } from "../../../../api/projects/project-alerts/project-alerts.service";
-import {
-  AlertRecipient,
-  NewAlertRecipient,
-  NewProjectAlert,
-  ProjectAlert,
-} from "../../../../api/projects/project-alerts/project-alerts.interface";
-import { ProjectSettingsService } from "../../project-settings.service";
-import { StatefulService } from "src/app/shared/stateful-service/stateful-service";
+import { OrganizationsService } from "src/app/api/organizations.service";
+import { components } from "src/app/api/api-schema";
+import { apiErrorMessage, client } from "src/app/shared/api/api";
+import { apiResource } from "src/app/shared/api/api-resource-factory";
+import { ProjectSlugs, sameProjectSlugs } from "../project-slugs";
 
-interface NewAlertState {
-  newAlertOpen: boolean;
-  newProjectAlertRecipients: NewAlertRecipient[] | null;
-  newAlertLoading: boolean;
-  newAlertError: string | null;
-}
-
-interface RecipientDialogState {
-  recipientError: string | null;
-  recipientDialogOpen: ProjectAlert | boolean;
-  activeAlert: ProjectAlert | null;
-}
-
-interface ProjectAlertState {
-  initialLoad: boolean;
-  initialLoadError: string | null;
-  projectAlerts: ProjectAlert[] | null;
-  newAlertState: NewAlertState;
-  recipientDialogState: RecipientDialogState;
-  // current alerts
-  removeAlertLoading: number | null;
-  removeAlertError: { error: string; pk: number } | null;
-  updatePropertiesLoading: number | null;
-  updatePropertiesError: { error: string; pk: number } | null;
-  deleteRecipientLoading: number | null;
-  deleteRecipientError: string | null;
-}
-
-const initialNewAlertState = {
-  newAlertOpen: false,
-  newProjectAlertRecipients: null,
-  newAlertLoading: false,
-  newAlertError: null,
+type AlertRecipient = components["schemas"]["AlertRecipientSchema"];
+type RecipientInput = NonNullable<
+  components["schemas"]["ProjectAlertIn"]["alertRecipients"]
+>[number];
+type WebhookType =
+  components["schemas"]["WebhookAlertRecipientIn"]["recipientType"];
+type ZulipFields = Partial<
+  Pick<
+    components["schemas"]["ZulipAlertRecipientIn"],
+    "botEmail" | "apiKey" | "channel" | "topic"
+  >
+>;
+/** Saved or not: unsaved recipients hold their Zulip settings flat. */
+type RecipientDraft = AlertRecipient & ZulipFields;
+/** A recipient added in the editor and not saved yet. */
+export type NewAlertRecipient = Omit<RecipientDraft, "id" | "url"> & {
+  url: string;
 };
 
-const initialRecipientDialogState = {
-  recipientError: null,
-  recipientDialogOpen: false,
-  activeAlert: null,
+// A Record so a webhook type added to the schema fails to compile until listed.
+const webhookTypes: Record<WebhookType, true> = {
+  discord: true,
+  feishu: true,
+  googlechat: true,
+  ntfy: true,
+  slack: true,
+  teams: true,
+  webhook: true,
 };
 
-const initialState: ProjectAlertState = {
-  initialLoad: false,
-  initialLoadError: null,
-  projectAlerts: null,
-  newAlertState: initialNewAlertState,
-  recipientDialogState: initialRecipientDialogState,
-  // current alerts
-  removeAlertLoading: null,
-  removeAlertError: null,
-  updatePropertiesLoading: null,
-  updatePropertiesError: null,
-  deleteRecipientLoading: null,
-  deleteRecipientError: null,
-};
+function isWebhookType(type: string): type is WebhookType {
+  return Object.hasOwn(webhookTypes, type);
+}
 
-@Injectable({
-  providedIn: "root",
-})
-export class ProjectAlertsService extends StatefulService<ProjectAlertState> {
-  readonly initialLoad$ = this.getState$.pipe(map((data) => data.initialLoad));
-  readonly initialLoadError$ = this.getState$.pipe(
-    map((data) => data.initialLoadError)
-  );
-  readonly projectAlerts$ = this.getState$.pipe(
-    map((data) => data.projectAlerts),
-    distinctUntilChanged(),
-    map((alerts) =>
-      alerts?.map((alert) => {
-        return {
-          ...alert,
-          errorAlert: !alert.timespan_minutes && !alert.quantity ? false : true,
-        };
-      })
-    )
-  );
+function withScheme(url: string | null | undefined) {
+  return url && !url.startsWith("http") ? "https://" + url : (url ?? "");
+}
 
-  /** New Alert */
-  readonly newAlertOpen$ = this.getState$.pipe(
-    map((data) => data.newAlertState.newAlertOpen)
-  );
-  readonly newProjectAlertRecipients$ = this.getState$.pipe(
-    map((data) => data.newAlertState.newProjectAlertRecipients)
-  );
-  readonly newAlertLoading$ = this.getState$.pipe(
-    map((data) => data.newAlertState.newAlertLoading)
-  );
-  readonly newAlertError$ = this.getState$.pipe(
-    map((data) => data.newAlertState.newAlertError)
-  );
-
-  /** Recipient Dialog */
-  readonly recipientError$ = this.getState$.pipe(
-    map((data) => data.recipientDialogState.recipientError)
-  );
-  readonly recipientDialogOpen$ = this.getState$.pipe(
-    map((data) => data.recipientDialogState.recipientDialogOpen)
-  );
-  readonly activeAlert$ = this.getState$.pipe(
-    map((data) => data.recipientDialogState.activeAlert)
-  );
-  readonly emailSelected$ = combineLatest([
-    this.newProjectAlertRecipients$,
-    this.activeAlert$,
-  ]).pipe(
-    map(([newRecipients, activeAlert]) => {
-      if (activeAlert?.pk) {
-        return activeAlert.alertRecipients.some(
-          (data) => data.recipientType === "email"
-        );
-      } else if (newRecipients !== null) {
-        return newRecipients.some((data) => data.recipientType === "email");
-      }
-      return;
-    })
-  );
-
-  /** Current Alerts */
-  readonly removeAlertLoading$ = this.getState$.pipe(
-    map((data) => data.removeAlertLoading)
-  );
-  readonly removeAlertError$ = this.getState$.pipe(
-    map((data) => data.removeAlertError)
-  );
-  readonly updatePropertiesLoading$ = this.getState$.pipe(
-    map((data) => data.updatePropertiesLoading)
-  );
-  readonly updatePropertiesError$ = this.getState$.pipe(
-    map((data) => data.updatePropertiesError)
-  );
-  readonly deleteRecipientLoading$ = this.getState$.pipe(
-    map((data) => data.deleteRecipientLoading)
-  );
-  readonly deleteRecipientError$ = this.getState$.pipe(
-    map((data) => data.deleteRecipientError)
-  );
-
-  constructor(
-    private organizationsService: OrganizationsService,
-    private projectSettingsService: ProjectSettingsService,
-    private projectAlertsAPIService: ProjectAlertsAPIService,
-    private snackBar: MatSnackBar
-  ) {
-    super(initialState);
-  }
-
-  /** Actions */
-  listProjectAlerts() {
-    combineLatest([
-      this.organizationsService.activeOrganizationSlug$,
-      this.projectSettingsService.activeProjectSlug$,
-    ])
-      .pipe(
-        take(1),
-        exhaustMap(([orgSlug, projectSlug]) => {
-          if (orgSlug && projectSlug) {
-            return this.projectAlertsAPIService.list(orgSlug, projectSlug).pipe(
-              tap((projectAlerts) => {
-                this.setProjectAlertsList(projectAlerts);
-              }),
-              catchError((err: HttpErrorResponse) => {
-                this.setProjectAlertsListError(err);
-                return EMPTY;
-              })
-            );
-          }
-          return EMPTY;
-        })
-      )
-      .subscribe();
-  }
-
-  /** New Alert Actions */
-  openNewAlert() {
-    this.setOpenNewAlert();
-  }
-
-  closeNewAlert() {
-    this.setCloseNewAlert();
-  }
-
-  addAlertRecipient(event: NewAlertRecipient) {
-    // Force https:// if no protocol exists
-    if (event.url && !event.url.startsWith("http")) {
-      event.url = "https://" + event.url;
-    }
-    combineLatest([this.newProjectAlertRecipients$, this.activeAlert$])
-      .pipe(
-        take(1),
-        exhaustMap(([newRecipients, activeAlert]) => {
-          if (newRecipients !== null) {
-            this.setAddNewAlertRecipient(event);
-          } else if (activeAlert?.alertRecipients !== null) {
-            this.updateAlertRecipient(event);
-          }
-          return EMPTY;
-        })
-      )
-      .subscribe();
-  }
-
-  removeNewAlertRecipient(url: string) {
-    this.setRemoveNewAlertRecipient(url);
-  }
-
-  createNewAlert(properties: {
-    timespan_minutes: number;
-    quantity: number;
-    uptime: boolean;
-  }) {
-    this.setNewAlertLoading();
-    combineLatest([
-      this.organizationsService.activeOrganizationSlug$,
-      this.projectSettingsService.activeProjectSlug$,
-      this.newProjectAlertRecipients$,
-    ])
-      .pipe(
-        take(1),
-        exhaustMap(([orgSlug, projectSlug, recipients]) => {
-          if (orgSlug && projectSlug && properties && recipients !== null) {
-            const data: NewProjectAlert = {
-              timespan_minutes: properties.timespan_minutes,
-              quantity: properties.quantity,
-              uptime: properties.uptime,
-              alertRecipients: recipients,
-            };
-            return this.projectAlertsAPIService
-              .create(data, orgSlug, projectSlug)
-              .pipe(
-                tap((resp) => {
-                  this.setCreateAlert(resp);
-                  this.snackBar.open(`Success! Your new alert has been added.`);
-                })
-              );
-          }
-          return EMPTY;
-        }),
-        catchError((err: HttpErrorResponse) => {
-          this.setCreateAlertError(err);
-          return EMPTY;
-        })
-      )
-      .subscribe();
-  }
-
-  /** Update Actions */
-  deleteProjectAlert(pk: number) {
-    this.setDeleteAlertLoading(pk);
-    combineLatest([
-      this.organizationsService.activeOrganizationSlug$,
-      this.projectSettingsService.activeProjectSlug$,
-    ])
-      .pipe(
-        take(1),
-        mergeMap(([orgSlug, projectSlug]) => {
-          if (orgSlug && projectSlug) {
-            return this.projectAlertsAPIService
-              .destroy(pk.toString(), orgSlug, projectSlug)
-              .pipe(
-                tap((_) => {
-                  this.setDeleteProjectAlert(pk);
-                  this.snackBar.open(`Success: Your alert has been deleted`);
-                })
-              );
-          }
-          return EMPTY;
-        }),
-        catchError((err: HttpErrorResponse) => {
-          this.setDeleteAlertError(err, pk);
-          return EMPTY;
-        })
-      )
-      .subscribe();
-  }
-
-  updateAlertProperties(
-    newTimespan: number,
-    newQuantity: number,
-    uptime: boolean,
-    id: number,
-    recipients: AlertRecipient[]
-  ) {
-    this.setUpdatePropertiesLoading(id);
-    const data: ProjectAlert = {
-      pk: id,
-      timespan_minutes: newTimespan,
-      quantity: newQuantity,
-      uptime,
-      alertRecipients: recipients,
+/** A saved recipient carries Zulip settings in config; the API takes them flat. */
+export function toRecipientInput(recipient: RecipientDraft): RecipientInput {
+  const { recipientType } = recipient;
+  const url = withScheme(recipient.url);
+  if (recipientType === "email") return { recipientType, url };
+  if (recipientType === "zulip") {
+    const config = (recipient.config ?? {}) as Record<string, string>;
+    return {
+      recipientType,
+      url,
+      botEmail: recipient.botEmail ?? config["bot_email"],
+      apiKey: recipient.apiKey ?? config["api_key"],
+      channel: recipient.channel ?? config["channel"],
+      topic: recipient.topic ?? (config["topic"] || "GlitchTip Alerts"),
     };
-    combineLatest([
-      this.organizationsService.activeOrganizationSlug$,
-      this.projectSettingsService.activeProjectSlug$,
-    ])
-      .pipe(
-        take(1),
-        mergeMap(([orgSlug, projectSlug]) => {
-          if (orgSlug && projectSlug) {
-            return this.projectAlertsAPIService
-              .update(id.toString(), data, orgSlug, projectSlug)
-              .pipe(
-                tap((resp) => {
-                  this.setUpdateAlertProperties(resp);
-                  this.snackBar.open(`Success: Your alert has been updated`);
-                })
-              );
-          }
-          return EMPTY;
-        }),
-        catchError((err: HttpErrorResponse) => {
-          this.setUpdatePropertiesError(err, id);
-          return EMPTY;
-        })
-      )
-      .subscribe();
+  }
+  if (isWebhookType(recipientType)) return { recipientType, url };
+  throw new Error(`Unknown alert recipient type: ${recipientType}`);
+}
+
+@Injectable()
+export class ProjectAlertsService {
+  private organizationsService = inject(OrganizationsService);
+  private snackBar = inject(MatSnackBar);
+
+  #params = signal<ProjectSlugs | null>(null, { equal: sameProjectSlugs });
+  #projectAlertsResource = apiResource(this.#params, (params) => ({
+    url: "/api/0/projects/{organization_id_or_slug}/{project_slug}/alerts/",
+    options: {
+      params: {
+        path: {
+          ...this.organizationsService.orgPath(params.orgSlug),
+          project_slug: params.projectSlug,
+        },
+        query: {
+          limit: 200,
+        },
+      },
+    },
+  }));
+  readonly initialLoad = computed(
+    () =>
+      this.#projectAlertsResource.hasValue() ||
+      !!this.#projectAlertsResource.error(),
+  );
+  readonly initialLoadError = computed(() =>
+    this.#projectAlertsResource.error(),
+  );
+  readonly projectAlerts = computed(() => {
+    // value() throws while the resource is in its error state.
+    if (!this.#projectAlertsResource.hasValue()) return undefined;
+    return this.#projectAlertsResource.value()?.map((alert) => {
+      return {
+        ...alert,
+        errorAlert: !alert.timespanMinutes && !alert.quantity ? false : true,
+      };
+    });
+  });
+
+  /**
+   * Slugs of the teams on this project, whose members get email alerts.
+   * Undefined until the organization (which lists them) has loaded.
+   */
+  readonly projectTeams = computed(() => {
+    const slug = this.#params()?.projectSlug;
+    const project = this.organizationsService
+      .activeOrganization()
+      ?.projects.find((p) => p.slug === slug);
+    return project?.teams.map((team) => team.slug);
+  });
+
+  setParams(orgSlug: string, projectSlug: string) {
+    this.#params.set({ orgSlug, projectSlug });
   }
 
-  updateAlertRecipient(newRecipient: NewAlertRecipient) {
-    let activeErrorPk = 0;
-    combineLatest([
-      this.activeAlert$,
-      this.organizationsService.activeOrganizationSlug$,
-      this.projectSettingsService.activeProjectSlug$,
-    ])
-      .pipe(
-        take(1),
-        exhaustMap(([activeAlert, orgSlug, projectSlug]) => {
-          if (activeAlert && orgSlug && projectSlug) {
-            activeErrorPk = activeAlert.pk;
-            const recipientsWithoutPK: NewAlertRecipient[] =
-              activeAlert.alertRecipients
-                .map((recipient) => {
-                  return {
-                    recipientType: recipient.recipientType,
-                    url: recipient.url,
-                  };
-                })
-                .concat([newRecipient]);
-            const data = {
-              timespan_minutes: activeAlert.timespan_minutes,
-              quantity: activeAlert.quantity,
-              uptime: activeAlert.uptime,
-              alertRecipients: recipientsWithoutPK,
-            };
-            return this.projectAlertsAPIService
-              .update(activeAlert.pk.toString(), data, orgSlug, projectSlug)
-              .pipe(
-                tap((resp) => {
-                  this.setUpdateAlertRecipients(resp.alertRecipients, resp.pk);
-                  this.snackBar.open(`Success: Your alert has been updated`);
-                })
-              );
-          }
-          return EMPTY;
-        }),
-        catchError((err: HttpErrorResponse) => {
-          this.setUpdateAlertRecipientsError(err, activeErrorPk);
-          return EMPTY;
-        })
-      )
-      .subscribe();
+  #path() {
+    const params = this.#params()!;
+    return {
+      ...this.organizationsService.orgPath(params.orgSlug),
+      project_slug: params.projectSlug,
+    };
   }
 
-  deleteAlertRecipient(recipientToRemove: AlertRecipient, alert: ProjectAlert) {
-    this.setDeleteRecipientLoading(recipientToRemove.pk);
-    const data = {
+  /**
+   * Creates (id null) or replaces an alert in one request: name, conditions,
+   * environments and recipients. Returns the error message, or null on success.
+   */
+  async saveAlert(
+    id: number | null,
+    alert: {
+      name: string;
+      timespanMinutes: number | null;
+      quantity: number | null;
+      uptime: boolean;
+      environments: string[];
+      alertRecipients: (AlertRecipient | NewAlertRecipient)[];
+    },
+  ): Promise<string | null> {
+    const path = this.#path();
+    const body = {
       ...alert,
-      alertRecipients: alert.alertRecipients.filter(
-        (currentRecipient) => currentRecipient.pk !== recipientToRemove.pk
-      ),
+      alertRecipients: alert.alertRecipients.map(toRecipientInput),
     };
-    combineLatest([
-      this.organizationsService.activeOrganizationSlug$,
-      this.projectSettingsService.activeProjectSlug$,
-    ])
-      .pipe(
-        take(1),
-        mergeMap(([orgSlug, projectSlug]) => {
-          if (orgSlug && projectSlug) {
-            return this.projectAlertsAPIService
-              .update(alert.pk.toString(), data, orgSlug, projectSlug)
-              .pipe(
-                tap((resp) => {
-                  this.setUpdateAlertRecipients(resp.alertRecipients, resp.pk);
-                  this.snackBar.open(
-                    `Success: Your recipient has been deleted`
-                  );
-                })
-              );
-          }
-          return EMPTY;
-        }),
-        catchError((err: HttpErrorResponse) => {
-          this.setDeleteRecipientError(err);
-          return EMPTY;
-        })
-      )
-      .subscribe();
+    const { data, error, response } = id
+      ? await client.PUT(
+          "/api/0/projects/{organization_id_or_slug}/{project_slug}/alerts/{alert_id}/",
+          { params: { path: { ...path, alert_id: id } }, body },
+        )
+      : await client.POST(
+          "/api/0/projects/{organization_id_or_slug}/{project_slug}/alerts/",
+          { params: { path }, body },
+        );
+    if (data) {
+      this.snackBar.open(
+        id ? $localize`Alert saved` : $localize`Alert created`,
+      );
+      this.#projectAlertsResource.reload();
+      return null;
+    }
+    return apiErrorMessage(
+      error,
+      response,
+      $localize`The alert couldn't be saved. Try again.`,
+    );
   }
 
-  openUpdateRecipientDialog(alert: ProjectAlert) {
-    this.setOpenUpdateRecipientDialog(alert);
+  /** Returns null once the alert is gone, or the error to show. */
+  async deleteProjectAlert(id: number): Promise<string | null> {
+    const { error, response } = await client.DELETE(
+      "/api/0/projects/{organization_id_or_slug}/{project_slug}/alerts/{alert_id}/",
+      { params: { path: { ...this.#path(), alert_id: id } } },
+    );
+    if (response.status === 204) {
+      this.snackBar.open($localize`Alert deleted`);
+      this.#projectAlertsResource.reload();
+      return null;
+    }
+    return apiErrorMessage(
+      error,
+      response,
+      $localize`The alert couldn't be deleted. Try again.`,
+    );
   }
 
-  openCreateRecipientDialog() {
-    this.setOpenCreateRecipientDialog();
-  }
-
-  closeRecipientDialog() {
-    this.setCloseRecipientDialog();
-  }
-
-  /** Set state */
-
-  private setProjectAlertsList(alerts: ProjectAlert[]) {
-    this.setState({
-      projectAlerts: alerts,
-      initialLoad: true,
-      initialLoadError: null,
-    });
-  }
-
-  private setProjectAlertsListError(err: HttpErrorResponse) {
-    this.setState({
-      initialLoad: true,
-      initialLoadError: `There was an error loading your alerts. Try refreshing the page.`,
-    });
-  }
-
-  /** New Alert */
-
-  private setOpenNewAlert() {
-    const newAlertState = this.state.getValue().newAlertState;
-    this.setState({
-      newAlertState: {
-        ...newAlertState,
-        newAlertOpen: true,
-        newProjectAlertRecipients: [{ recipientType: "email", url: "" }],
+  async testRecipient(alertId: number, recipientId: number) {
+    const { data, error } = await client.POST(
+      "/api/0/projects/{organization_id_or_slug}/{project_slug}/alerts/{alert_id}/test/",
+      {
+        params: {
+          path: { ...this.#path(), alert_id: alertId },
+          query: { recipient_id: recipientId },
+        },
       },
-    });
-  }
-
-  private setCloseNewAlert() {
-    const newAlertState = this.state.getValue().newAlertState;
-    this.setState({
-      newAlertState: {
-        ...newAlertState,
-        newAlertOpen: false,
-        newAlertError: null,
-        newProjectAlertRecipients: null,
-      },
-    });
-  }
-
-  private setAddNewAlertRecipient(recipient: NewAlertRecipient) {
-    const newAlertState = this.state.getValue().newAlertState;
-    const recipientDialogState = this.state.getValue().recipientDialogState;
-    this.setState({
-      newAlertState: {
-        ...newAlertState,
-        newProjectAlertRecipients:
-          newAlertState.newProjectAlertRecipients?.concat([recipient]) ?? null,
-      },
-      recipientDialogState: {
-        ...recipientDialogState,
-        recipientDialogOpen: false,
-      },
-    });
-  }
-
-  private setRemoveNewAlertRecipient(url: string) {
-    const newAlertState = this.state.getValue().newAlertState;
-    this.setState({
-      newAlertState: {
-        ...newAlertState,
-        newProjectAlertRecipients:
-          newAlertState.newProjectAlertRecipients?.filter(
-            (recipient) => recipient.url !== url
-          ) ?? null,
-      },
-    });
-  }
-
-  private setNewAlertLoading() {
-    const newAlertState = this.state.getValue().newAlertState;
-    this.setState({
-      newAlertState: {
-        ...newAlertState,
-        newAlertLoading: true,
-      },
-    });
-  }
-
-  private setCreateAlert(alert: ProjectAlert) {
-    const state = this.state.getValue();
-    this.setState({
-      projectAlerts: state.projectAlerts?.concat([alert]),
-      newAlertState: initialNewAlertState,
-    });
-  }
-
-  private setCreateAlertError(error: HttpErrorResponse) {
-    const newAlertState = this.state.getValue().newAlertState;
-    this.setState({
-      newAlertState: {
-        ...newAlertState,
-        newAlertError: `${error.statusText} : ${error.status}`,
-        newAlertLoading: false,
-      },
-    });
-  }
-
-  private setOpenCreateRecipientDialog() {
-    const recipientDialogState = this.state.getValue().recipientDialogState;
-    this.setState({
-      recipientDialogState: {
-        ...recipientDialogState,
-        recipientDialogOpen: true,
-        activeAlert: null,
-      },
-    });
-  }
-
-  /** Recipient Dialog */
-
-  private setCloseRecipientDialog() {
-    const recipientDialogState = this.state.getValue().recipientDialogState;
-    this.setState({
-      recipientDialogState: {
-        ...recipientDialogState,
-        recipientDialogOpen: false,
-        recipientError: null,
-        activeAlert: null,
-      },
-    });
-  }
-
-  private setOpenUpdateRecipientDialog(alert: ProjectAlert) {
-    const recipientDialogState = this.state.getValue().recipientDialogState;
-    this.setState({
-      recipientDialogState: {
-        ...recipientDialogState,
-        recipientDialogOpen: true,
-        recipientError: null,
-        activeAlert: alert,
-      },
-    });
-  }
-
-  /** Alert Updates */
-
-  private setDeleteAlertLoading(pk: number) {
-    this.setState({
-      removeAlertLoading: pk,
-      removeAlertError: null,
-    });
-  }
-
-  private setDeleteProjectAlert(pk: number) {
-    const state = this.state.getValue();
-    this.setState({
-      projectAlerts:
-        state.projectAlerts?.filter((alert) => alert.pk !== pk) ?? null,
-      removeAlertLoading: null,
-      removeAlertError: null,
-    });
-  }
-
-  private setDeleteAlertError(err: HttpErrorResponse, id: number) {
-    const state = this.state.getValue();
-    this.setState({
-      removeAlertError: {
-        ...state.removeAlertError,
-        error: `${err.statusText} : ${err.status}`,
-        pk: id,
-      },
-      removeAlertLoading: null,
-    });
-  }
-
-  private setUpdateAlertProperties(updatedAlert: ProjectAlert) {
-    const state = this.state.getValue();
-    this.setState({
-      projectAlerts: this.findAndReplaceAlert(
-        state.projectAlerts,
-        updatedAlert
-      ),
-      updatePropertiesLoading: null,
-      updatePropertiesError: null,
-    });
-  }
-
-  private setUpdatePropertiesLoading(pk: number) {
-    this.setState({
-      updatePropertiesLoading: pk,
-      updatePropertiesError: null,
-    });
-  }
-
-  private setUpdatePropertiesError(err: HttpErrorResponse, id: number) {
-    const state = this.state.getValue();
-    this.setState({
-      updatePropertiesLoading: null,
-      updatePropertiesError: {
-        ...state.updatePropertiesError,
-        error: `${err.statusText} : ${err.status}`,
-        pk: id,
-      },
-    });
-  }
-
-  private setUpdateAlertRecipientsError(err: HttpErrorResponse, id: number) {
-    const recipientDialogState = this.state.getValue().recipientDialogState;
-    this.setState({
-      recipientDialogState: {
-        ...recipientDialogState,
-        recipientError: `${err.statusText} : ${err.status}`,
-      },
-    });
-  }
-
-  private setUpdateAlertRecipients(recipients: AlertRecipient[], id: number) {
-    const state = this.state.getValue();
-    const recipientDialogState = this.state.getValue().recipientDialogState;
-    this.setState({
-      projectAlerts: state.projectAlerts?.map((alert) =>
-        alert.pk === id ? { ...alert, alertRecipients: recipients } : alert
-      ),
-      recipientDialogState: {
-        ...recipientDialogState,
-        recipientError: null,
-        recipientDialogOpen: false,
-        activeAlert: null,
-      },
-      deleteRecipientLoading: null,
-      deleteRecipientError: null,
-    });
-
-    this.setState({});
-  }
-
-  private setDeleteRecipientLoading(pk: number) {
-    const recipientDialogState = this.state.getValue().recipientDialogState;
-    this.setState({
-      recipientDialogState: {
-        ...recipientDialogState,
-        recipientError: null,
-      },
-      deleteRecipientLoading: pk,
-    });
-
-    this.setState({});
-  }
-
-  private setDeleteRecipientError(err: HttpErrorResponse) {
-    this.setState({
-      deleteRecipientError: `${err.statusText} : ${err.status}`,
-      deleteRecipientLoading: null,
-    });
-  }
-
-  /** Utility Functions */
-
-  findAndReplaceAlert(
-    currentAlerts: ProjectAlert[] | null,
-    newAlert: ProjectAlert
-  ): ProjectAlert[] | null {
-    const updatedAlert = currentAlerts?.map((alert) => {
-      if (alert.pk === newAlert.pk) {
-        return {
-          ...alert,
-          timespan_minutes: newAlert.timespan_minutes,
-          quantity: newAlert.quantity,
-          uptime: newAlert.uptime,
-        };
-      } else return alert;
-    });
-    return updatedAlert !== undefined ? updatedAlert : null;
+    );
+    if (data) {
+      const results = data as {
+        recipientType: string;
+        status: string;
+        message?: string | null;
+      }[];
+      const result = results[0];
+      if (!result) {
+        this.snackBar.open($localize`No test was sent`);
+      } else if (result.status === "error") {
+        this.snackBar.open($localize`Test failed: ${result.message}:message:`);
+      } else if (result.status === "sent") {
+        this.snackBar.open($localize`Test notification sent successfully`);
+      } else if (result.status === "skipped") {
+        this.snackBar.open(
+          $localize`Email recipients are tested via the alert itself`,
+        );
+      }
+    } else if (error) {
+      this.snackBar.open($localize`Failed to send test notification`);
+    }
   }
 }

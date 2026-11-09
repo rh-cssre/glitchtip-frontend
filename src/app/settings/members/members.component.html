@@ -1,43 +1,89 @@
+<gt-top-app-bar>
+  <ng-container slot="left">
+    <h1 i18n class="gt-bar-title">Members</h1>
+  </ng-container>
+  <ng-container slot="right">
+    @if (canWriteMember()) {
+      <a i18n mat-flat-button color="primary" [routerLink]="['new']"
+        >Invite Member</a
+      >
+    }
+  </ng-container>
+</gt-top-app-bar>
 <section class="l-body">
-  <header class="page-header">
-    <h1 class="mat-display-1">Organization Members</h1>
-    <a mat-flat-button color="primary" [routerLink]="['new']">Invite Member</a>
-  </header>
-  <mat-card>
-    <mat-card-title>
-      {{ (activeOrganizationDetail$ | async)?.name }}
-    </mat-card-title>
-    <mat-divider></mat-divider>
-    <mat-card-content>
-      <div class="list">
-        <div class="list--item" *ngFor="let member of members$ | async">
-          <a class="email" mat-line [routerLink]="[member.id]">{{
-            member.email
-          }}</a>
-
-          <div *ngIf="member.pending" class="invite-status">
-            <p class="pending">Pending</p>
-            <gt-loading-button
-              *ngIf="!member.loadingResendInvite && !member.sentResendInvite"
-              class="resend-invite"
-              [loading]="member.loadingResendInvite"
-              buttonText="Resend Invite"
-              (click)="resendInvite(member.id)"
+  <gt-panel flush>
+    <gt-list flush>
+      @for (member of members(); track member.id) {
+        <gt-list-row>
+          <a gtListRowLink [routerLink]="[member.id]">{{ member.email }}</a>
+          @if (member.pending) {
+            <gt-status-pill [label]="invitePendingText" />
+          }
+          @if (member.isOwner) {
+            <span class="list-row__tag" i18n>Account owner</span>
+          }
+          @if (
+            member.isOwner &&
+            !member.pending &&
+            (member.isMe || canAdminMember())
+          ) {
+            <span slot="description" i18n
+              >Account ownership must be transferred.</span
             >
-            </gt-loading-button>
-            <span *ngIf="member.sentResendInvite">Invite Sent</span>
-          </div>
-
-          <div class="role">{{ member.roleName }}</div>
-
-          <gt-loading-button
-            class="remove-button"
-            (click)="removeMember(member)"
-            [buttonText]="member.isMe ? 'Leave' : 'Remove'"
-            buttonStyle="stroked"
-          ></gt-loading-button>
-        </div>
-      </div>
-    </mat-card-content>
-  </mat-card>
+          }
+          <span slot="meta">{{
+            roleName(member.role) ?? member.roleName
+          }}</span>
+          @if (member.role === "owner" && !member.isOwner && !canManageOwners()) {
+            <span slot="description" i18n
+              >Only owners can manage another owner.</span
+            >
+          }
+          @if (member.pending && canWriteMember() && canManage(member)) {
+            <ng-container slot="actions">
+              <button
+                mat-icon-button
+                class="medium-icon-button"
+                [matMenuTriggerFor]="memberMenu"
+                [attr.aria-label]="actionsForLabel(member.email)"
+              >
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #memberMenu="matMenu" xPosition="before">
+                <button
+                  mat-menu-item
+                  [disabled]="
+                    member.sentResendInvite || member.loadingResendInvite
+                  "
+                  (click)="resendInvite(member)"
+                >
+                  @if (member.sentResendInvite) {
+                    <ng-container i18n>Invite resent</ng-container>
+                  } @else {
+                    <ng-container i18n>Resend invite</ng-container>
+                  }
+                </button>
+                @if (canAdminMember()) {
+                  <button mat-menu-item (click)="removeMember(member)" i18n
+                    >Remove</button
+                  >
+                }
+              </mat-menu>
+            </ng-container>
+          } @else if (
+            !member.pending &&
+            (member.isMe || (canAdminMember() && canManage(member)))
+          ) {
+            <gt-loading-button
+              slot="actions"
+              [disabled]="member.isOwner"
+              (buttonClick)="removeMember(member)"
+              [buttonText]="member.isMe ? leaveText : removeText"
+              buttonStyle="stroked"
+            />
+          }
+        </gt-list-row>
+      }
+    </gt-list>
+  </gt-panel>
 </section>

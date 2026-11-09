@@ -1,0 +1,13 @@
+@use "variables" as vars;
+
+:host {
+  width: 200px;
+
+  @media screen and (max-width: vars.$medium - 1) {
+    flex: 2;
+  }
+}
+
+.gt-select-ghost {
+  width: 100%;
+}

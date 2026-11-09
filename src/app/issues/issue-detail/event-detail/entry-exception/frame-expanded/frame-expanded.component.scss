@@ -1,5 +1,4 @@
-@use '@angular/material' as mat;
-@import "variables";
+@use "variables" as vars;
 
 pre {
   margin-top: 0;
@@ -24,11 +23,6 @@ pre {
   padding-bottom: 1px;
 }
 
-.highlight {
-  background: mat.get-color-from-palette($amaranth-palette, 100);
-  width: 100vw;
-}
-
 .var-wrapper {
   padding-top: 32px;
   padding-bottom: 16px;
@@ -44,7 +38,7 @@ pre {
     clear: both;
     padding-top: 8px;
     padding-bottom: 8px;
-    @media screen and (max-width: $small - 1) {
+    @media screen and (max-width: vars.$small - 1) {
       flex-direction: column;
     }
 
@@ -54,11 +48,11 @@ pre {
       float: left;
       width: 20%;
 
-      @media screen and (max-width: $large - 1) {
+      @media screen and (max-width: vars.$large - 1) {
         width: 25%;
       }
 
-      @media screen and (max-width: $small - 1) {
+      @media screen and (max-width: vars.$small - 1) {
         width: 100%;
       }
     }
@@ -67,7 +61,7 @@ pre {
       margin-left: 0px;
       width: 70%;
 
-      @media screen and (max-width: $small - 1) {
+      @media screen and (max-width: vars.$small - 1) {
         width: 100%;
       }
     }

@@ -1,55 +1,104 @@
-<mat-card class="half-width">
-  <mat-card-content>
-    <mat-card-title i18n>Preferences</mat-card-title>
-    <mat-divider></mat-divider>
-    <form
-      *ngIf="userDetails$ | async"
-      [formGroup]="form"
-      (ngSubmit)="onSubmit()"
-    >
-      <mat-form-field class="full-width first-field">
+@if (userDetails()) {
+  <!-- One form per section, all on the same FormGroup, so Enter saves only
+       the section it was pressed in. -->
+  <form [formGroup]="form" (ngSubmit)="save('name')">
+    <gt-settings-section #nameSection i18n-title title="Name" panel>
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
         <input
           matInput
-          placeholder="Name"
           formControlName="name"
           maxlength="255"
+          [attr.aria-labelledby]="nameSection.titleId"
         />
       </mat-form-field>
-      <mat-form-field class="timezone full-width">
+      <gt-loading-button
+        slot="actions"
+        i18n-buttonText
+        buttonText="Save name"
+        buttonStyle="stroked"
+        [loading]="saving().name"
+      />
+    </gt-settings-section>
+  </form>
+
+  <form [formGroup]="form" (ngSubmit)="save('timeZone')">
+    <gt-settings-section
+      #timeZoneSection
+      i18n-title
+      title="Time zone"
+      panel
+    >
+      <span slot="description" i18n
+        >Your system time zone is {{ currentTimeZone }}</span
+      >
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
         <input
           type="text"
-          placeholder="Time Zone"
           matInput
           formControlName="timeZone"
           [matAutocomplete]="auto"
-          [errorStateMatcher]="matcher"
+          [attr.aria-labelledby]="timeZoneSection.titleId"
         />
         <button
           [class.invalid]="formTimeZone.invalid"
-          mat-button
+          class="input-icon-button"
           mat-icon-button
           matSuffix
           type="button"
+          i18n-aria-label
+          aria-label="Clear time zone"
           (click)="clearTimeZone()"
         >
           <mat-icon>close</mat-icon>
         </button>
         <mat-autocomplete #auto="matAutocomplete">
-          <mat-option
-            *ngFor="let timeZone of filteredOptions | async"
-            [value]="timeZone"
-          >
-            {{ timeZone }}
-          </mat-option>
+          @for (timeZone of filteredOptions(); track timeZone) {
+            <mat-option [value]="timeZone">
+              {{ timeZone }}
+            </mat-option>
+          }
         </mat-autocomplete>
         <mat-error>
-          <span *ngIf="formTimeZone?.errors?.invalidAutocompleteString" i18n>
-            Select a valid time zone
-          </span>
+          @if (formTimeZone.errors?.invalidAutocompleteString) {
+            <span i18n>Select a valid time zone</span>
+          }
         </mat-error>
-        <mat-hint>Your system time zone is {{ currentTimeZone }}</mat-hint>
       </mat-form-field>
-      <gt-loading-button buttonText="Update Preferences"></gt-loading-button>
-    </form>
-  </mat-card-content>
-</mat-card>
+      <gt-loading-button
+        slot="actions"
+        i18n-buttonText
+        buttonText="Save time zone"
+        buttonStyle="stroked"
+        [loading]="saving().timeZone"
+      />
+    </gt-settings-section>
+  </form>
+
+  <!-- The theme previews itself, so it saves on click without a button. -->
+  <div [formGroup]="form">
+    <gt-settings-section #themeSection i18n-title title="Theme" panel>
+      <mat-button-toggle-group
+        class="gt-segmented"
+        hideSingleSelectionIndicator
+        formControlName="theme"
+        [attr.aria-labelledby]="themeSection.titleId"
+      >
+        <mat-button-toggle value="system">
+          <mat-icon>brightness_medium</mat-icon>
+          <ng-container i18n>System</ng-container>
+        </mat-button-toggle>
+        <mat-button-toggle value="light">
+          <mat-icon>light_mode</mat-icon>
+          <ng-container i18n>Light</ng-container>
+        </mat-button-toggle>
+        <mat-button-toggle value="dark">
+          <mat-icon>dark_mode</mat-icon>
+          <ng-container i18n>Dark</ng-container>
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+      @if (themeError(); as error) {
+        <gt-form-error slot="error" [errors]="error" />
+      }
+    </gt-settings-section>
+  </div>
+}

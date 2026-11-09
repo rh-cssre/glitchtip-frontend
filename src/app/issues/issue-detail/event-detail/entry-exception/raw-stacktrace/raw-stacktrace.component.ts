@@ -1,4 +1,9 @@
-import { Component, ChangeDetectionStrategy, Input } from "@angular/core";
+import {
+  Component,
+  ChangeDetectionStrategy,
+  input,
+  inject,
+} from "@angular/core";
 import { isStacktrace } from "src/app/issues/utils";
 import { IssueDetailService } from "../../../issue-detail.service";
 
@@ -9,10 +14,10 @@ import { IssueDetailService } from "../../../issue-detail.service";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RawStacktraceComponent {
-  @Input() eventPlatform: string | null | undefined;
-  rawStacktraceValues$ = this.issueService.rawStacktraceValues$;
+  private issueService = inject(IssueDetailService);
 
-  constructor(private issueService: IssueDetailService) {}
+  readonly eventPlatform = input<string | null>();
+  rawStacktraceValues = this.issueService.rawStacktraceValues;
 
   checkStacktraceInterface = isStacktrace;
 }

@@ -1,51 +1,42 @@
-@import "variables";
+@use "variables" as vars;
 
-mat-card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-bottom: 12px;
-
-  &::ng-deep .mat-card-header-text {
-    margin-left: 0;
-  }
-
-  mat-card-title {
-    margin-bottom: 0;
-    margin-right: 8px;
-  }
-}
-
-.server-error {
-  padding-top: 16px;
-  text-align: center;
-}
-
-mat-form-field {
-  width: 100%;
+:host {
+  display: block;
 }
 
 .select-all {
-  margin-bottom: 8px
+  display: block;
+  margin-bottom: var(--gt-space-2, 8px);
 }
 
-ul {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax((150px), 1fr));
-  grid-gap: 8px 16px;
-  margin-top: 0;
-  margin-bottom: 0;
-  padding-left: 0;
+// Resources down the side, levels across the top.
+.scope-table {
+  border-collapse: collapse;
 
-  li {
-    list-style-type: none;
+  th,
+  td {
+    padding: var(--gt-space-1, 4px) var(--gt-space-3, 12px)
+      var(--gt-space-1, 4px) 0;
+    text-align: left;
   }
-}
 
-.checkbox-error {
-  font-size: 75%;
-}
+  // Level headers sit over their checkboxes.
+  thead th,
+  td {
+    text-align: center;
+  }
 
-gt-loading-button {
-  margin-top: 40px;
+  thead th {
+    font: var(--mat-sys-body-small);
+    color: var(--mat-sys-on-surface-variant);
+  }
+
+  tbody th {
+    font: var(--mat-sys-body-medium);
+    font-weight: 600;
+  }
+
+  code {
+    font-family: vars.$font-mono;
+  }
 }

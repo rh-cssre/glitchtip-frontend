@@ -1,25 +1,24 @@
-The Pyramid integration adds support for the [Pyramid Web Framework](https://trypyramid.com/).
+Install the sentry Python SDK:
 
-1. Install `sentry-sdk` from PyPI:
+```bash
+pip install sentry-sdk
+```
 
-   ```bash
-   $ pip install --upgrade sentry-sdk
-   ```
+Initialize the SDK before creating your Pyramid app:
 
-2. To configure the SDK, initialize it with the integration before or after your app has been created:
+```python
+import sentry_sdk
+from pyramid.config import Configurator
 
-   ```python
-   import sentry_sdk
+sentry_sdk.init(
+    dsn="YOUR_DSN",
+    traces_sample_rate=0.01,
+    auto_session_tracking=False,
+)
 
-   from sentry_sdk.integrations.pyramid import PyramidIntegration
+with Configurator() as config:
+    config.add_route("home", "/")
+    app = config.make_wsgi_app()
+```
 
-   sentry_sdk.init(
-       dsn="your DSN here",
-       integrations=[PyramidIntegration()]
-   )
-
-   from pyramid.config import Configurator
-
-   with Configurator() as config:
-       ...
-   ```
+The SDK auto-detects Pyramid and captures unhandled exceptions and request data.
