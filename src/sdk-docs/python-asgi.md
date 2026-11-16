@@ -1,14 +1,31 @@
-It is recommended to use an integration for your particular WSGI framework if available, as those are easier to use and capture more useful information.
+Install the sentry Python SDK:
 
-If you use a WSGI framework not directly supported by the SDK, or wrote a raw WSGI app, you can use this generic WSGI middleware. It captures errors and attaches a basic amount of information for incoming requests.
+```bash
+pip install sentry-sdk
+```
+
+Initialize the SDK and wrap your ASGI app with `SentryAsgiMiddleware`:
 
 ```python
 import sentry_sdk
-from sentry_sdk.integrations.wsgi import SentryWsgiMiddleware
+from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
 
-from myapp import wsgi_app
+sentry_sdk.init(
+    dsn="YOUR_DSN",
+    traces_sample_rate=0.01,
+    auto_session_tracking=False,
+)
 
-sentry_sdk.init(dsn="your DSN here")
+async def app(scope, receive, send):
+    # Your ASGI application
+    pass
 
-wsgi_app = SentryWsgiMiddleware(wsgi_app)
+app = SentryAsgiMiddleware(app)
 ```
+
+The ASGI middleware captures unhandled exceptions and request data from any ASGI-compatible framework.
+
+## Tips
+
+- If you're using FastAPI, Django, or Starlette, prefer their dedicated integrations — they provide richer context automatically.
+- This integration is useful for custom ASGI applications or less common frameworks.

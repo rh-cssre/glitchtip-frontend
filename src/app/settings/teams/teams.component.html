@@ -1,87 +1,97 @@
+<gt-top-app-bar>
+  <ng-container slot="left">
+    <h1 class="gt-bar-title" i18n>Teams</h1>
+  </ng-container>
+  <ng-container slot="right">
+    @if (canWriteTeam()) {
+      <button
+        mat-flat-button
+        color="primary"
+        (click)="openCreateTeamDialog()"
+        id="new-team"
+        i18n
+        >New team</button
+      >
+    }
+  </ng-container>
+</gt-top-app-bar>
 <section class="l-body">
-  <header class="page-header">
-    <h1 class="mat-display-1" i18n>Teams</h1>
-    <button
-      mat-flat-button
-      color="primary"
-      (click)="openCreateTeamDialog()"
-      id="new-team"
-      i18n
-      >Create Team</button
-    >
-  </header>
-  <mat-card>
-    <mat-card-title i18n>Your Teams</mat-card-title>
-    <p class="description" i18n
-      >Teams are for managing issue notifications and workflow. View permissions
-      are handled through
-      <a routerLink="../members"> organization membership.</a></p
-    >
-    <mat-divider></mat-divider>
-    <mat-card-content>
-      <mat-list *ngIf="(yourTeams$ | async)?.length; else noTeams">
-        <mat-error class="center-text" *ngIf="errors$ | async as error">{{
-          error.removeTeamMember
-        }}</mat-error>
-        <mat-list-item *ngFor="let yourTeam of yourTeams$ | async">
-          <a mat-line [routerLink]="[yourTeam.slug, 'members']">
-            #{{ yourTeam.slug }}
-          </a>
-          <p mat-line>
-            {{ yourTeam.memberCount | i18nPlural: memberCountPluralMapping }}
-          </p>
-          <gt-loading-button
-            buttonText="Leave Team"
-            buttonStyle="stroked"
-            [loading]="(loading$ | async)?.removeTeamMember === yourTeam.slug"
-            (click)="leaveTeam(yourTeam.slug)"
-            id="leave-team"
-          ></gt-loading-button>
-        </mat-list-item>
-      </mat-list>
-      <ng-template #noTeams>
-        <p *ngIf="(otherTeams$ | async)?.length; else noTeamsInOrg" i18n
-          >You aren't part of any teams. Join a team below or press the "Create
-          Team" button in the upper right.</p
-        >
-        <ng-template #noTeamsInOrg>
-          <p i18n
-            >You don't have any teams set up. Teams determine which users have
-            access to projects in your organization.</p
+  @if (activeOrganization()) {
+    @if (!yourTeams()?.length) {
+      <gt-panel>
+        @if (otherTeams()?.length) {
+          <gt-empty-state
+            icon="groups"
+            i18n-title
+            title="No teams joined"
+            [message]="noTeamsJoinedMessage()"
+          />
+        } @else {
+          <gt-empty-state
+            icon="groups"
+            i18n-title
+            title="No teams"
+            [message]="noTeamsMessage()"
+          />
+        }
+      </gt-panel>
+    }
+    @for (section of sections(); track section.joined; let first = $first) {
+      <gt-settings-section [title]="section.title" panel flush>
+        @if (first) {
+          <span slot="description" i18n
+            >Members of a team get email alerts for the team's projects. Access
+            to projects comes from
+            <a routerLink="../members">organization membership</a>.</span
           >
-          <p i18n
-            >To create a new team, press the "Create Team" button in the upper
-            right.</p
-          >
-        </ng-template>
-      </ng-template>
-    </mat-card-content>
-  </mat-card>
-
-  <mat-card *ngIf="(otherTeams$ | async)?.length">
-    <mat-card-title i18n>Other Teams</mat-card-title>
-    <mat-divider></mat-divider>
-    <mat-card-content>
-      <mat-list>
-        <mat-error class="center-text" *ngIf="errors$ | async as error">{{
-          error.addTeamMember
-        }}</mat-error>
-        <mat-list-item *ngFor="let otherTeam of otherTeams$ | async">
-          <a mat-line [routerLink]="[otherTeam.slug, 'members']">
-            #{{ otherTeam.slug }}
-          </a>
-          <p mat-line>
-            {{ otherTeam.memberCount | i18nPlural: memberCountPluralMapping }}
-          </p>
-          <gt-loading-button
-            buttonText="Join Team"
-            buttonStyle="stroked"
-            [loading]="(loading$ | async)?.addTeamMember === otherTeam.slug"
-            (click)="joinTeam(otherTeam.slug)"
-            id="leave-team"
-          ></gt-loading-button>
-        </mat-list-item>
-      </mat-list>
-    </mat-card-content>
-  </mat-card>
+        }
+        <gt-list flush>
+          @for (team of section.teams; track team.id) {
+            <gt-list-row>
+              <a gtListRowLink [routerLink]="[team.slug, 'members']"
+                >#{{ team.slug }}</a
+              >
+              <span slot="meta">
+                <span i18n
+                  >{team.memberCount, plural,
+                    =1 {1 member}
+                    other {{{ team.memberCount // i18n(ph="count") }} members}
+                  }</span
+                >
+                <span i18n
+                  >{projectCount(team.id), plural,
+                    =1 {1 project}
+                    other {{{ projectCount(team.id) // i18n(ph="count") }} projects}
+                  }</span
+                >
+              </span>
+              @if (section.joined && canLeaveTeam()) {
+                <gt-loading-button
+                  slot="actions"
+                  i18n-buttonText
+                  buttonText="Leave team"
+                  buttonStyle="stroked"
+                  [loading]="loading().removeTeamMember === team.slug"
+                  (buttonClick)="leaveTeam(team.slug)"
+                />
+              }
+              @if (!section.joined && canJoinTeam()) {
+                <gt-loading-button
+                  slot="actions"
+                  i18n-buttonText
+                  buttonText="Join team"
+                  buttonStyle="stroked"
+                  [loading]="loading().addTeamMember === team.slug"
+                  (buttonClick)="joinTeam(team.slug)"
+                />
+              }
+            </gt-list-row>
+          }
+        </gt-list>
+        @if (section.error) {
+          <gt-form-error slot="error" [errors]="section.error" />
+        }
+      </gt-settings-section>
+    }
+  }
 </section>

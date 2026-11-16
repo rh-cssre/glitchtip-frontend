@@ -1,0 +1,62 @@
+@use "controls";
+
+:host {
+  display: block;
+}
+
+.comments-loading-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60px;
+}
+
+.composer {
+  margin-bottom: var(--gt-space-4, 16px);
+}
+
+.comment {
+  padding: var(--gt-space-3, 12px) var(--gt-space-4, 16px);
+  transition: opacity 150ms;
+
+  & + & {
+    border-top: 1px solid var(--mat-sys-outline-variant);
+  }
+
+  &--busy {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
+
+.comment__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gt-space-1, 4px) var(--gt-space-3, 12px);
+  min-height: 32px;
+  font: var(--mat-sys-body-medium);
+}
+
+.comment__author {
+  font-weight: 600;
+  color: var(--mat-sys-on-surface);
+  overflow-wrap: anywhere;
+}
+
+.comment__time {
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.comment__actions {
+  display: flex;
+  gap: var(--gt-space-1, 4px);
+  margin-left: auto;
+  @include controls.compact-buttons;
+}
+
+.comment__body {
+  font: var(--mat-sys-body-medium);
+  color: var(--mat-sys-on-surface);
+  overflow-wrap: anywhere;
+}

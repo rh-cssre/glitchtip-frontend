@@ -1,0 +1,14 @@
+<header>
+  <div class="header-group">
+    <h1>
+      <span class="section-header-text-light">{{ getTitle() }}</span>
+      @if (getTitleSuffix(); as suffix) {
+        <span class="body-text-strong">{{ suffix }}</span>
+      }
+      <p class="body-text-strong">{{ subtitle() }}</p>
+    </h1>
+    <div class="button-row">
+      <ng-content />
+    </div>
+  </div>
+</header>

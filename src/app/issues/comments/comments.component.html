@@ -1,0 +1,93 @@
+@if (commentsListLoading()) {
+  <div class="comments-loading-wrapper">
+    <mat-progress-spinner
+      [diameter]="33"
+      color="primary"
+      mode="indeterminate"
+    ></mat-progress-spinner>
+  </div>
+} @else {
+  @if (displayCommentCreation()) {
+    <gt-comment-form
+      class="composer"
+      [loading]="createCommentLoading()!"
+      (commentSubmitted)="createOrUpdateComment($event)"
+    ></gt-comment-form>
+  }
+  @if (comments().length) {
+    <gt-panel flush>
+      <div role="list" i18n-aria-label aria-label="Comments">
+        @for (comment of comments(); track comment.id) {
+          <div
+            class="comment"
+            role="listitem"
+            [class.comment--busy]="comment.deleteLoading"
+            [attr.aria-busy]="comment.deleteLoading || null"
+          >
+            @if (comment.updateMode) {
+              <gt-comment-form
+                [comment]="comment"
+                [loading]="comment.updateLoading"
+                (cancelUpdate)="cancelCommentUpdateMode($event)"
+                (commentSubmitted)="createOrUpdateComment($event)"
+              ></gt-comment-form>
+            } @else {
+              <div class="comment__head">
+                <span class="comment__author">{{ comment.user?.email }}</span>
+                <span
+                  class="comment__time gt-has-tip"
+                  tabindex="0"
+                  [matTooltip]="comment.dateCreated | date: 'medium'"
+                  >{{ comment.dateCreated | daysAgo }}</span
+                >
+                @if (user(); as user) {
+                  @if (user.id === comment.user?.id) {
+                    <span class="comment__actions">
+                      <button
+                        mat-icon-button
+                        type="button"
+                        i18n-aria-label
+                        aria-label="Edit comment"
+                        i18n-matTooltip
+                        matTooltip="Edit"
+                        (click)="triggerCommentUpdateMode(comment.id!)"
+                      >
+                        <mat-icon class="gt-icon-sm">edit</mat-icon>
+                      </button>
+                      <button
+                        mat-icon-button
+                        type="button"
+                        i18n-aria-label
+                        aria-label="Delete comment"
+                        i18n-matTooltip
+                        matTooltip="Delete"
+                        (click)="deleteComment(comment.id!)"
+                      >
+                        <mat-icon class="gt-icon-sm">delete</mat-icon>
+                      </button>
+                    </span>
+                  }
+                }
+              </div>
+              <div
+                markdown
+                [data]="comment.data.text"
+                class="comment__body comment-markdown"
+              ></div>
+            }
+          </div>
+        }
+      </div>
+    </gt-panel>
+  } @else {
+    <gt-panel>
+      <gt-empty-state
+        icon="breaking_news"
+        i18n-title
+        title="No comments"
+        i18n-message
+        message="Add a comment to share context with your team."
+      />
+    </gt-panel>
+  }
+}

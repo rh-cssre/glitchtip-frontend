@@ -1,0 +1,9 @@
+@use "@angular/material" as mat;
+
+@include mat.card-overrides(
+  (
+    outlined-container-color: var(--mat-sys-surface-container),
+    title-text-size: 18px,
+    title-text-weight: 500,
+  )
+);

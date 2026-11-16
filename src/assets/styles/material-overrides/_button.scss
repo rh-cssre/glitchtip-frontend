@@ -1,0 +1,68 @@
+@use "@angular/material" as mat;
+@use "controls";
+@use "variables" as vars;
+
+@include mat.button-overrides(
+  (
+    filled-container-shape: vars.$shape-radius,
+    outlined-container-shape: vars.$shape-radius,
+    protected-container-shape: vars.$shape-radius,
+    text-container-shape: vars.$shape-radius,
+    filled-horizontal-padding: 12px,
+    outlined-label-text-color: var(--mat-sys-on-surface),
+    outlined-state-layer-color: var(--mat-sys-on-surface),
+    outlined-ripple-color: controls.state-layer-color(pressed),
+    text-label-text-color: var(--mat-sys-on-surface),
+    text-state-layer-color: var(--mat-sys-on-surface),
+    text-ripple-color: controls.state-layer-color(pressed),
+  )
+);
+
+// Material 3 ignores color on buttons, so warn is mapped to the error role here.
+.mat-mdc-outlined-button.mat-warn,
+.mat-mdc-button.mat-warn {
+  @include mat.button-overrides(
+    (
+      outlined-label-text-color: var(--mat-sys-error),
+      outlined-state-layer-color: var(--mat-sys-error),
+      text-label-text-color: var(--mat-sys-error),
+      text-state-layer-color: var(--mat-sys-error),
+    )
+  );
+}
+
+// Filled buttons darken the red on hover and press, like the active nav item,
+// instead of Material's white state layer; keyboard focus gets the ring.
+[mat-flat-button] {
+  @include mat.button-overrides(
+    (
+      filled-hover-state-layer-opacity: 0,
+      filled-focus-state-layer-opacity: 0,
+      filled-pressed-state-layer-opacity: 0,
+      filled-ripple-color: transparent,
+    )
+  );
+
+  // Touch screens skip hover, so a tap leaves nothing behind.
+  @media (hover: hover) {
+    &:hover {
+      @include mat.button-overrides(
+        (
+          filled-container-color: var(--gt-primary-hover),
+        )
+      );
+    }
+  }
+
+  &:active {
+    @include mat.button-overrides(
+      (
+        filled-container-color: var(--gt-primary-pressed),
+      )
+    );
+  }
+
+  &:focus-visible {
+    @include controls.focus-ring;
+  }
+}

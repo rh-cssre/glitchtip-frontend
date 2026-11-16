@@ -1,0 +1,13 @@
+:host {
+  display: block;
+}
+
+.page-shell {
+  width: min(95%, 100% - var(--mkt-gutter));
+  max-width: var(--mkt-container-wide);
+  // min-height keeps short pages (support, legal stubs) from collapsing above
+  // the footer.
+  min-height: 60vh;
+  margin: 0 auto;
+  padding: clamp(24px, 4vw, 40px) 0 64px;
+}

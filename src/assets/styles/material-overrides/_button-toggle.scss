@@ -1,0 +1,34 @@
+@use "@angular/material" as mat;
+@use "controls";
+@use "variables" as vars;
+
+@include mat.button-toggle-overrides(
+  (
+    shape: vars.$shape-radius,
+  )
+);
+
+// 40px with the border, the height of the form fields they sit beside. :root
+// outranks the theme's density height on html.
+:root {
+  @include mat.button-toggle-overrides(
+    (
+      height: 38px,
+    )
+  );
+}
+
+// Segmented control for a short view switch in a bar or panel header: 32px
+// with the border like the other header controls, neutral (selected is a
+// tint, not primary).
+.gt-segmented {
+  @include mat.button-toggle-overrides(
+    (
+      height: 30px,
+      selected-state-background-color: controls.state-layer-color(focus),
+      selected-state-text-color: var(--mat-sys-on-surface),
+      text-color: var(--mat-sys-on-surface-variant),
+      divider-color: var(--mat-sys-outline),
+    )
+  );
+}

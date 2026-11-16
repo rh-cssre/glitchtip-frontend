@@ -1,0 +1,194 @@
+@if (visible()) {
+  <mat-card appearance="outlined" class="upgrade-banner">
+    <mat-card-content>
+      <div class="banner-content">
+        @if (variant() === "get-started") {
+          <h2 class="banner-headline fancy" i18n>Get started with GlitchTip</h2>
+          <p class="banner-description" i18n
+            >Start free with {{ freeEventLabel() }} events/month, or go paid to
+            scale up and support open source error tracking with priority
+            support.</p
+          >
+        } @else if (isSuspended()) {
+          <!-- Switched off by hand, so no plan, cap or toggle changes it. This
+               comes before every other case because those all name something to
+               buy or adjust, and none of it would restore ingest. -->
+          <h2 class="banner-headline fancy" i18n>Event collection is paused</h2>
+          <p class="banner-usage" i18n>
+            We've paused event collection for this organization, so new events
+            are being rejected. Please get in touch and we'll sort it out with
+            you.
+          </p>
+        } @else if (isThrottling()) {
+          <!-- The remedy comes from the shared throttle state the card and
+               snackbar also branch on, so the three surfaces cannot disagree.
+               visible() has already dropped the states with nothing honest to
+               say ("throttled" is the server catching up with a change; the
+               card below owns that notice). A paid org is asked to get in
+               touch to change plan, never to upgrade to a named one. -->
+          @if (throttleState() === "stalled-broken") {
+            <h2 class="banner-headline fancy" i18n
+              >On-demand billing needs attention</h2
+            >
+          } @else if (isLargestPlan()) {
+            <h2 class="banner-headline fancy" i18n
+              >You've outgrown this plan</h2
+            >
+          } @else {
+            <h2 class="banner-headline fancy" i18n>Don't lose events!</h2>
+          }
+          @switch (throttleState()) {
+            @case ("cap") {
+              <!-- The cap is the one self-serve remedy; a larger plan is a
+                   conversation. -->
+              @if (!canManage()) {
+                <p class="banner-usage" i18n>
+                  You've reached your spend cap, and about
+                  <strong>{{ eventThrottleRate() }}%</strong> of your incoming
+                  events are being dropped. Ask an organization owner to raise
+                  the spend cap or change your plan to keep collecting events.
+                </p>
+              } @else {
+                <p class="banner-usage" i18n>
+                  You've reached your spend cap, and about
+                  <strong>{{ eventThrottleRate() }}%</strong> of your incoming
+                  events are being dropped. Raise your cap below to keep
+                  collecting events, or get in touch and we'll help you find a
+                  fit.
+                </p>
+              }
+            }
+            @case ("no-overage") {
+              @if (!canManage()) {
+                <p class="banner-usage" i18n>
+                  About <strong>{{ eventThrottleRate() }}%</strong> of your
+                  incoming events are being dropped. Ask an organization owner
+                  to turn on on-demand billing or change your plan to keep
+                  collecting events.
+                </p>
+              } @else if (isLargestPlan()) {
+                <p class="banner-usage" i18n>
+                  You're at your event limit on our largest plan, and about
+                  <strong>{{ eventThrottleRate() }}%</strong> of your incoming
+                  events are being dropped. Turn on on-demand billing below to
+                  keep collecting events, or get in touch and we'll help you
+                  find a fit.
+                </p>
+              } @else if (paid()) {
+                <p class="banner-usage" i18n>
+                  About <strong>{{ eventThrottleRate() }}%</strong> of your
+                  incoming events are being dropped. Turn on on-demand billing
+                  below to keep collecting events, or get in touch to change
+                  your plan.
+                </p>
+              } @else {
+                <p class="banner-usage" i18n>
+                  About <strong>{{ eventThrottleRate() }}%</strong> of your
+                  incoming events are being dropped. Upgrade to keep collecting
+                  events, or turn on on-demand billing below.
+                </p>
+              }
+            }
+            @case ("stalled-broken") {
+              <!-- Only we can fix this, so nothing is sold: an upgrade would
+                   not restore a metered item that is gone on the billing side,
+                   and the card below says raising the cap will not help. -->
+              <p class="banner-usage" i18n>
+                On-demand billing is switched on but is not running, and about
+                <strong>{{ eventThrottleRate() }}%</strong> of your incoming
+                events are being dropped. You are not being charged for it.
+                Please get in touch and we'll sort it out with you.
+              </p>
+            }
+            @default {
+              <!-- "unavailable" and "stalled-plan": a plan change is the one
+                   real remedy, so this is the plain pitch. Also where a
+                   diagnosis that failed to load lands, which is why this names
+                   no overage control: the rate is all we can stand behind. -->
+              @if (isLargestPlan()) {
+                <p class="banner-usage" i18n>
+                  About <strong>{{ eventThrottleRate() }}%</strong> of your
+                  incoming events are being dropped. Get in touch and we'll help
+                  you find a fit.
+                </p>
+              } @else if (isHardStopped()) {
+                @if (paid()) {
+                  <p class="banner-usage" i18n>
+                    Your events are being rejected. Get in touch to change your
+                    plan and resume event tracking.
+                  </p>
+                } @else {
+                  <p class="banner-usage" i18n>
+                    Your events are being rejected. Upgrade to resume event
+                    tracking.
+                  </p>
+                }
+              } @else if (paid()) {
+                <p class="banner-usage" i18n>
+                  About <strong>{{ eventThrottleRate() }}%</strong> of your
+                  incoming events are being dropped. Get in touch to change your
+                  plan and restore full coverage.
+                </p>
+              } @else {
+                <p class="banner-usage" i18n>
+                  About <strong>{{ eventThrottleRate() }}%</strong> of your
+                  incoming events are being dropped. Upgrade to restore full
+                  coverage.
+                </p>
+              }
+            }
+          }
+        } @else if (usagePercent() !== null) {
+          <h2 class="banner-headline fancy" i18n>Don't lose events!</h2>
+          <p class="banner-usage" i18n>
+            You're at <strong>{{ usagePercent() }}%</strong> of your event
+            limit. Upgrade before throttling kicks in and support open source
+            error tracking.
+          </p>
+        } @else {
+          <h2 class="banner-headline fancy" i18n>Don't lose events!</h2>
+          <p class="banner-usage" i18n>
+            Support open source error tracking and avoid event loss as you
+            scale.
+          </p>
+        }
+        @if (!hideActions()) {
+          <div class="banner-actions">
+            @if (showUpgrade()) {
+              <button
+                mat-flat-button
+                color="primary"
+                class="upgrade-button"
+                [disabled]="upgradeLoading()"
+                (click)="onUpgrade()"
+              >
+                <span
+                  [style.visibility]="upgradeLoading() ? 'hidden' : 'visible'"
+                  i18n
+                  >Upgrade to {{ nextPlanLabel() }} events/mo</span
+                >
+                @if (upgradeLoading()) {
+                  <mat-spinner class="upgrade-button-spinner" diameter="18" />
+                }
+              </button>
+            }
+            <!-- Comparing plans is a dead end for all of these: the largest
+                 plan has nothing above it, a paused org is not paused over
+                 capacity, a broken on-demand stall is ours to fix, and a paid
+                 org's Select button would be Checkout. Offer the conversation
+                 instead. -->
+            @if (contactInstead() && contactEmail()) {
+              <a mat-stroked-button href="mailto:{{ contactEmail() }}" i18n>
+                Contact us
+              </a>
+            } @else if (!paid()) {
+              <button mat-stroked-button (click)="onComparePlans()" i18n>
+                Compare Plans
+              </button>
+            }
+          </div>
+        }
+      </div>
+    </mat-card-content>
+  </mat-card>
+}

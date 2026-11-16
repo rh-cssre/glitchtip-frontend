@@ -1,8 +1,5 @@
-import {
-  Organization,
-  OrganizationProject,
-  OrganizationDetail,
-} from "./organizations.interface";
+import { Organization, OrganizationDetail } from "./organizations.interface";
+import { OrganizationProject } from "../projects/projects-api.interfaces";
 
 interface APIOrganizationProject extends Omit<OrganizationProject, "id"> {
   id: string;
@@ -29,6 +26,7 @@ export const organizationList: Organization[] = [
     isEarlyAdopter: false,
     require2FA: false,
     isAcceptingEvents: true,
+    eventThrottleRate: 0,
   },
   {
     id: 1,
@@ -46,6 +44,7 @@ export const organizationList: Organization[] = [
     isEarlyAdopter: false,
     require2FA: false,
     isAcceptingEvents: true,
+    eventThrottleRate: 0,
   },
 ];
 
@@ -65,13 +64,33 @@ export const testOrgDetail: APIOrganizationDetail = {
   isEarlyAdopter: false,
   require2FA: false,
   isAcceptingEvents: true,
+  eventThrottleRate: 0,
   projects: [
     {
-      platform: "",
-      slug: "uptime-test",
+      avatar: {
+        avatarType: "",
+        avatarUuid: null,
+      },
+      color: "",
+      features: [],
+      firstEvent: null,
+      hasAccess: true,
       id: "72",
-      name: "Uptime Test",
+      isBookmarked: false,
+      isInternal: false,
       isMember: true,
+      isPublic: false,
+      name: "uptime-test",
+      scrubIPAddresses: true,
+      slug: "Uptime Test",
+      dateCreated: "2023-05-03T15:21:15.811252Z",
+      platform: "",
+      teams: [
+        {
+          id: 1,
+          slug: "team",
+        },
+      ],
     },
   ],
   teams: [
