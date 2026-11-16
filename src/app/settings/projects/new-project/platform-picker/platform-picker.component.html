@@ -1,0 +1,60 @@
+<!-- The page around the picker gives it its title and description. -->
+<div class="picker-bar">
+  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+    <mat-label i18n>Filter platforms</mat-label>
+    <input i18n-aria-label
+      #filterInput
+      type="text"
+      aria-label="Filter platforms"
+      [formControl]="filterPlatformInput"
+      matInput
+    />
+  </mat-form-field>
+  <mat-button-toggle-group
+    class="gt-segmented"
+    hideSingleSelectionIndicator
+    i18n-aria-label
+    aria-label="Platform category"
+    [value]="selected()"
+    (change)="setSelected($event.value)"
+  >
+    @for (category of categoryList; track category; let i = $index) {
+      <mat-button-toggle [value]="i">{{ category.name }}</mat-button-toggle>
+    }
+    <mat-button-toggle [value]="allTabIndex" i18n>All</mat-button-toggle>
+  </mat-button-toggle-group>
+</div>
+<ul class="platform-grid">
+  @for (platform of shownPlatforms(); track platform.id) {
+    <li>
+      <button
+        data-test
+        type="button"
+        class="platform-tile"
+        [class.platform-tile--active]="activePlatform === platform.id"
+        [attr.aria-pressed]="activePlatform === platform.id"
+        (click)="writeValue(platform.id, true)"
+      >
+        <span class="platform-tile__name">{{ platform.name }}</span>
+        @if (activePlatform === platform.id) {
+          <mat-icon class="platform-tile__check">check</mat-icon>
+        }
+      </button>
+    </li>
+  } @empty {
+    <li>
+      <button
+        type="button"
+        class="platform-tile"
+        [class.platform-tile--active]="activePlatform === 'other'"
+        [attr.aria-pressed]="activePlatform === 'other'"
+        (click)="writeValue('other', true)"
+      >
+        <span class="platform-tile__name" i18n>Other</span>
+        @if (activePlatform === "other") {
+          <mat-icon class="platform-tile__check">check</mat-icon>
+        }
+      </button>
+    </li>
+  }
+</ul>

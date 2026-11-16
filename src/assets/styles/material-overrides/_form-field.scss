@@ -1,0 +1,26 @@
+@use "@angular/material" as mat;
+@use "variables" as vars;
+
+// A softer resting outline that still keeps 3:1 on the darkest field background (side nav).
+@include mat.form-field-overrides(
+  (
+    container-text-size: var(--mat-sys-body-medium-size),
+    container-text-line-height: var(--mat-sys-body-medium-line-height),
+    container-text-tracking: var(--mat-sys-body-medium-tracking),
+    outlined-label-text-size: var(--mat-sys-body-medium-size),
+    outlined-label-text-tracking: var(--mat-sys-body-medium-tracking),
+    outlined-container-shape: vars.$shape-radius,
+    outlined-outline-color: color-mix(
+        in srgb,
+        var(--mat-sys-outline) 85%,
+        var(--mat-sys-outline-variant)
+      ),
+  )
+);
+@include mat.select-overrides(
+  (
+    trigger-text-size: var(--mat-sys-body-medium-size),
+    trigger-text-line-height: var(--mat-sys-body-medium-line-height),
+    trigger-text-tracking: var(--mat-sys-body-medium-tracking),
+  )
+);

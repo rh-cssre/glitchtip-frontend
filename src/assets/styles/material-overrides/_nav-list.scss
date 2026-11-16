@@ -1,0 +1,65 @@
+@use "@angular/material" as mat;
+@use "controls";
+@use "variables" as vars;
+
+mat-nav-list {
+  @include mat.list-overrides(
+    (
+      active-indicator-color: var(--mat-sys-primary),
+      active-indicator-shape: vars.$shape-radius,
+      // Nav items are controls, so they use the label type like the org switcher.
+      list-item-label-text-font: var(--mat-sys-label-large-font),
+      list-item-label-text-size: var(--mat-sys-label-large-size),
+      list-item-label-text-line-height: var(--mat-sys-label-large-line-height),
+      list-item-label-text-tracking: var(--mat-sys-label-large-tracking),
+      list-item-label-text-weight: var(--mat-sys-label-large-weight),
+      list-item-leading-icon-size: 20px,
+      list-item-one-line-container-height: 40px,
+    )
+  );
+
+  // The current item is brand red. Hover and press darken the red itself, and
+  // nothing lingers after a click; keyboard focus gets the ring.
+  .mdc-list-item--activated {
+    @include mat.list-overrides(
+      (
+        list-item-label-text-color: var(--mat-sys-on-primary),
+        list-item-hover-label-text-color: var(--mat-sys-on-primary),
+        list-item-focus-label-text-color: var(--mat-sys-on-primary),
+        list-item-leading-icon-color: var(--mat-sys-on-primary),
+        list-item-hover-leading-icon-color: var(--mat-sys-on-primary),
+        list-item-trailing-supporting-text-color: var(--mat-sys-on-primary),
+        list-item-hover-state-layer-opacity: 0,
+        list-item-focus-state-layer-opacity: 0,
+      )
+    );
+    @include mat.ripple-overrides(
+      (
+        color: transparent,
+      )
+    );
+
+    // Touch screens skip hover, so a tap leaves nothing behind.
+    @media (hover: hover) {
+      &:hover {
+        @include mat.list-overrides(
+          (
+            active-indicator-color: var(--gt-primary-hover),
+          )
+        );
+      }
+    }
+
+    &:active {
+      @include mat.list-overrides(
+        (
+          active-indicator-color: var(--gt-primary-pressed),
+        )
+      );
+    }
+
+    &:focus-visible {
+      @include controls.focus-ring;
+    }
+  }
+}

@@ -1,17 +1,11 @@
-@import "variables";
-
-.half-width {
-  max-width: 390px;
-}
-
-.first-field {
-  margin-top: 24px;
-}
-
-.timezone {
-  margin-bottom: 7px;
+:host {
+  display: block;
 }
 
 .invalid {
-  color: $amaranth;
+  color: var(--mat-sys-error);
+}
+
+mat-button-toggle mat-icon {
+  margin-right: var(--gt-space-1, 4px);
 }

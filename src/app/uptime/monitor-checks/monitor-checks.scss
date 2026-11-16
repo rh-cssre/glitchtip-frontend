@@ -1,0 +1,54 @@
+@use "variables" as vars;
+
+table {
+  width: 100%;
+}
+
+.mat-button-toggle-group {
+  height: 30px;
+  align-items: center;
+}
+
+// Auto layout: the colspan actions row comes first, so fixed layout would split columns evenly.
+.mat-column-status {
+  width: 96px;
+}
+
+.mat-column-responseTime {
+  width: 140px;
+  @media screen and (max-width: (vars.$small - 1)) {
+    display: none;
+  }
+}
+
+.mat-column-startCheck {
+  width: 176px;
+}
+
+.pagination-buttons-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.status-color {
+  position: relative;
+
+  &:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+  }
+
+  &--true:after {
+    background-color: var(--gt-monitor-up);
+  }
+
+  &--false:after {
+    background-color: var(--gt-monitor-down);
+  }
+}

@@ -1,38 +1,51 @@
-import { Component, ChangeDetectionStrategy, OnInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import {
+  Component,
+  ChangeDetectionStrategy,
+  OnInit,
+  computed,
+  inject,
+  input,
+} from "@angular/core";
+import { RouterLink } from "@angular/router";
+import { MatCardModule } from "@angular/material/card";
 import { IssueDetailService } from "../issue-detail.service";
-import { exhaustMap, map } from "rxjs/operators";
-import { EMPTY } from "rxjs";
+import { OrganizationsService } from "src/app/api/organizations.service";
+import { IssueTagsAdjusted } from "../../interfaces";
 
 @Component({
   selector: "gt-issue-detail-tags",
   templateUrl: "./issue-detail-tags.component.html",
   styleUrls: ["./issue-detail-tags.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [MatCardModule, RouterLink],
 })
 export class IssueDetailTagsComponent implements OnInit {
-  tags$ = this.issueService.tags$;
+  private issueService = inject(IssueDetailService);
+  private organizationsService = inject(OrganizationsService);
 
-  issueIdParam$ = this.route.paramMap.pipe(
-    map((params) => params.get("issue-id"))
-  );
-  percent = 10;
+  issueID = input.required<string>();
+  orgSlug = this.organizationsService.activeOrganizationSlug;
 
-  constructor(
-    private issueService: IssueDetailService,
-    private route: ActivatedRoute
-  ) {}
+  /** Most concentrated tags first; single-value tags carry no signal and sink. */
+  rankedTags = computed<IssueTagsAdjusted[] | null>(() => {
+    const tags = this.issueService.tags();
+    if (!tags) return null;
+    const score = (tag: IssueTagsAdjusted) =>
+      tag.uniqueValues > 1 ? (tag.topValues[0]?.percent ?? 0) : -1;
+    return tags
+      .filter((tag) => tag.topValues.length)
+      .sort((a, b) => score(b) - score(a));
+  });
 
   ngOnInit() {
-    this.issueIdParam$
-      .pipe(
-        exhaustMap((issueId) => {
-          if (issueId) {
-            return this.issueService.retrieveTags(+issueId);
-          }
-          return EMPTY;
-        })
-      )
-      .subscribe();
+    this.issueService.retrieveTags(+this.issueID());
+  }
+
+  /** Same filter the event's tag pills apply. */
+  tagQuery(key: string, value: string) {
+    if (key === "environment") {
+      return { environment: value };
+    }
+    return { query: `is:unresolved "${key}":"${value}"` };
   }
 }

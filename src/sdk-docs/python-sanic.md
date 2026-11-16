@@ -1,28 +1,30 @@
-The Sanic integration adds support for the [Sanic Web Framework](https://github.com/huge-success/sanic). We support all LTS versions of Sanic starting from `0.8`. Additionally, a Python version of 3.6 or greater is required.
+Install the sentry Python SDK:
 
-1. Install `sentry-sdk` from PyPI:
+```bash
+pip install sentry-sdk
+```
 
-   ```bash
-   $ pip install --upgrade sentry-sdk
-   ```
+Initialize the SDK before creating your Sanic app:
 
-2. If you're on Python 3.6, you also need the `aiocontextvars` package:
+```python
+import sentry_sdk
+from sanic import Sanic
 
-   ```bash
-   $ pip install --upgrade aiocontextvars
-   ```
+sentry_sdk.init(
+    dsn="YOUR_DSN",
+    traces_sample_rate=0.01,
+    auto_session_tracking=False,
+)
 
-3. To configure the SDK, initialize it with the integration before or after your app has been initialized:
+app = Sanic("MyApp")
+```
 
-   ```python
-   import sentry_sdk
-   from sentry_sdk.integrations.sanic import SanicIntegration
-   from sanic import Sanic
+The SDK auto-detects Sanic and captures unhandled exceptions and request data.
 
-   sentry_sdk.init(
-       dsn="your DSN here",
-       integrations=[SanicIntegration()]
-   )
+Verify your setup:
 
-   app = Sanic(__name__)
-   ```
+```python
+@app.route("/error")
+async def trigger_error(request):
+    division_by_zero = 1 / 0
+```

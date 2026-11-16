@@ -1,0 +1,9 @@
+.team-row {
+  display: flex;
+  align-items: center;
+  gap: var(--gt-space-2, 8px);
+
+  mat-form-field {
+    flex: 1;
+  }
+}

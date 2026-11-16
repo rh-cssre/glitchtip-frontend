@@ -1,0 +1,11 @@
+@use "@angular/material" as mat;
+
+@include mat.sidenav-overrides(
+  (
+    container-shape: 0,
+    // Same surface as the page; one hairline marks the edge.
+    container-background-color: var(--mat-sys-surface-container-low),
+    container-divider-color: var(--mat-sys-outline-variant),
+    container-elevation-shadow: none,
+  )
+);
