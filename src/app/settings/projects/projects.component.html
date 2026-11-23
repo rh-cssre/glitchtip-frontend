@@ -1,32 +1,36 @@
+<gt-top-app-bar>
+  <ng-container slot="left">
+    <h1 class="gt-bar-title" i18n>Projects</h1>
+  </ng-container>
+  <ng-container slot="right">
+    @if (canWriteProject()) {
+      <a mat-flat-button [routerLink]="['new']" color="primary" i18n
+        >New project</a
+      >
+    }
+  </ng-container>
+</gt-top-app-bar>
 <section class="l-body">
-  <header class="page-header">
-    <h1 class="mat-display-1" i18n>Projects</h1>
-    <a mat-flat-button [routerLink]="['new']" color="primary" i18n
-      >Create New Project</a
-    >
-  </header>
-  <div *ngIf="projectsForActiveOrg$ | async as projects">
-    <gt-empty-projects
-      *ngIf="projects.length === 0"
-      [activeOrgOnly]="true"
-    ></gt-empty-projects>
-  </div>
-
-  <div class="project-card-wrapper">
-    <gt-project-card
-      *ngFor="let project of projectsForActiveOrg$ | async"
-      [cardLink]="project.slug"
-      [title]="project.name"
-      [descriptionList]="[
-        { key: 'organization', value: project.organization.name },
-        { key: 'date created', value: (project.dateCreated | date)! }
-      ]"
-      [isMember]="project.isMember"
-      [secondaryButton]="{
-        link: project.slug,
-        icon: 'settings',
-        text: 'Settings'
-      }"
-    ></gt-project-card>
-  </div>
+  @if (hasError()) {
+    @for (error of errors(); track $index) {
+      <p>{{ error.msg || error }}</p>
+    }
+  } @else if (projects()?.length === 0) {
+    <gt-panel>
+      <gt-empty-state
+        icon="folder"
+        i18n-title
+        title="No projects yet"
+        [headingLevel]="2"
+        [message]="canWriteProject() ? noProjectsCanCreate : noProjectsAskOwner"
+      />
+    </gt-panel>
+  } @else if (projects(); as projects) {
+    <gt-project-rows
+      [projects]="projects"
+      [orgSlug]="orgSlug()"
+      opensSettings
+      [showTrend]="false"
+    />
+  }
 </section>

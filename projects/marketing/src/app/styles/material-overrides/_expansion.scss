@@ -1,0 +1,8 @@
+@use "@angular/material" as mat;
+
+@include mat.expansion-overrides(
+  (
+    container-background-color: transparent,
+    container-shape: 0,
+  )
+);

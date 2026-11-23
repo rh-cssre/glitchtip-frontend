@@ -1,105 +1,65 @@
-@use '@angular/material' as mat;
-@import "variables";
+@use "variables" as vars;
 
-.table-actions {
-  display: flex;
-  justify-content: space-between;
-}
-
-.button-group {
-  button {
-    font-size: 0.95em;
-    line-height: 30px;
-    padding: 0 12px;
-
-    &:not(:last-of-type) {
-      margin-right: 10px;
-
-      @media screen and (max-width: $small - 1) {
-        margin-right: 5px;
-      }
-    }
-  }
-}
-
-.action-group {
+.data-filter-bar-container {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+  margin-bottom: 15px;
+  gap: 15px;
 
-  @media screen and (max-width: $tablet - 1) {
-    flex-direction: column-reverse;
+  @media (max-width: vars.$small - 1) {
+    gap: 10px;
   }
+}
 
-  @media screen and (min-width: $tablet) {
-    > * {
-      padding-left: 10px;
-      padding-right: 10px;
-
-      &:first-child {
-        padding-left: 0;
-      }
-
-      &:last-child {
-        padding-right: 0;
-      }
+.sort-form,
+.environment-form {
+  @media (max-width: vars.$medium - 1) {
+    mat-form-field {
+      width: 170px;
     }
   }
 
-  .environment-form,
-  .sort-form {
-    ::ng-deep .mat-form-field-infix {
-      width: 130px;
+  @media (max-width: vars.$small - 1) {
+    mat-form-field {
+      width: 160px;
     }
   }
-
-  .date-form,
-  .search-form {
-    flex: 1;
-    max-width: 400px;
-
-    @media screen and (max-width: $tablet - 1) {
-      padding-bottom: 5px;
+}
+.search-form {
+  @media (min-width: vars.$small) {
+    mat-form-field {
+      width: 350px;
     }
-
+  }
+  @media (min-width: vars.$large) {
+    mat-form-field {
+      width: 450px;
+    }
+  }
+  @media (max-width: vars.$small - 1) {
+    width: 100%;
     mat-form-field {
       width: 100%;
     }
   }
+}
 
-  .date-form {
-    padding-right: 20px;
+.right-block {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 15px;
+}
 
-    @media screen and (max-width: $tablet - 1) {
-      padding-right: 0;
-    }
-  }
+.stats-period-select {
+  width: 110px;
+}
 
-  .search-form {
-    max-width: 350px;
-  }
-
-  form.date-form {
+.left-block {
+  @media (min-width: vars.$medium) {
     display: flex;
-    align-items: center;
-
-    @media screen and (max-width: $small - 1) {
-      flex-wrap: wrap;
-      margin-bottom: 10px;
-    }
-
-    > mat-form-field {
-      width: 100px;
-      margin-right: 15px;
-    }
-
-    button {
-      margin-top: -14px;
-      margin-right: 5px;
-
-      @media screen and (max-width: $small - 1) {
-        margin-top: 0;
-      }
-    }
+    justify-content: space-between;
+    gap: 15px;
   }
 }

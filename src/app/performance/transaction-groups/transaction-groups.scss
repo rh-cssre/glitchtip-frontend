@@ -1,0 +1,29 @@
+table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.mat-column-name-and-project,
+.mat-column-header-spacing {
+  width: auto;
+}
+
+.mat-column-avgDuration,
+.mat-column-pagination {
+  width: 160px;
+}
+
+.name-and-project {
+  padding-top: 8px;
+  padding-bottom: 8px;
+
+  .group-title {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  .caption-text {
+    color: inherit;
+  }
+}

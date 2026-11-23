@@ -1,0 +1,4 @@
+# Ignore openapi files
+src/app/api/api-base.service.ts
+src/app/api/api-schema.d.ts
+src/app/api/allauth-schema.d.ts

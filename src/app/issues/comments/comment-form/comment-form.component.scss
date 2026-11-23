@@ -1,0 +1,19 @@
+:host {
+  display: block;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+textarea {
+  min-height: 96px;
+  resize: vertical;
+}
+
+.edit-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--gt-space-2, 8px);
+  margin-top: var(--gt-space-3, 12px);
+}

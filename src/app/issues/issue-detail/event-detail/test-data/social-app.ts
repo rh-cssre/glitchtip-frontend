@@ -12,13 +12,13 @@ export const socialApp = {
       trace_id: "f9e158b9a93644f1aa5eecb7bd02bd95",
       description:
         "glitchtip.middleware.proxy.DecompressBodyMiddleware.__call__",
-      parent_span_id: "93b86622ccd9cb61"
+      parent_span_id: "93b86622ccd9cb61",
     },
     runtime: {
       name: "CPython",
       build: "3.8.2 (default, Feb 26 2020, 15:09:34) \n[GCC 8.3.0]",
-      version: "3.8.2"
-    }
+      version: "3.8.2",
+    },
   },
   culprit: "/rest-auth/gitlab/",
   dateCreated: "2020-03-23T11:18:36.817518Z",
@@ -34,17 +34,16 @@ export const socialApp = {
             module: "allauth.socialaccount.models",
             mechanism: {
               type: "django",
-              handled: false
+              handled: false,
             },
             stacktrace: {
               frames: [
                 {
                   vars: {
-                    exc:
-                      "DoesNotExist('SocialApp matching query does not exist.')",
+                    exc: "DoesNotExist('SocialApp matching query does not exist.')",
                     request: "<WSGIRequest: POST '/rest-auth/gitlab/'>",
                     get_response:
-                      "<bound method BaseHandler._get_response of <django.core.handlers.wsgi.WSGIHandler object at 0x7f233073c9d0>>"
+                      "<bound method BaseHandler._get_response of <django.core.handlers.wsgi.WSGIHandler object at 0x7f233073c9d0>>",
                   },
                   in_app: true,
                   module: "django.core.handlers.exception",
@@ -57,7 +56,7 @@ export const socialApp = {
                   context: [
                     [
                       29,
-                      "    can rely on getting a response instead of an exception."
+                      "    can rely on getting a response instead of an exception.",
                     ],
                     [30, '    """'],
                     [31, "    @wraps(get_response)"],
@@ -67,17 +66,16 @@ export const socialApp = {
                     [35, "        except Exception as exc:"],
                     [
                       36,
-                      "            response = response_for_exception(request, exc)"
+                      "            response = response_for_exception(request, exc)",
                     ],
                     [37, "        return response"],
                     [38, "    return inner"],
-                    [39, ""]
-                  ]
+                    [39, ""],
+                  ],
                 },
                 {
                   vars: {
-                    self:
-                      "<django.core.handlers.wsgi.WSGIHandler object at 0x7f233073c9d0>",
+                    self: "<django.core.handlers.wsgi.WSGIHandler object at 0x7f233073c9d0>",
                     request: "<WSGIRequest: POST '/rest-auth/gitlab/'>",
                     callback: "<function GitlabLogin at 0x7f232ff24940>",
                     resolver: "<URLResolver 'glitchtip.urls' (None:None) '^/'>",
@@ -89,7 +87,7 @@ export const socialApp = {
                     wrapped_callback:
                       "<function GitlabLogin at 0x7f232ff24940>",
                     middleware_method:
-                      "<function CsrfViewMiddleware.process_view at 0x7f23306bc5e0>"
+                      "<function CsrfViewMiddleware.process_view at 0x7f23306bc5e0>",
                   },
                   in_app: true,
                   module: "django.core.handlers.base",
@@ -104,35 +102,34 @@ export const socialApp = {
                     [110, "        if response is None:"],
                     [
                       111,
-                      "            wrapped_callback = self.make_view_atomic(callback)"
+                      "            wrapped_callback = self.make_view_atomic(callback)",
                     ],
                     [112, "            try:"],
                     [
                       113,
-                      "                response = wrapped_callback(request, *callback_args, **callback_kwargs)"
+                      "                response = wrapped_callback(request, *callback_args, **callback_kwargs)",
                     ],
                     [114, "            except Exception as e:"],
                     [
                       115,
-                      "                response = self.process_exception_by_middleware(e, request)"
+                      "                response = self.process_exception_by_middleware(e, request)",
                     ],
                     [116, ""],
                     [
                       117,
-                      "        # Complain if the view returned None (a common error)."
+                      "        # Complain if the view returned None (a common error).",
                     ],
                     [118, "        if response is None:"],
                     [
                       119,
-                      "            if isinstance(callback, types.FunctionType):    # FBV"
+                      "            if isinstance(callback, types.FunctionType):    # FBV",
                     ],
-                    [120, "                view_name = callback.__name__"]
-                  ]
+                    [120, "                view_name = callback.__name__"],
+                  ],
                 },
                 {
                   vars: {
-                    self:
-                      "<django.core.handlers.wsgi.WSGIHandler object at 0x7f233073c9d0>",
+                    self: "<django.core.handlers.wsgi.WSGIHandler object at 0x7f233073c9d0>",
                     request: "<WSGIRequest: POST '/rest-auth/gitlab/'>",
                     callback: "<function GitlabLogin at 0x7f232ff24940>",
                     resolver: "<URLResolver 'glitchtip.urls' (None:None) '^/'>",
@@ -144,7 +141,7 @@ export const socialApp = {
                     wrapped_callback:
                       "<function GitlabLogin at 0x7f232ff24940>",
                     middleware_method:
-                      "<function CsrfViewMiddleware.process_view at 0x7f23306bc5e0>"
+                      "<function CsrfViewMiddleware.process_view at 0x7f23306bc5e0>",
                   },
                   in_app: true,
                   module: "django.core.handlers.base",
@@ -161,31 +158,31 @@ export const socialApp = {
                     [110, "        if response is None:"],
                     [
                       111,
-                      "            wrapped_callback = self.make_view_atomic(callback)"
+                      "            wrapped_callback = self.make_view_atomic(callback)",
                     ],
                     [112, "            try:"],
                     [
                       113,
-                      "                response = wrapped_callback(request, *callback_args, **callback_kwargs)"
+                      "                response = wrapped_callback(request, *callback_args, **callback_kwargs)",
                     ],
                     [114, "            except Exception as e:"],
                     [
                       115,
-                      "                response = self.process_exception_by_middleware(e, request)"
+                      "                response = self.process_exception_by_middleware(e, request)",
                     ],
                     [116, ""],
                     [
                       117,
-                      "        # Complain if the view returned None (a common error)."
+                      "        # Complain if the view returned None (a common error).",
                     ],
-                    [118, "        if response is None:"]
-                  ]
+                    [118, "        if response is None:"],
+                  ],
                 },
                 {
                   vars: {
                     args: ["<WSGIRequest: POST '/rest-auth/gitlab/'>"],
                     kwargs: {},
-                    view_func: "<function GitlabLogin at 0x7f232ff1ca60>"
+                    view_func: "<function GitlabLogin at 0x7f232ff1ca60>",
                   },
                   in_app: true,
                   module: "django.views.decorators.csrf",
@@ -199,31 +196,30 @@ export const socialApp = {
                     [49, "def csrf_exempt(view_func):"],
                     [
                       50,
-                      '    """Mark a view function as being exempt from the CSRF view protection."""'
+                      '    """Mark a view function as being exempt from the CSRF view protection."""',
                     ],
                     [
                       51,
-                      "    # view_func.csrf_exempt = True would also work, but decorators are nicer"
+                      "    # view_func.csrf_exempt = True would also work, but decorators are nicer",
                     ],
                     [
                       52,
-                      "    # if they don't have side effects, so return a new function."
+                      "    # if they don't have side effects, so return a new function.",
                     ],
                     [53, "    def wrapped_view(*args, **kwargs):"],
                     [54, "        return view_func(*args, **kwargs)"],
                     [55, "    wrapped_view.csrf_exempt = True"],
-                    [56, "    return wraps(view_func)(wrapped_view)"]
-                  ]
+                    [56, "    return wraps(view_func)(wrapped_view)"],
+                  ],
                 },
                 {
                   vars: {
                     cls: "<class 'glitchtip.social.GitlabLogin'>",
                     args: [],
-                    self:
-                      "<glitchtip.social.GitlabLogin object at 0x7f232fe5c100>",
+                    self: "<glitchtip.social.GitlabLogin object at 0x7f232fe5c100>",
                     kwargs: {},
                     request: "<WSGIRequest: POST '/rest-auth/gitlab/'>",
-                    initkwargs: {}
+                    initkwargs: {},
                   },
                   in_app: true,
                   module: "django.views.generic.base",
@@ -239,38 +235,36 @@ export const socialApp = {
                     [67, "                raise AttributeError("],
                     [
                       68,
-                      "                    \"%s instance has no 'request' attribute. Did you override \""
+                      "                    \"%s instance has no 'request' attribute. Did you override \"",
                     ],
                     [
                       69,
-                      '                    "setup() and forget to call super()?" % cls.__name__'
+                      '                    "setup() and forget to call super()?" % cls.__name__',
                     ],
                     [70, "                )"],
                     [
                       71,
-                      "            return self.dispatch(request, *args, **kwargs)"
+                      "            return self.dispatch(request, *args, **kwargs)",
                     ],
                     [72, "        view.view_class = cls"],
                     [73, "        view.view_initkwargs = initkwargs"],
                     [74, ""],
                     [75, "        # take name and docstring from class"],
-                    [76, "        update_wrapper(view, cls, updated=())"]
-                  ]
+                    [76, "        update_wrapper(view, cls, updated=())"],
+                  ],
                 },
                 {
                   vars: {
-                    dec:
-                      "<function sensitive_post_parameters.<locals>.decorator at 0x7f232ffb19d0>",
+                    dec: "<function sensitive_post_parameters.<locals>.decorator at 0x7f232ffb19d0>",
                     args: ["<WSGIRequest: POST '/rest-auth/gitlab/'>"],
-                    self:
-                      "<glitchtip.social.GitlabLogin object at 0x7f232fe5c100>",
+                    self: "<glitchtip.social.GitlabLogin object at 0x7f232fe5c100>",
                     kwargs: {},
                     method: "<function LoginView.dispatch at 0x7f232ffb1d30>",
                     decorators: [
-                      "<function sensitive_post_parameters.<locals>.decorator at 0x7f232ffb19d0>"
+                      "<function sensitive_post_parameters.<locals>.decorator at 0x7f232ffb19d0>",
                     ],
                     bound_method:
-                      "<function sensitive_post_parameters.<locals>.decorator.<locals>.sensitive_post_parameters_wrapper at 0x7f233371c550>"
+                      "<function sensitive_post_parameters.<locals>.decorator.<locals>.sensitive_post_parameters_wrapper at 0x7f233371c550>",
                   },
                   in_app: true,
                   module: "django.utils.decorators",
@@ -283,15 +277,15 @@ export const socialApp = {
                   context: [
                     [
                       38,
-                      "        # 'func'. Also, wrap method.__get__() in a function because new"
+                      "        # 'func'. Also, wrap method.__get__() in a function because new",
                     ],
                     [
                       39,
-                      "        # attributes can't be set on bound method objects, only on functions."
+                      "        # attributes can't be set on bound method objects, only on functions.",
                     ],
                     [
                       40,
-                      "        bound_method = partial(method.__get__(self, type(self)))"
+                      "        bound_method = partial(method.__get__(self, type(self)))",
                     ],
                     [41, "        for dec in decorators:"],
                     [42, "            bound_method = dec(bound_method)"],
@@ -299,29 +293,28 @@ export const socialApp = {
                     [44, ""],
                     [
                       45,
-                      "    # Copy any attributes that a decorator adds to the function it decorates."
+                      "    # Copy any attributes that a decorator adds to the function it decorates.",
                     ],
                     [46, "    for dec in decorators:"],
                     [47, "        _update_method_wrapper(_wrapper, dec)"],
                     [
                       48,
-                      "    # Preserve any existing attributes of 'method', including the name."
-                    ]
-                  ]
+                      "    # Preserve any existing attributes of 'method', including the name.",
+                    ],
+                  ],
                 },
                 {
                   vars: {
                     args: [],
-                    view:
-                      "functools.partial(<bound method LoginView.dispatch of <glitchtip.social.GitlabLogin object at 0x7f232fe5c100>>)",
+                    view: "functools.partial(<bound method LoginView.dispatch of <glitchtip.social.GitlabLogin object at 0x7f232fe5c100>>)",
                     kwargs: {},
                     request: "<WSGIRequest: POST '/rest-auth/gitlab/'>",
                     parameters: [
                       "'password'",
                       "'old_password'",
                       "'new_password1'",
-                      "'new_password2'"
-                    ]
+                      "'new_password2'",
+                    ],
                   },
                   in_app: true,
                   module: "django.views.decorators.debug",
@@ -337,25 +330,24 @@ export const socialApp = {
                     [72, "            if parameters:"],
                     [
                       73,
-                      "                request.sensitive_post_parameters = parameters"
+                      "                request.sensitive_post_parameters = parameters",
                     ],
                     [74, "            else:"],
                     [
                       75,
-                      "                request.sensitive_post_parameters = '__ALL__'"
+                      "                request.sensitive_post_parameters = '__ALL__'",
                     ],
                     [76, "            return view(request, *args, **kwargs)"],
                     [77, "        return sensitive_post_parameters_wrapper"],
-                    [78, "    return decorator"]
-                  ]
+                    [78, "    return decorator"],
+                  ],
                 },
                 {
                   vars: {
                     args: ["<WSGIRequest: POST '/rest-auth/gitlab/'>"],
-                    self:
-                      "<glitchtip.social.GitlabLogin object at 0x7f232fe5c100>",
+                    self: "<glitchtip.social.GitlabLogin object at 0x7f232fe5c100>",
                     kwargs: {},
-                    __class__: "<class 'rest_auth.views.LoginView'>"
+                    __class__: "<class 'rest_auth.views.LoginView'>",
                   },
                   in_app: true,
                   module: "rest_auth.views",
@@ -374,25 +366,24 @@ export const socialApp = {
                     [48, "    def dispatch(self, *args, **kwargs):"],
                     [
                       49,
-                      "        return super(LoginView, self).dispatch(*args, **kwargs)"
+                      "        return super(LoginView, self).dispatch(*args, **kwargs)",
                     ],
                     [50, ""],
                     [51, "    def process_login(self):"],
                     [52, "        django_login(self.request, self.user)"],
                     [53, ""],
-                    [54, "    def get_response_serializer(self):"]
-                  ]
+                    [54, "    def get_response_serializer(self):"],
+                  ],
                 },
                 {
                   vars: {
                     args: [],
-                    self:
-                      "<glitchtip.social.GitlabLogin object at 0x7f232fe5c100>",
+                    self: "<glitchtip.social.GitlabLogin object at 0x7f232fe5c100>",
                     kwargs: {},
                     handler:
                       "<bound method LoginView.post of <glitchtip.social.GitlabLogin object at 0x7f232fe5c100>>",
                     request:
-                      "<rest_framework.request.Request object at 0x7f232fe5c490>"
+                      "<rest_framework.request.Request object at 0x7f232fe5c490>",
                   },
                   in_app: true,
                   module: "rest_framework.views",
@@ -406,12 +397,12 @@ export const socialApp = {
                   context: [
                     [
                       500,
-                      "                handler = self.http_method_not_allowed"
+                      "                handler = self.http_method_not_allowed",
                     ],
                     [501, ""],
                     [
                       502,
-                      "            response = handler(request, *args, **kwargs)"
+                      "            response = handler(request, *args, **kwargs)",
                     ],
                     [503, ""],
                     [504, "        except Exception as exc:"],
@@ -419,30 +410,27 @@ export const socialApp = {
                     [506, ""],
                     [
                       507,
-                      "        self.response = self.finalize_response(request, response, *args, **kwargs)"
+                      "        self.response = self.finalize_response(request, response, *args, **kwargs)",
                     ],
                     [508, "        return self.response"],
                     [509, ""],
-                    [510, "    def options(self, request, *args, **kwargs):"]
-                  ]
+                    [510, "    def options(self, request, *args, **kwargs):"],
+                  ],
                 },
                 {
                   vars: {
-                    exc:
-                      "DoesNotExist('SocialApp matching query does not exist.')",
-                    self:
-                      "<glitchtip.social.GitlabLogin object at 0x7f232fe5c100>",
+                    exc: "DoesNotExist('SocialApp matching query does not exist.')",
+                    self: "<glitchtip.social.GitlabLogin object at 0x7f232fe5c100>",
                     context: {
                       args: [],
-                      view:
-                        "<glitchtip.social.GitlabLogin object at 0x7f232fe5c100>",
+                      view: "<glitchtip.social.GitlabLogin object at 0x7f232fe5c100>",
                       kwargs: {},
                       request:
-                        "<rest_framework.request.Request object at 0x7f232fe5c490>"
+                        "<rest_framework.request.Request object at 0x7f232fe5c490>",
                     },
                     response: "None",
                     exception_handler:
-                      "<function exception_handler at 0x7f233005b550>"
+                      "<function exception_handler at 0x7f233005b550>",
                   },
                   in_app: true,
                   module: "rest_framework.views",
@@ -457,7 +445,7 @@ export const socialApp = {
                     [460, ""],
                     [
                       461,
-                      "        context = self.get_exception_handler_context()"
+                      "        context = self.get_exception_handler_context()",
                     ],
                     [462, "        response = exception_handler(exc, context)"],
                     [463, ""],
@@ -467,15 +455,13 @@ export const socialApp = {
                     [467, "        response.exception = True"],
                     [468, "        return response"],
                     [469, ""],
-                    [470, "    def raise_uncaught_exception(self, exc):"]
-                  ]
+                    [470, "    def raise_uncaught_exception(self, exc):"],
+                  ],
                 },
                 {
                   vars: {
-                    exc:
-                      "DoesNotExist('SocialApp matching query does not exist.')",
-                    self:
-                      "<glitchtip.social.GitlabLogin object at 0x7f232fe5c100>"
+                    exc: "DoesNotExist('SocialApp matching query does not exist.')",
+                    self: "<glitchtip.social.GitlabLogin object at 0x7f232fe5c100>",
                   },
                   in_app: true,
                   module: "rest_framework.views",
@@ -490,40 +476,39 @@ export const socialApp = {
                     [472, "            request = self.request"],
                     [
                       473,
-                      "            renderer_format = getattr(request.accepted_renderer, 'format')"
+                      "            renderer_format = getattr(request.accepted_renderer, 'format')",
                     ],
                     [
                       474,
-                      "            use_plaintext_traceback = renderer_format not in ('html', 'api', 'admin')"
+                      "            use_plaintext_traceback = renderer_format not in ('html', 'api', 'admin')",
                     ],
                     [
                       475,
-                      "            request.force_plaintext_errors(use_plaintext_traceback)"
+                      "            request.force_plaintext_errors(use_plaintext_traceback)",
                     ],
                     [476, "        raise exc"],
                     [477, ""],
                     [
                       478,
-                      "    # Note: Views are made CSRF exempt from within `as_view` as to prevent"
+                      "    # Note: Views are made CSRF exempt from within `as_view` as to prevent",
                     ],
                     [
                       479,
-                      "    # accidental removal of this exemption in cases where `dispatch` needs to"
+                      "    # accidental removal of this exemption in cases where `dispatch` needs to",
                     ],
                     [480, "    # be overridden."],
-                    [481, "    def dispatch(self, request, *args, **kwargs):"]
-                  ]
+                    [481, "    def dispatch(self, request, *args, **kwargs):"],
+                  ],
                 },
                 {
                   vars: {
                     args: [],
-                    self:
-                      "<glitchtip.social.GitlabLogin object at 0x7f232fe5c100>",
+                    self: "<glitchtip.social.GitlabLogin object at 0x7f232fe5c100>",
                     kwargs: {},
                     handler:
                       "<bound method LoginView.post of <glitchtip.social.GitlabLogin object at 0x7f232fe5c100>>",
                     request:
-                      "<rest_framework.request.Request object at 0x7f232fe5c490>"
+                      "<rest_framework.request.Request object at 0x7f232fe5c490>",
                   },
                   in_app: true,
                   module: "rest_framework.views",
@@ -537,21 +522,21 @@ export const socialApp = {
                   context: [
                     [
                       497,
-                      "                handler = getattr(self, request.method.lower(),"
+                      "                handler = getattr(self, request.method.lower(),",
                     ],
                     [
                       498,
-                      "                                  self.http_method_not_allowed)"
+                      "                                  self.http_method_not_allowed)",
                     ],
                     [499, "            else:"],
                     [
                       500,
-                      "                handler = self.http_method_not_allowed"
+                      "                handler = self.http_method_not_allowed",
                     ],
                     [501, ""],
                     [
                       502,
-                      "            response = handler(request, *args, **kwargs)"
+                      "            response = handler(request, *args, **kwargs)",
                     ],
                     [503, ""],
                     [504, "        except Exception as exc:"],
@@ -559,18 +544,17 @@ export const socialApp = {
                     [506, ""],
                     [
                       507,
-                      "        self.response = self.finalize_response(request, response, *args, **kwargs)"
-                    ]
-                  ]
+                      "        self.response = self.finalize_response(request, response, *args, **kwargs)",
+                    ],
+                  ],
                 },
                 {
                   vars: {
                     args: [],
-                    self:
-                      "<glitchtip.social.GitlabLogin object at 0x7f232fe5c100>",
+                    self: "<glitchtip.social.GitlabLogin object at 0x7f232fe5c100>",
                     kwargs: {},
                     request:
-                      "<rest_framework.request.Request object at 0x7f232fe5c490>"
+                      "<rest_framework.request.Request object at 0x7f232fe5c490>",
                   },
                   in_app: true,
                   module: "rest_auth.views",
@@ -587,28 +571,27 @@ export const socialApp = {
                     [100, "        self.request = request"],
                     [
                       101,
-                      "        self.serializer = self.get_serializer(data=self.request.data,"
+                      "        self.serializer = self.get_serializer(data=self.request.data,",
                     ],
                     [
                       102,
-                      "                                              context={'request': request})"
+                      "                                              context={'request': request})",
                     ],
                     [
                       103,
-                      "        self.serializer.is_valid(raise_exception=True)"
+                      "        self.serializer.is_valid(raise_exception=True)",
                     ],
                     [104, ""],
                     [105, "        self.login()"],
                     [106, "        return self.get_response()"],
                     [107, ""],
-                    [108, ""]
-                  ]
+                    [108, ""],
+                  ],
                 },
                 {
                   vars: {
-                    self:
-                      "SocialLoginSerializer(context={'request': <rest_framework.request.Request object>, 'format': None, 'view': <glitchtip.social.GitlabLogin object>}, data={'access_token': '7e6d28e705369c544138248b3bbdc575b5698ec13c21f7e67482c2553a536007'}):\n    access_token = CharField(allow_blank=True, required=False)\n    code = CharField(allow_blank=True, required=False)",
-                    raise_exception: "True"
+                    self: "SocialLoginSerializer(context={'request': <rest_framework.request.Request object>, 'format': None, 'view': <glitchtip.social.GitlabLogin object>}, data={'access_token': '7e6d28e705369c544138248b3bbdc575b5698ec13c21f7e67482c2553a536007'}):\n    access_token = CharField(allow_blank=True, required=False)\n    code = CharField(allow_blank=True, required=False)",
+                    raise_exception: "True",
                   },
                   in_app: true,
                   module: "rest_framework.serializers",
@@ -622,7 +605,7 @@ export const socialApp = {
                   context: [
                     [
                       229,
-                      "            'passed when instantiating the serializer instance.'"
+                      "            'passed when instantiating the serializer instance.'",
                     ],
                     [230, "        )"],
                     [231, ""],
@@ -630,28 +613,27 @@ export const socialApp = {
                     [233, "            try:"],
                     [
                       234,
-                      "                self._validated_data = self.run_validation(self.initial_data)"
+                      "                self._validated_data = self.run_validation(self.initial_data)",
                     ],
                     [235, "            except ValidationError as exc:"],
                     [236, "                self._validated_data = {}"],
                     [237, "                self._errors = exc.detail"],
                     [238, "            else:"],
-                    [239, "                self._errors = {}"]
-                  ]
+                    [239, "                self._errors = {}"],
+                  ],
                 },
                 {
                   vars: {
                     data: {
                       access_token:
-                        "'7e6d28e705369c544138248b3bbdc575b5698ec13c21f7e67482c2553a536007'"
+                        "'7e6d28e705369c544138248b3bbdc575b5698ec13c21f7e67482c2553a536007'",
                     },
-                    self:
-                      "SocialLoginSerializer(context={'request': <rest_framework.request.Request object>, 'format': None, 'view': <glitchtip.social.GitlabLogin object>}, data={'access_token': '7e6d28e705369c544138248b3bbdc575b5698ec13c21f7e67482c2553a536007'}):\n    access_token = CharField(allow_blank=True, required=False)\n    code = CharField(allow_blank=True, required=False)",
+                    self: "SocialLoginSerializer(context={'request': <rest_framework.request.Request object>, 'format': None, 'view': <glitchtip.social.GitlabLogin object>}, data={'access_token': '7e6d28e705369c544138248b3bbdc575b5698ec13c21f7e67482c2553a536007'}):\n    access_token = CharField(allow_blank=True, required=False)\n    code = CharField(allow_blank=True, required=False)",
                     value: {
                       access_token:
-                        "'7e6d28e705369c544138248b3bbdc575b5698ec13c21f7e67482c2553a536007'"
+                        "'7e6d28e705369c544138248b3bbdc575b5698ec13c21f7e67482c2553a536007'",
                     },
-                    is_empty_value: "False"
+                    is_empty_value: "False",
                   },
                   in_app: true,
                   module: "rest_framework.serializers",
@@ -670,35 +652,33 @@ export const socialApp = {
                     [436, "            value = self.validate(value)"],
                     [
                       437,
-                      "            assert value is not None, '.validate() should return the validated data'"
+                      "            assert value is not None, '.validate() should return the validated data'",
                     ],
                     [
                       438,
-                      "        except (ValidationError, DjangoValidationError) as exc:"
+                      "        except (ValidationError, DjangoValidationError) as exc:",
                     ],
                     [
                       439,
-                      "            raise ValidationError(detail=as_serializer_error(exc))"
+                      "            raise ValidationError(detail=as_serializer_error(exc))",
                     ],
                     [440, ""],
-                    [441, "        return value"]
-                  ]
+                    [441, "        return value"],
+                  ],
                 },
                 {
                   vars: {
-                    self:
-                      "SocialLoginSerializer(context={'request': <rest_framework.request.Request object>, 'format': None, 'view': <glitchtip.social.GitlabLogin object>}, data={'access_token': '7e6d28e705369c544138248b3bbdc575b5698ec13c21f7e67482c2553a536007'}):\n    access_token = CharField(allow_blank=True, required=False)\n    code = CharField(allow_blank=True, required=False)",
-                    view:
-                      "<glitchtip.social.GitlabLogin object at 0x7f232fe5c100>",
+                    self: "SocialLoginSerializer(context={'request': <rest_framework.request.Request object>, 'format': None, 'view': <glitchtip.social.GitlabLogin object>}, data={'access_token': '7e6d28e705369c544138248b3bbdc575b5698ec13c21f7e67482c2553a536007'}):\n    access_token = CharField(allow_blank=True, required=False)\n    code = CharField(allow_blank=True, required=False)",
+                    view: "<glitchtip.social.GitlabLogin object at 0x7f232fe5c100>",
                     attrs: {
                       access_token:
-                        "'7e6d28e705369c544138248b3bbdc575b5698ec13c21f7e67482c2553a536007'"
+                        "'7e6d28e705369c544138248b3bbdc575b5698ec13c21f7e67482c2553a536007'",
                     },
                     adapter:
                       "<allauth.socialaccount.providers.gitlab.views.GitLabOAuth2Adapter object at 0x7f232fe5c6a0>",
                     request: "<WSGIRequest: POST '/rest-auth/gitlab/'>",
                     adapter_class:
-                      "<class 'allauth.socialaccount.providers.gitlab.views.GitLabOAuth2Adapter'>"
+                      "<class 'allauth.socialaccount.providers.gitlab.views.GitLabOAuth2Adapter'>",
                   },
                   in_app: true,
                   module: "rest_auth.registration.serializers",
@@ -712,36 +692,35 @@ export const socialApp = {
                   context: [
                     [
                       70,
-                      "        adapter_class = getattr(view, 'adapter_class', None)"
+                      "        adapter_class = getattr(view, 'adapter_class', None)",
                     ],
                     [71, "        if not adapter_class:"],
                     [
                       72,
-                      '            raise serializers.ValidationError(_("Define adapter_class in view"))'
+                      '            raise serializers.ValidationError(_("Define adapter_class in view"))',
                     ],
                     [73, ""],
                     [74, "        adapter = adapter_class(request)"],
                     [
                       75,
-                      "        app = adapter.get_provider().get_app(request)"
+                      "        app = adapter.get_provider().get_app(request)",
                     ],
                     [76, ""],
                     [77, "        # More info on code vs access_token"],
                     [
                       78,
-                      "        # http://stackoverflow.com/questions/8666316/facebook-oauth-2-0-code-and-token"
+                      "        # http://stackoverflow.com/questions/8666316/facebook-oauth-2-0-code-and-token",
                     ],
                     [79, ""],
-                    [80, "        # Case 1: We received the access_token"]
-                  ]
+                    [80, "        # Case 1: We received the access_token"],
+                  ],
                 },
                 {
                   vars: {
-                    self:
-                      "<allauth.socialaccount.providers.gitlab.provider.GitLabProvider object at 0x7f232fe5c4f0>",
+                    self: "<allauth.socialaccount.providers.gitlab.provider.GitLabProvider object at 0x7f232fe5c4f0>",
                     adapter:
                       "<allauth.socialaccount.adapter.DefaultSocialAccountAdapter object at 0x7f232fe5c760>",
-                    request: "<WSGIRequest: POST '/rest-auth/gitlab/'>"
+                    request: "<WSGIRequest: POST '/rest-auth/gitlab/'>",
                   },
                   in_app: true,
                   module: "allauth.socialaccount.providers.base",
@@ -756,7 +735,7 @@ export const socialApp = {
                     [44, '        """'],
                     [
                       45,
-                      '        raise NotImplementedError("get_login_url() for " + self.name)'
+                      '        raise NotImplementedError("get_login_url() for " + self.name)',
                     ],
                     [46, ""],
                     [47, "    def get_app(self, request):"],
@@ -767,20 +746,19 @@ export const socialApp = {
                     [52, '        """'],
                     [
                       53,
-                      "        Some providers may require extra scripts (e.g. a Facebook connect)"
+                      "        Some providers may require extra scripts (e.g. a Facebook connect)",
                     ],
-                    [54, '        """']
-                  ]
+                    [54, '        """'],
+                  ],
                 },
                 {
                   vars: {
-                    self:
-                      "<allauth.socialaccount.adapter.DefaultSocialAccountAdapter object at 0x7f232fe5c760>",
+                    self: "<allauth.socialaccount.adapter.DefaultSocialAccountAdapter object at 0x7f232fe5c760>",
                     config: "None",
                     request: "<WSGIRequest: POST '/rest-auth/gitlab/'>",
                     provider: "'gitlab'",
                     SocialApp:
-                      "<class 'allauth.socialaccount.models.SocialApp'>"
+                      "<class 'allauth.socialaccount.models.SocialApp'>",
                   },
                   in_app: true,
                   module: "allauth.socialaccount.adapter",
@@ -796,16 +774,16 @@ export const socialApp = {
                     [199, "            app = SocialApp(provider=provider)"],
                     [
                       200,
-                      "            for field in ['client_id', 'secret', 'key']:"
+                      "            for field in ['client_id', 'secret', 'key']:",
                     ],
                     [
                       201,
-                      "                setattr(app, field, config.get(field))"
+                      "                setattr(app, field, config.get(field))",
                     ],
                     [202, "        else:"],
                     [
                       203,
-                      "            app = SocialApp.objects.get_current(provider, request)"
+                      "            app = SocialApp.objects.get_current(provider, request)",
                     ],
                     [204, "        return app"],
                     [205, ""],
@@ -813,19 +791,18 @@ export const socialApp = {
                     [207, "def get_adapter(request=None):"],
                     [
                       208,
-                      "    return import_attribute(app_settings.ADAPTER)(request)"
-                    ]
-                  ]
+                      "    return import_attribute(app_settings.ADAPTER)(request)",
+                    ],
+                  ],
                 },
                 {
                   vars: {
                     app: "None",
-                    self:
-                      "<allauth.socialaccount.models.SocialAppManager object at 0x7f2330858e80>",
+                    self: "<allauth.socialaccount.models.SocialAppManager object at 0x7f2330858e80>",
                     site: "<Site: example.com>",
                     cache: {},
                     request: "<WSGIRequest: POST '/rest-auth/gitlab/'>",
-                    provider: "'gitlab'"
+                    provider: "'gitlab'",
                   },
                   in_app: true,
                   module: "allauth.socialaccount.models",
@@ -838,7 +815,7 @@ export const socialApp = {
                   context: [
                     [
                       27,
-                      "            cache = getattr(request, '_socialapp_cache', {})"
+                      "            cache = getattr(request, '_socialapp_cache', {})",
                     ],
                     [28, "            request._socialapp_cache = cache"],
                     [29, "        app = cache.get(provider)"],
@@ -849,19 +826,18 @@ export const socialApp = {
                     [34, "                provider=provider)"],
                     [35, "            cache[provider] = app"],
                     [36, "        return app"],
-                    [37, ""]
-                  ]
+                    [37, ""],
+                  ],
                 },
                 {
                   vars: {
                     args: [],
                     name: "'get'",
-                    self:
-                      "<allauth.socialaccount.models.SocialAppManager object at 0x7f2330858e80>",
+                    self: "<allauth.socialaccount.models.SocialAppManager object at 0x7f2330858e80>",
                     kwargs: {
                       provider: "'gitlab'",
-                      sites__id: "1"
-                    }
+                      sites__id: "1",
+                    },
                   },
                   in_app: true,
                   module: "django.db.models.manager",
@@ -879,35 +855,34 @@ export const socialApp = {
                     [80, "        def create_method(name, method):"],
                     [
                       81,
-                      "            def manager_method(self, *args, **kwargs):"
+                      "            def manager_method(self, *args, **kwargs):",
                     ],
                     [
                       82,
-                      "                return getattr(self.get_queryset(), name)(*args, **kwargs)"
+                      "                return getattr(self.get_queryset(), name)(*args, **kwargs)",
                     ],
                     [
                       83,
-                      "            manager_method.__name__ = method.__name__"
+                      "            manager_method.__name__ = method.__name__",
                     ],
                     [84, "            manager_method.__doc__ = method.__doc__"],
                     [85, "            return manager_method"],
                     [86, ""],
-                    [87, "        new_methods = {}"]
-                  ]
+                    [87, "        new_methods = {}"],
+                  ],
                 },
                 {
                   vars: {
                     num: "0",
                     args: [],
-                    self:
-                      "<QuerySet from django.db.models.query at 0x7f232fe5c7c0>",
+                    self: "<QuerySet from django.db.models.query at 0x7f232fe5c7c0>",
                     clone:
                       "<QuerySet from django.db.models.query at 0x7f232fe5caf0>",
                     limit: "21",
                     kwargs: {
                       provider: "'gitlab'",
-                      sites__id: "1"
-                    }
+                      sites__id: "1",
+                    },
                   },
                   in_app: true,
                   module: "django.db.models.query",
@@ -926,34 +901,34 @@ export const socialApp = {
                     [415, "            raise self.model.DoesNotExist("],
                     [
                       416,
-                      '                "%s matching query does not exist." %'
+                      '                "%s matching query does not exist." %',
                     ],
                     [417, "                self.model._meta.object_name"],
                     [418, "            )"],
                     [419, "        raise self.model.MultipleObjectsReturned("],
                     [
                       420,
-                      "            'get() returned more than one %s -- it returned %s!' % ("
-                    ]
-                  ]
-                }
-              ]
-            }
-          }
-        ]
-      }
+                      "            'get() returned more than one %s -- it returned %s!' % (",
+                    ],
+                  ],
+                },
+              ],
+            },
+          },
+        ],
+      },
     },
     {
       type: "request",
       data: {
         env: {
           SERVER_NAME: "glitchtip-staging-6787c7c74c-7pdfb",
-          SERVER_PORT: "8080"
+          SERVER_PORT: "8080",
         },
         url: "https, https://staging.glitchtip.com/rest-auth/gitlab/",
         data: {
           access_token:
-            "7e6d28e705369c544138248b3bbdc575b5698ec13c21f7e67482c2553a536007"
+            "7e6d28e705369c544138248b3bbdc575b5698ec13c21f7e67482c2553a536007",
         },
         method: "POST",
         headers: [
@@ -975,22 +950,22 @@ export const socialApp = {
           ["Referer", "https://staging.glitchtip.com/login/gitlab"],
           [
             "User-Agent",
-            "Mozilla/5.0 (X11; NetBSD i686; rv:68.0) Gecko/20100101 Firefox/68.0"
+            "Mozilla/5.0 (X11; NetBSD i686; rv:68.0) Gecko/20100101 Firefox/68.0",
           ],
           ["X-Forwarded-For", ""],
           ["X-Forwarded-Port", "443"],
-          ["X-Forwarded-Proto", "https, https"]
+          ["X-Forwarded-Proto", "https, https"],
         ],
         query_string: "",
-        inferredContentType: "application/json"
-      }
-    }
+        inferredContentType: "application/json",
+      },
+    },
   ],
   metadata: {
     type: "SocialApp.DoesNotExist",
     value: "SocialApp matching query does not exist.",
     filename: "django/db/models/query.py",
-    function: "get"
+    function: "get",
   },
   packages: {
     pip: "20.0.2",
@@ -1066,7 +1041,7 @@ export const socialApp = {
     djangorestframework: "3.11.0",
     "django-debug-toolbar": "2.2",
     "django-organizations": "1.1.2",
-    "django-celery-results": "1.2.0"
+    "django-celery-results": "1.2.0",
   },
   platform: "python",
   sdk: {
@@ -1075,8 +1050,8 @@ export const socialApp = {
     packages: [
       {
         name: "pypi:sentry-sdk",
-        version: "0.13.5"
-      }
+        version: "0.13.5",
+      },
     ],
     integrations: [
       "argv",
@@ -1087,12 +1062,12 @@ export const socialApp = {
       "logging",
       "modules",
       "stdlib",
-      "threading"
-    ]
+      "threading",
+    ],
   },
   tags: [],
   title: "SocialApp.DoesNotExist: SocialApp matching query does not exist.",
   type: "error",
   nextEventID: null,
-  previousEventID: "cd12ee1200fb41dfa6133b2254118892"
+  previousEventID: "cd12ee1200fb41dfa6133b2254118892",
 };

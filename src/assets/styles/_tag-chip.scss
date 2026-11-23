@@ -1,0 +1,84 @@
+@use "controls";
+@use "row-mixins" as rows;
+// A tag: muted key, bold value, optional share, in a hairline pill.
+.gt-tag-chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--gt-space-2, 8px);
+  box-sizing: border-box;
+  max-width: 100%;
+  min-width: 0;
+  padding: 2px var(--gt-space-2, 8px);
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: var(--mat-sys-corner-full);
+  background-color: transparent;
+  font: var(--mat-sys-body-small);
+  line-height: 18px;
+  font-weight: 400;
+  color: var(--mat-sys-on-surface);
+  text-decoration: none;
+  vertical-align: middle;
+
+  &:is(a):hover {
+    border-color: var(--mat-sys-outline);
+    background-color: var(--mat-sys-surface-container);
+  }
+
+  &:focus-visible {
+    @include controls.focus-ring;
+  }
+}
+
+.gt-tag-chip--compact {
+  height: 24px;
+  align-items: center;
+  padding: 0 var(--gt-space-2, 8px);
+  font: var(--mat-sys-label-medium);
+  font-weight: 400;
+}
+
+.gt-tag-chip__key {
+  flex: 0 1 auto;
+  min-width: 2ch;
+  @include rows.truncate;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.gt-tag-chip__value {
+  flex: 0 1 auto;
+  min-width: 0;
+  @include rows.truncate;
+  font-weight: 600;
+}
+
+// The middle dot is drawn, never typed into a translated string.
+.gt-tag-chip__share {
+  flex: none;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  color: var(--mat-sys-on-surface-variant);
+
+  &::before {
+    @include controls.middot($before: 0);
+  }
+}
+
+// A wrapping list of chips.
+.gt-tag-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gt-space-1, 4px) var(--gt-space-3, 12px);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  > li {
+    display: inline-flex;
+    align-items: center;
+    min-width: 0;
+    max-width: 100%;
+  }
+}

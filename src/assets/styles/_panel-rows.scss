@@ -1,0 +1,233 @@
+@use "controls";
+@use "variables" as vars;
+@use "row-mixins" as rows;
+
+// Rows inside a flush gt-panel, shared by every data panel. Hairlines, no boxes.
+
+$hairline: 1px solid var(--mat-sys-outline-variant);
+
+.gt-mono {
+  font-family: rows.$mono;
+  font-size: rows.$mono-size;
+}
+
+.gt-muted {
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.gt-truncate {
+  @include rows.truncate;
+  min-width: 0;
+}
+
+.gt-break {
+  overflow-wrap: anywhere;
+}
+
+.gt-prose-link {
+  font-weight: 400;
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--mat-sys-outline);
+  text-underline-offset: 3px;
+
+  &:hover {
+    text-decoration-color: currentColor;
+  }
+}
+
+.gt-has-tip {
+  text-decoration: underline dotted var(--mat-sys-outline);
+  text-underline-offset: 3px;
+  cursor: help;
+
+  // Takes focus (tabindex 0) so the tooltip opens from the keyboard.
+  &:focus-visible {
+    @include controls.focus-ring;
+    border-radius: 2px;
+  }
+}
+
+// Material's .mat-icon size loads after global styles, so this one rule pairs with it.
+.mat-icon:is(.gt-chev, .gt-icon-sm) {
+  @include controls.icon-size(20px);
+}
+
+.gt-chev {
+  justify-self: center;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+// One right chevron, turned down while its row is open.
+[aria-expanded="true"] .gt-chev {
+  transform: rotate(90deg);
+}
+
+// Truncates from the left so the file name survives: "...checkout/pricing.ts".
+.gt-path {
+  @include rows.truncate;
+  min-width: 0;
+  direction: rtl;
+  text-align: left;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.gt-lc {
+  font-family: rows.$mono;
+  font-size: rows.$mono-size;
+  font-variant-numeric: tabular-nums;
+  text-align: end;
+  white-space: nowrap;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.gt-raw {
+  margin: 0;
+  padding: var(--gt-space-3, 12px) var(--gt-space-4, 16px);
+  overflow-x: auto;
+  font-family: rows.$mono;
+  font-size: rows.$mono-size;
+  line-height: 20px;
+  white-space: pre;
+  color: var(--mat-sys-on-surface);
+
+  &--wrap {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+}
+
+// A plain end row in a flush panel ("Show all 7"), not the tinted footer.
+.gt-panel-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gt-space-1, 4px) var(--gt-space-4, 16px);
+  min-height: 40px;
+  padding: var(--gt-space-1, 4px) var(--gt-space-4, 16px) var(--gt-space-1, 4px)
+    var(--gt-space-1, 4px);
+  border-top: $hairline;
+  font: var(--mat-sys-body-small);
+  box-sizing: border-box;
+
+  > .gt-muted {
+    padding-inline-start: var(--gt-space-3, 12px);
+  }
+}
+
+// A <button aria-expanded> row with a trailing chevron in a 32px slot.
+.gt-expandable-row {
+  @include rows.row-button;
+}
+
+// Key/value rows: label column, value, chevron slot.
+.gt-kv > * + * {
+  border-top: $hairline;
+}
+
+.gt-kv__row {
+  --gt-label-w: #{rows.$label-w};
+  display: grid;
+  grid-template-columns: var(--gt-label-w) minmax(0, 1fr) rows.$chev-slot;
+  align-items: center;
+  column-gap: var(--gt-space-4, 16px);
+  box-sizing: border-box;
+  min-height: 36px;
+  padding: var(--gt-space-2, 8px) var(--gt-space-4, 16px);
+  font: var(--mat-sys-body-medium);
+}
+
+button.gt-kv__row {
+  @include rows.row-button;
+  padding: var(--gt-space-2, 8px) var(--gt-space-4, 16px);
+}
+
+.gt-kv__k {
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.gt-kv__count {
+  margin-inline-start: var(--gt-space-1, 4px);
+  font-variant-numeric: tabular-nums;
+  color: var(--mat-sys-on-surface);
+}
+
+.gt-kv__v {
+  min-width: 0;
+  color: var(--mat-sys-on-surface);
+  overflow-wrap: anywhere;
+}
+
+.gt-kv__group {
+  --gt-indent: calc(var(--gt-space-4, 16px) * 2);
+}
+
+// Property list: muted label column, then the value.
+.gt-property-list {
+  --gt-label-w: #{rows.$label-w};
+  margin: 0;
+  padding-block: var(--gt-space-2, 8px);
+
+  dt {
+    font: var(--mat-sys-body-medium);
+    color: var(--mat-sys-on-surface-variant);
+    overflow-wrap: anywhere;
+  }
+
+  dd {
+    min-width: 0;
+    margin: 0;
+    font: var(--mat-sys-body-medium);
+    overflow-wrap: anywhere;
+    color: var(--mat-sys-on-surface);
+  }
+
+  dt.gt-mono,
+  dd.gt-mono {
+    font-family: rows.$mono;
+    font-size: rows.$mono-size;
+  }
+
+  dd.gt-mono {
+    white-space: pre-wrap;
+  }
+}
+
+.gt-property-list__row {
+  display: grid;
+  grid-template-columns: var(--gt-label-w) minmax(0, 1fr);
+  align-content: center;
+  align-items: baseline;
+  column-gap: var(--gt-space-4, 16px);
+  box-sizing: border-box;
+  min-height: 32px;
+  padding: var(--gt-space-1, 4px) var(--gt-space-4, 16px);
+}
+
+.gt-property-list--nested {
+  padding-block: 0 var(--gt-space-2, 8px);
+
+  .gt-property-list__row {
+    min-height: 28px;
+    padding-inline-start: var(--gt-indent, var(--gt-space-4, 16px));
+  }
+}
+
+.gt-property-list--facts {
+  --gt-label-w: 104px;
+  padding-block: var(--gt-space-1, 4px);
+}
+
+@include controls.narrow-panel {
+  .gt-property-list,
+  .gt-property-list--facts,
+  .gt-kv__row {
+    --gt-label-w: #{rows.$label-w-narrow};
+  }
+
+  // A long value goes under its label.
+  .gt-property-list__row--long {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 2px;
+  }
+}

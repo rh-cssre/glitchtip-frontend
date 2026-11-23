@@ -1,0 +1,8 @@
+@use "@angular/material" as mat;
+
+@include mat.menu-overrides(
+  (
+    item-leading-spacing: 14px,
+    item-trailing-spacing: 14px,
+  )
+);

@@ -1,79 +1,100 @@
-import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
-import { UntypedFormControl, Validators, UntypedFormGroup } from "@angular/forms";
+import {
+  Component,
+  ChangeDetectionStrategy,
+  effect,
+  inject,
+  input,
+} from "@angular/core";
+import {
+  FormControl,
+  Validators,
+  FormGroup,
+  ReactiveFormsModule,
+} from "@angular/forms";
 import { TeamsService } from "src/app/api/teams/teams.service";
-import { ActivatedRoute } from "@angular/router";
-import { map, take } from "rxjs/operators";
-import { OrganizationsService } from "src/app/api/organizations/organizations.service";
+import { LoadingButtonComponent } from "../../../shared/loading-button/loading-button.component";
+import { MatInputModule } from "@angular/material/input";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatDialog } from "@angular/material/dialog";
+import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
+import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
+import { OrganizationsService } from "src/app/api/organizations.service";
+import { slugRegex } from "src/app/shared/validators";
+import { mapFormErrors } from "src/app/shared/forms/form.utils";
+import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
 
 @Component({
   selector: "gt-team-settings",
   templateUrl: "./team-settings.component.html",
-  styleUrls: ["./team-settings.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    MatFormFieldModule,
+    ReactiveFormsModule,
+    MatInputModule,
+    LoadingButtonComponent,
+    SettingsSectionComponent,
+    FormErrorComponent,
+  ],
 })
-export class TeamSettingsComponent implements OnInit {
-  team$ = this.teamsService.team$;
-  loading$ = this.teamsService.loading$;
-  errors$ = this.teamsService.errors$;
-  form = new UntypedFormGroup({
-    slug: new UntypedFormControl("", [Validators.required]),
+export class TeamSettingsComponent {
+  private teamsService = inject(TeamsService);
+  private organizationsService = inject(OrganizationsService);
+  private dialog = inject(MatDialog);
+
+  team = this.teamsService.team;
+  loading = this.teamsService.loading;
+  errors = this.teamsService.errors;
+  canWriteTeam = this.organizationsService.canWriteTeam;
+  canAdminTeam = this.organizationsService.canAdminTeam;
+  form = new FormGroup({
+    slug: new FormControl("", [
+      Validators.required,
+      Validators.pattern(slugRegex),
+    ]),
   });
-  routeSlugs$ = this.route.paramMap.pipe(
-    map((params) => [params.get("org-slug"), params.get("team-slug")])
-  );
 
-  constructor(
-    private teamsService: TeamsService,
-    private organizationsService: OrganizationsService,
-    private route: ActivatedRoute
-  ) {}
+  get slug() {
+    return this.form.get("slug");
+  }
+  orgSlug = input.required<string>({ alias: "org-slug" });
+  teamSlug = input.required<string>({ alias: "team-slug" });
 
-  ngOnInit(): void {
-    this.routeSlugs$
-      .pipe(
-        map(([orgSlug, teamSlug]) => {
-          if (orgSlug && teamSlug) {
-            this.teamsService.retrieveSingleTeam(orgSlug, teamSlug);
-            this.form.patchValue({ slug: teamSlug });
-          }
-        })
-      )
-      .subscribe();
+  constructor() {
+    effect(() => {
+      this.form.patchValue({ slug: this.teamSlug() });
+    });
   }
 
-  onSubmit() {
-    const newSlug = this.form.value.slug;
-    this.routeSlugs$
-      .pipe(
-        take(1),
-        map(([orgSlug, teamSlug]) => {
-          if (orgSlug && teamSlug) {
-            this.teamsService
-              .updateTeamSlug(orgSlug, teamSlug, newSlug)
-              .subscribe((resp) => {
-                this.organizationsService.updateTeam(resp.id, resp.slug);
-              });
-          }
-        })
-      )
-      .toPromise();
+  async onSubmit() {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+    const newSlug = this.form.value.slug!;
+    await this.teamsService.updateTeamSlug(
+      this.orgSlug(),
+      this.teamSlug(),
+      newSlug,
+    );
+    const error = this.errors().updateName;
+    if (error) {
+      mapFormErrors({ slug: [error] }, this.form);
+    }
   }
 
   deleteTeam() {
-    if (window.confirm("Are you sure you want to delete this team?")) {
-      this.routeSlugs$
-        .pipe(
-          map(([orgSlug, teamSlug]) => {
-            if (orgSlug && teamSlug) {
-              this.teamsService
-                .deleteTeam(orgSlug, teamSlug)
-                .subscribe(() =>
-                  this.organizationsService.deleteTeam(teamSlug)
-                );
-            }
-          })
-        )
-        .toPromise();
-    }
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: $localize`Delete #${this.teamSlug()}:team:?`,
+        message: $localize`Its projects and members stay in the organization. This cannot be undone.`,
+        confirmText: $localize`Delete`,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (confirmed) {
+        this.teamsService.deleteTeam(this.orgSlug(), this.teamSlug());
+      }
+    });
   }
 }

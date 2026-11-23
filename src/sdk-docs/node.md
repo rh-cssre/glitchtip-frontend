@@ -1,22 +1,34 @@
-Use `yarn` or `npm` to add `@sentry/node` to your project:
+Install the sentry Node.js SDK:
 
 ```bash
-# Using yarn
-$ yarn add @sentry/node
-
-# Using npm
-$ npm install @sentry/node
+npm install @sentry/node
 ```
 
-Then, inform the Node SDK about your DSN:
+Initialize the SDK as early as possible in your application:
 
 ```javascript
 const Sentry = require("@sentry/node");
-Sentry.init({ dsn: "your DSN here" });
+
+Sentry.init({
+  dsn: "YOUR_DSN",
+  tracesSampleRate: 0.01, // 1% of transactions — adjust to your needs
+  autoSessionTracking: false, // GlitchTip does not support sessions
+});
 ```
 
-One way to break your JavaScript application is to call an undefined function:
+Verify your setup:
 
-```js
+```javascript
+Sentry.captureMessage("Test message from Node.js");
+```
+
+Or trigger a test error:
+
+```javascript
 myUndefinedFunction();
 ```
+
+## Tips
+
+- If you're using Express, Koa, or Connect, see their dedicated integration docs for richer error context.
+- Set `tracesSampleRate` to a low value in production to save disk space.

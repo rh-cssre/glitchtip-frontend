@@ -1,4 +1,4 @@
-import { Directive, Input } from "@angular/core";
+import { Directive, input } from "@angular/core";
 import {
   Validator,
   NG_VALIDATORS,
@@ -7,6 +7,7 @@ import {
 } from "@angular/forms";
 
 @Directive({
+  standalone: true,
   selector: "[gtInputMatcher]",
   providers: [
     {
@@ -17,11 +18,12 @@ import {
   ],
 })
 export class InputMatcherDirective implements Validator {
-  @Input() gtInputMatcher?: string;
+  readonly gtInputMatcher = input<string>();
 
   validate(control: AbstractControl): ValidationErrors | null {
-    if (this.gtInputMatcher !== undefined) {
-      const comparisonInput = control.parent!.get(this.gtInputMatcher);
+    const gtInputMatcher = this.gtInputMatcher();
+    if (gtInputMatcher !== undefined) {
+      const comparisonInput = control.parent!.get(gtInputMatcher);
       if (comparisonInput && comparisonInput.value !== control.value) {
         return { notEqual: true };
       } else {

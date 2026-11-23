@@ -1,0 +1,70 @@
+:host {
+  display: block;
+}
+
+.verify-email-banner {
+  --mat-card-container-color: var(--mat-sys-surface-container-highest);
+  background-color: var(--mat-sys-surface-container-highest);
+  background-image: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--mat-sys-outline) 40%, transparent) 1.3px,
+    transparent 1.3px
+  );
+  background-size: 22px 22px;
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to right,
+      var(--mat-sys-surface-container-highest) 30%,
+      transparent 80%
+    );
+    pointer-events: none;
+    z-index: 0;
+  }
+}
+
+.banner-content {
+  position: relative;
+  z-index: 1;
+  padding: 24px;
+}
+
+.banner-headline {
+  margin: 0 0 8px;
+  font-size: 1.5em;
+  color: var(--mat-sys-primary);
+  display: inline-block;
+}
+
+.banner-description {
+  margin: 0 0 8px;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.banner-email {
+  margin: 0 0 16px;
+  color: var(--mat-sys-on-surface-variant);
+  word-break: break-all;
+}
+
+.banner-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.resend-button {
+  position: relative;
+}
+
+.resend-button-spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

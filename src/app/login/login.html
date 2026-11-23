@@ -1,0 +1,139 @@
+<div class="auth-split">
+  <gt-auth-brand>
+    <span slot="lead" i18n>Welcome back.</span>
+    <span slot="rest" i18n>
+      Your issues, uptime monitors and logs are right where you left them.</span
+    >
+  </gt-auth-brand>
+  <main class="auth-page">
+    <div class="auth-column">
+      @if (requiresMFA()) {
+        <img
+          class="auth-logo"
+          src="static/assets/images/glitchtip-logo-v1.svg"
+          alt="GlitchTip"
+        />
+        <gt-panel>
+          @if (!hasWebAuthn() || preferTOTP()) {
+            <gt-login-totp></gt-login-totp>
+          } @else {
+            <gt-login-webauthn></gt-login-webauthn>
+          }
+        </gt-panel>
+      } @else {
+        <img
+          class="auth-logo"
+          src="static/assets/images/glitchtip-logo-v1.svg"
+          alt="GlitchTip"
+        />
+        <h1 class="auth-title" i18n>Log in to GlitchTip</h1>
+        <gt-panel>
+          <form class="auth-fields" [formGroup]="form" (ngSubmit)="onSubmit()">
+            <gt-form-error [errors]="formErrors()"></gt-form-error>
+            <div class="auth-field">
+              <label class="auth-label" for="login-email" i18n>Email</label>
+              <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                <input
+                  id="login-email"
+                  matInput
+                  autofocus
+                  type="email"
+                  autocomplete="email"
+                  formControlName="email"
+                />
+                @if (email?.errors) {
+                  <mat-error>
+                    @if (email?.errors?.["required"]) {
+                      <span i18n>Your email is required to log in</span>
+                    }
+                    @if (email?.errors?.["email"]) {
+                      <span i18n>Enter a valid email address</span>
+                    }
+                    @if (email?.errors?.["serverError"]) {
+                      <span>{{ email?.errors?.["serverError"] }}</span>
+                    }
+                  </mat-error>
+                }
+              </mat-form-field>
+            </div>
+            <div class="auth-field">
+              <div class="auth-label-row">
+                <label class="auth-label" for="login-password" i18n
+                  >Password</label
+                >
+                <a class="auth-aside-link" routerLink="/reset-password" i18n
+                  >Forgot password?</a
+                >
+              </div>
+              <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                <input
+                  id="login-password"
+                  matInput
+                  type="password"
+                  autocomplete="current-password"
+                  formControlName="password"
+                />
+                @if (password?.errors) {
+                  <mat-error>
+                    @if (password?.errors?.["minlength"]) {
+                      <span i18n
+                        >Your password should be at least 8 characters
+                        long</span
+                      >
+                    }
+                    @if (password?.errors?.["required"]) {
+                      <span i18n>Your password is required to log in</span>
+                    }
+                    @if (password?.errors?.["serverError"]) {
+                      <span>{{ password?.errors?.["serverError"] }}</span>
+                    }
+                  </mat-error>
+                }
+              </mat-form-field>
+            </div>
+            <gt-loading-button
+              i18n-buttonText
+              buttonText="Log in"
+              [fullWidth]="true"
+              [loading]="loading()"
+              id="submit"
+            >
+            </gt-loading-button>
+          </form>
+          @if (socialApps(); as socialApps) {
+            @if (socialApps.length) {
+              <div class="auth-or">
+                <span i18n>or</span>
+              </div>
+              <div class="auth-sso">
+                @for (socialApp of socialApps; track socialApp) {
+                  <button mat-stroked-button (click)="onSocialApp(socialApp)">
+                    <gt-auth-svg
+                      source="auth"
+                      text="Log in with {{ socialApp.name }}"
+                      i18n-text
+                      [provider]="socialApp.provider"
+                    ></gt-auth-svg>
+                  </button>
+                }
+              </div>
+            }
+          }
+        </gt-panel>
+        @if (enableUserRegistration() || enableSocialAppsUserRegistration()) {
+          <p class="auth-aside gt-prose">
+            <ng-container i18n>New to GlitchTip?</ng-container>
+            {{ " " }}
+            <a routerLink="../register" queryParamsHandling="preserve" i18n
+              >Sign up</a
+            >
+          </p>
+        }
+        @if (instanceName()) {
+          <p class="auth-instance" markdown>{{ instanceName() }}</p>
+        }
+      }
+    </div>
+  </main>
+</div>
+<div cdkFocusRegionEnd></div>

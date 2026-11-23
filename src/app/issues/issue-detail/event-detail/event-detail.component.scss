@@ -1,5 +1,5 @@
-@use '@angular/material' as mat;
-@import "variables";
+@use "@angular/material" as mat;
+@use "variables" as vars;
 
 section {
   margin-bottom: 16px;
@@ -13,7 +13,7 @@ section {
   display: flex;
   justify-content: space-between;
 
-  @media screen and (max-width: $small - 1) {
+  @media screen and (max-width: vars.$small - 1) {
     flex-direction: column-reverse;
   }
 
@@ -28,10 +28,28 @@ section {
   }
 
   .navigation-buttons {
-    @media screen and (max-width: $small - 1) {
+    @media screen and (max-width: vars.$small - 1) {
       margin: 0 auto 8px;
     }
   }
+}
+
+// "copy for AI" rendered as a sibling that visually matches the "raw JSON"
+// anchor next to it (bold, on-surface colour, no underline).
+.link-button {
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  color: var(--mat-sys-on-surface);
+  text-decoration: none;
+}
+
+.action-separator {
+  margin: 0 6px;
+  color: var(--mat-sys-on-surface-variant);
 }
 
 .tags {
@@ -46,38 +64,64 @@ gt-entry-request {
   display: block;
 }
 
-.pseudo-chip-list {
+// Tag pills: border only, no shadow.
+.tag-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gt-space-2, 8px);
   margin: 4px 0 20px;
   padding: 0;
-  overflow: hidden;
-
-  a {
-    display: inline-block;
-    width: 100%;
-    height: 100%;
-    text-decoration: none;
-  }
-}
-.pseudo-chip {
-  margin-top: 6px;
-  margin-right: 8px;
-  padding: 2px 12px;
-  border-radius: 16px;
-  border: 1px solid mat.get-color-from-palette(mat.$gray-palette, 500);
-  background-color: #fefefe;
-  float: left;
   list-style: none;
-  transition: 0.3s;
+}
+
+.tag-pill {
+  display: flex;
+  align-items: center;
+  max-width: 100%;
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: var(--mat-sys-corner-full);
+  background-color: var(--mat-sys-surface);
+  font: var(--mat-sys-body-small);
+  color: var(--mat-sys-on-surface);
 
   &:hover {
-    background: mat.get-color-from-palette(mat.$gray-palette, 100);
+    border-color: var(--mat-sys-outline);
+    background-color: var(--mat-sys-surface-container);
   }
 }
-.pseudo-chip-key {
-  font-size: 0.8em;
-  padding-right: 10px;
-  opacity: 0.8;
+
+.tag-pill__link {
+  display: flex;
+  align-items: baseline;
+  gap: var(--gt-space-2, 8px);
+  min-width: 0;
+  padding: 2px var(--gt-space-3, 12px);
+  color: inherit;
+  font-weight: 400;
+  text-decoration: none;
 }
-.pseudo-chip-value {
-  vertical-align: -0.07em;
+
+.tag-pill__key {
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.tag-pill__value {
+  overflow: hidden;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tag-pill__external {
+  display: flex;
+  align-items: center;
+  padding: 0 var(--gt-space-2, 8px) 0 var(--gt-space-1, 4px);
+  border-left: 1px solid var(--mat-sys-outline-variant);
+  color: var(--mat-sys-on-surface-variant);
+
+  mat-icon {
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+  }
 }

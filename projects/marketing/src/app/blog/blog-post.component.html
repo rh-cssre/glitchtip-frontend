@@ -1,0 +1,41 @@
+<mkt-page-shell>
+  <article class="blog-article">
+    <header class="blog-article__head">
+      <nav class="blog-crumbs" aria-label="Breadcrumb">
+        <a routerLink="/blog">Blog</a>
+        <span class="blog-crumbs__sep">/</span>
+        <span class="blog-crumbs__current">{{ title() }}</span>
+      </nav>
+
+      <h1 class="fancy marketing-heading">{{ title() }}</h1>
+      @if (postDate(); as date) {
+        <time class="blog-article__date" [dateTime]="date">{{
+          date | date: "longDate"
+        }}</time>
+      }
+    </header>
+
+    <div class="markdown-container mat-typography">
+      <markdown [data]="cleanedMarkdown()" (ready)="onReady()"></markdown>
+    </div>
+
+    <nav class="mkt-pager" aria-label="More posts">
+      @if (newerPost(); as post) {
+        <a class="mkt-pager__link is-prev" [routerLink]="[post.route]">
+          <span class="mkt-pager__dir">&#8592; Newer</span>
+          <span class="mkt-pager__title">{{ post.title }}</span>
+        </a>
+      } @else {
+        <span></span>
+      }
+      @if (olderPost(); as post) {
+        <a class="mkt-pager__link is-next" [routerLink]="[post.route]">
+          <span class="mkt-pager__dir">Older &#8594;</span>
+          <span class="mkt-pager__title">{{ post.title }}</span>
+        </a>
+      }
+    </nav>
+
+    <div data-chirpy-comment="true"></div>
+  </article>
+</mkt-page-shell>

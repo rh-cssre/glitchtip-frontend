@@ -1,72 +1,114 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
 import {
-  UntypedFormGroup,
-  UntypedFormArray,
-  UntypedFormControl,
+  Component,
+  OnInit,
+  Signal,
+  ViewChild,
+  inject,
+  ChangeDetectionStrategy,
+} from "@angular/core";
+import { toSignal } from "@angular/core/rxjs-interop";
+import { map } from "rxjs";
+import {
+  FormGroup,
+  FormControl,
   Validators,
-  UntypedFormBuilder,
+  ReactiveFormsModule,
+  FormArray,
+  FormBuilder,
 } from "@angular/forms";
-import { MatCheckbox } from "@angular/material/checkbox";
+import { MatCheckbox, MatCheckboxModule } from "@angular/material/checkbox";
 import { AuthTokensService, AuthTokensState } from "../auth-tokens.service";
-import { StatefulBaseComponent } from "src/app/shared/stateful-service/stateful-base.component";
+import { LoadingButtonComponent } from "../../../shared/loading-button/loading-button.component";
+import { MatInputModule } from "@angular/material/input";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { RouterLink } from "@angular/router";
+import { MatButtonModule } from "@angular/material/button";
+import { StatefulComponent } from "src/app/shared/stateful-service/signal-state.component";
+import { mapFormErrors } from "src/app/shared/forms/form.utils";
+import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
+import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-header.component";
+import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
+import { PanelComponent } from "src/app/shared/panel/panel.component";
+import {
+  TOKEN_SCOPES,
+  TOKEN_SCOPE_GROUPS,
+  TOKEN_SCOPE_LEVELS,
+} from "../token-scopes";
 
 @Component({
   selector: "gt-new-token",
   templateUrl: "./new-token.component.html",
   styleUrls: ["./new-token.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: [
+    PageHeaderComponent,
+    FormErrorComponent,
+    SettingsSectionComponent,
+    PanelComponent,
+    MatButtonModule,
+    RouterLink,
+    MatFormFieldModule,
+    ReactiveFormsModule,
+    MatInputModule,
+    MatCheckboxModule,
+    LoadingButtonComponent,
+  ],
 })
 export class NewTokenComponent
-  extends StatefulBaseComponent<AuthTokensState, AuthTokensService>
+  extends StatefulComponent<AuthTokensState, AuthTokensService>
   implements OnInit
 {
+  protected service: AuthTokensService;
+  private fb = inject(FormBuilder);
+
   @ViewChild("selectAllCheckbox") selectAllCheckbox?: MatCheckbox;
 
-  createLoading$ = this.service.createLoading$;
-  createError$ = this.service.createError$;
-  createErrorLabel$ = this.service.createErrorLabel$;
-  createErrorScopes$ = this.service.createErrorScopes$;
+  createLoading = this.service.createLoading;
+  createErrorForm = this.service.createErrorForm;
 
-  form: UntypedFormGroup;
-  scopeOptions: string[] = [
-    "project:read",
-    "project:write",
-    "project:admin",
-    "project:releases",
-    "team:read",
-    "team:write",
-    "team:admin",
-    "event:read",
-    "event:write",
-    "event:admin",
-    "org:read",
-    "org:write",
-    "org:admin",
-    "member:read",
-    "member:write",
-    "member:admin",
-  ];
+  form: FormGroup;
+  scopeOptions = TOKEN_SCOPES;
+  scopeGroups = TOKEN_SCOPE_GROUPS;
+  scopeLevels = TOKEN_SCOPE_LEVELS;
+  /** Rebuilt when the scopes' status changes, not on every check. */
+  scopesErrors: Signal<string[]>;
 
   get scopes() {
-    return this.form.controls.scopes as UntypedFormArray;
+    return this.form.controls.scopes as FormArray;
   }
 
   get label() {
-    return this.form.controls.label as UntypedFormControl;
+    return this.form.controls.label as FormControl;
   }
 
-  constructor(
-    protected service: AuthTokensService,
-    private fb: UntypedFormBuilder
-  ) {
+  constructor() {
+    const service = inject(AuthTokensService);
+
     super(service);
+    this.service = service;
+
     this.form = this.fb.group({
-      label: new UntypedFormControl("", [Validators.required]),
-      scopes: new UntypedFormArray([]),
+      label: new FormControl("", [
+        Validators.required,
+        Validators.maxLength(255),
+      ]),
+      scopes: new FormArray([]),
     });
 
     /* Set scopeOptions to scopes FormArray **/
-    this.scopeOptions.forEach(() =>
-      this.scopes.push(new UntypedFormControl(false))
+    this.scopeOptions.forEach(() => this.scopes.push(new FormControl(false)));
+
+    this.scopesErrors = toSignal(
+      this.scopes.statusChanges.pipe(
+        map(() => {
+          const errors = this.scopes.errors;
+          return [
+            errors?.selectOne ? $localize`Select at least one scope` : null,
+            errors?.serverError as string | undefined,
+          ].filter((error): error is string => !!error);
+        }),
+      ),
+      { initialValue: [] },
     );
   }
 
@@ -74,7 +116,7 @@ export class NewTokenComponent
     this.scopes.valueChanges.subscribe((values: boolean[]) => {
       if (this.selectAllCheckbox) {
         this.selectAllCheckbox.checked = values.every(
-          (value) => value === true
+          (value) => value === true,
         );
         this.selectAllCheckbox.indeterminate =
           !this.selectAllCheckbox.checked &&
@@ -91,30 +133,12 @@ export class NewTokenComponent
     }
   }
 
-  getLabelFieldError() {
-    this.createErrorLabel$.subscribe((error) => {
-      if (error) {
-        return this.label.setErrors({
-          serverErrorLabel: error,
-        });
-      }
-    });
-  }
-
-  getScopesFieldError() {
-    this.createErrorScopes$.subscribe((error) => {
-      if (error) {
-        return this.scopes.setErrors({
-          serverErrorScopes: error,
-        });
-      }
-    });
-  }
-
   validateScopes() {
+    // Drops a stale server error, which would otherwise block resubmitting.
+    this.scopes.updateValueAndValidity();
     /* Check to see if at least one scope is selected before submitting **/
     const valueSelected = this.scopes.value.find(
-      (value: boolean) => value === true
+      (value: boolean) => value === true,
     );
     if (!valueSelected) {
       this.scopes.setErrors({
@@ -123,25 +147,18 @@ export class NewTokenComponent
     }
   }
 
-  validateForm() {
+  async onSubmit() {
     this.validateScopes();
-    this.getLabelFieldError();
-    this.getScopesFieldError();
-  }
-
-  onSubmit() {
-    this.service.resetCreateErrors();
-
-    this.validateForm();
 
     if (this.form.valid) {
       const label = this.label.value;
       const selectedScopes = this.form.value.scopes
         .map((checked: boolean, index: number) =>
-          checked ? this.scopeOptions[index] : null
+          checked ? this.scopeOptions[index] : null,
         )
         .filter((selected: string) => selected !== null);
-      this.service.createAuthToken(label, selectedScopes);
+      await this.service.createAuthToken(label, selectedScopes);
+      mapFormErrors(this.service.createErrorFields(), this.form);
     }
   }
 }

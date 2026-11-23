@@ -3,63 +3,146 @@ import {
   OnInit,
   ChangeDetectionStrategy,
   OnDestroy,
+  inject,
+  effect,
+  computed,
 } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
-import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
+import { DatePipe } from "@angular/common";
+import { ActivatedRoute, RouterLink } from "@angular/router";
+import { FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { map } from "rxjs/operators";
 import { combineLatest } from "rxjs";
-import { OrganizationsService } from "src/app/api/organizations/organizations.service";
-import { MemberDetailService } from "src/app/api/organizations/member-detail.service";
+import { MatRadioModule } from "@angular/material/radio";
+import { MatDialog } from "@angular/material/dialog";
+import { OrganizationsService } from "src/app/api/organizations.service";
+import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
+import { EmptyStateComponent } from "src/app/shared/empty-state/empty-state.component";
+import { ListComponent } from "src/app/shared/list/list.component";
+import { ListRowComponent } from "src/app/shared/list/list-row.component";
+import { ListRowLinkComponent } from "src/app/shared/list/list-row-link.component";
+import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
+import { MemberDetailService } from "src/app/settings/members/member-detail/member-detail.service";
+import { MemberRole } from "src/app/api/organizations/organizations.interface";
+import { MEMBER_ROLES, roleDescription, roleName } from "../member-roles";
+import { LoadingButtonComponent } from "../../../shared/loading-button/loading-button.component";
+import { PageHeaderComponent } from "src/app/shared/detail/page-header/page-header.component";
+import { BackLinkComponent } from "src/app/shared/detail/back-link/back-link.component";
+import { TopAppBar } from "src/app/shared/top-app-bar/top-app-bar";
+import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
 
 @Component({
-  selector: "gt-member-detail",
   templateUrl: "./member-detail.component.html",
-  styleUrls: ["./member-detail.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    DatePipe,
+    RouterLink,
+    ReactiveFormsModule,
+    FormErrorComponent,
+    MatRadioModule,
+    TopAppBar,
+    BackLinkComponent,
+    EmptyStateComponent,
+    LoadingButtonComponent,
+    ListComponent,
+    ListRowComponent,
+    ListRowLinkComponent,
+    PageHeaderComponent,
+    SettingsSectionComponent,
+  ],
 })
 export class MemberDetailComponent implements OnInit, OnDestroy {
-  memberDetail$ = this.memberDetailService.memberDetail$;
-  teams$ = this.organizationsService.organizationTeams$;
-  updateMemberError$ = this.memberDetailService.updateMemberError$;
-  updateMemberLoading$ = this.memberDetailService.updateMemberLoading$;
+  route = inject(ActivatedRoute);
+  private memberDetailService = inject(MemberDetailService);
+  private organizationsService = inject(OrganizationsService);
+  private dialog = inject(MatDialog);
+
+  member = this.memberDetailService.member;
+  memberTeams = this.memberDetailService.memberTeams;
+  updateMemberError = this.memberDetailService.updateMemberRoleError;
+  updateMemberLoading = this.memberDetailService.updateMemberRoleLoading;
+  transferOrgOwnershipError =
+    this.memberDetailService.transferOrgOwnershipError;
+  transferOrgOwnershipLoading =
+    this.memberDetailService.transferOrgOwnershipLoading;
   orgSlug$ = this.route.paramMap.pipe(map((params) => params.get("org-slug")));
-  memberIdSlug$ = this.route.paramMap.pipe(
-    map((params) => params.get("member-id"))
+  memberIdParam$ = this.route.paramMap.pipe(
+    map((params) => params.get("member-id")),
   );
-  routeParams$ = combineLatest([this.orgSlug$, this.memberIdSlug$]);
-  form = new UntypedFormGroup({
-    role: new UntypedFormControl(""),
+  routeParams$ = combineLatest([this.orgSlug$, this.memberIdParam$]);
+  form = new FormGroup({
+    role: new FormControl<MemberRole | null>(null),
+  });
+  formRole = this.form.get("role") as FormControl<MemberRole | null>;
+
+  /** The backend refuses granting a role above your own; only owners outrank managers. */
+  readonly roles = computed(() =>
+    this.organizationsService.canAdminOrg()
+      ? MEMBER_ROLES
+      : MEMBER_ROLES.filter((role) => role !== "owner"),
+  );
+  readonly invitePendingText = $localize`Invite pending`;
+  /** An owner is never pending, so one status slot holds either. */
+  readonly headerStatus = computed(() => {
+    const member = this.member();
+    if (member?.pending) return this.invitePendingText;
+    return member?.isOwner ? $localize`Account owner` : null;
   });
 
-  constructor(
-    public route: ActivatedRoute,
-    private organizationsService: OrganizationsService,
-    private memberDetailService: MemberDetailService
-  ) {}
+  /** Changing roles needs member:write (managers and owners); an owner's, the owner role. */
+  canEditRole = computed(
+    () =>
+      this.organizationsService.canWriteMember() &&
+      (this.member()?.role !== "owner" ||
+        this.organizationsService.canAdminOrg()),
+  );
+  /** A manager may manage members, but not this one. */
+  ownerOnly = computed(
+    () =>
+      this.organizationsService.canWriteMember() &&
+      !this.organizationsService.canAdminOrg(),
+  );
+  /**
+   * The backend allows a transfer only for owners (member:admin plus being the
+   * account owner or having the owner role), so org:admin is the signal.
+   */
+  canTransfer = computed(() => {
+    const member = this.member();
+    return (
+      this.organizationsService.canAdminOrg() &&
+      !!member &&
+      !member.isOwner &&
+      !member.pending
+    );
+  });
+
+  roleName = roleName;
+  roleDescription = roleDescription;
+
+  constructor() {
+    effect(() => {
+      const member = this.member();
+      if (member && this.form.pristine) {
+        this.form.patchValue({
+          role: member.role,
+        });
+        this.form.markAsPristine();
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.routeParams$
       .pipe(
-        map(([organizationSlug, memberIdSlug]) => {
-          if (organizationSlug && memberIdSlug) {
-            this.memberDetailService
-              .retrieveMemberDetail(organizationSlug, memberIdSlug)
-              .toPromise();
-            this.organizationsService.retrieveOrganizationTeams(
-              organizationSlug
+        map(([organizationSlug, memberIdParam]) => {
+          if (organizationSlug && memberIdParam) {
+            this.memberDetailService.retrieveMemberDetail(
+              organizationSlug,
+              +memberIdParam,
             );
           }
-        })
+        }),
       )
       .subscribe();
-
-    this.memberDetail$.subscribe((data) => {
-      if (data) {
-        this.form.patchValue({
-          role: data.role,
-        });
-      }
-    });
   }
 
   ngOnDestroy() {
@@ -67,8 +150,24 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    const role = this.form.get("role")?.value;
-    this.memberDetailService.updateMember(role);
-    // entire member object needs to be put to orgs/org-slug/members/member-id
+    const role = this.formRole.value;
+    if (role) {
+      this.memberDetailService.updateMemberRole(role);
+    }
+  }
+
+  transferOrgOwnership(email: string) {
+    this.dialog
+      .open(ConfirmDialogComponent, {
+        data: {
+          title: $localize`Transfer ownership to ${email}:email:?`,
+          message: $localize`They will hold the organization's subscription. Nobody's role changes.`,
+          confirmText: $localize`Transfer`,
+        },
+      })
+      .afterClosed()
+      .subscribe((confirmed) => {
+        if (confirmed) this.memberDetailService.transferOrgOwnership();
+      });
   }
 }
