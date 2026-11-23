@@ -1,0 +1,63 @@
+@use "controls";
+@use "@angular/material" as mat;
+
+// Content projected into gt-record-band comes from the page's template, so it is global.
+// Key facts in the band's corner: each a number over a short muted label.
+.gt-band-facts {
+  display: flex;
+  gap: 0 var(--gt-space-5, 24px);
+  font: var(--mat-sys-body-medium);
+  color: var(--mat-sys-on-surface-variant);
+
+  > * {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    white-space: nowrap;
+  }
+
+  // Hairlines keep the numbers evenly spaced when label lengths differ.
+  > * + * {
+    border-inline-start: 1px solid var(--mat-sys-outline-variant);
+    padding-inline-start: var(--gt-space-5, 24px);
+  }
+
+  b {
+    order: -1;
+    font: var(--mat-sys-title-large);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: var(--mat-sys-on-surface);
+  }
+
+  // A stat with a tooltip underlines its number, not its label too.
+  .gt-has-tip {
+    text-decoration: none;
+    cursor: help;
+
+    b {
+      text-decoration: underline dotted var(--mat-sys-outline);
+      text-underline-offset: 3px;
+    }
+  }
+}
+
+// Wide bands show the facts in the corner, so the meta line leaves them out.
+@include controls.wide-band {
+  gt-page-header .gt-band-fact {
+    display: none;
+  }
+}
+
+.l-body:has(> gt-record-band:first-child) {
+  margin-top: 0;
+}
+
+// The band's bottom edge is the tab bar's line.
+gt-record-band nav[mat-tab-nav-bar] {
+  @include mat.tabs-overrides(
+    (
+      divider-height: 0,
+    )
+  );
+}

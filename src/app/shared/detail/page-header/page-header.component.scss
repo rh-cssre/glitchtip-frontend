@@ -1,0 +1,95 @@
+@use "object-header";
+
+// Block, so padding a page adds to the host (the issue level bar) indents the header.
+:host {
+  display: block;
+}
+
+.gt-page-header {
+  display: flex;
+  align-items: center;
+  gap: var(--gt-space-4, 16px);
+  // A record band sets the gap to 0: its tiers do the spacing.
+  margin-bottom: var(--gt-page-header-gap, var(--gt-space-5, 24px));
+}
+
+.gt-page-header__icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background-color: var(--mat-sys-secondary-container);
+  color: var(--mat-sys-on-secondary-container);
+}
+
+.gt-page-header__text {
+  flex: 1;
+  min-width: 0;
+}
+
+.gt-page-header__title {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.gt-page-header__subtitle {
+  display: -webkit-box;
+  margin: var(--gt-space-1, 4px) 0 0;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  font: var(--mat-sys-body-large);
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.gt-page-header__meta {
+  @include object-header.meta;
+
+  .gt-page-header__pill {
+    margin-left: object-header.$sep-gap;
+  }
+
+  &:not(:has(*)) {
+    display: none;
+  }
+}
+
+// Settings pages: one line, with the facts wrapping under the title.
+:host(.gt-page-header--compact) {
+  .gt-page-header {
+    gap: var(--gt-space-3, 12px);
+    margin-bottom: var(--gt-space-4, 16px);
+  }
+
+  .gt-page-header__icon {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--mat-sys-corner-small);
+
+    mat-icon {
+      width: 20px;
+      height: 20px;
+      font-size: 20px;
+    }
+  }
+
+  .gt-page-header__text {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 2px var(--gt-space-3, 12px);
+  }
+
+  .gt-page-header__title {
+    font: var(--mat-sys-title-large);
+    font-weight: 600;
+    letter-spacing: var(--mat-sys-title-large-tracking);
+  }
+
+  .gt-page-header__meta {
+    margin-top: 0;
+  }
+}

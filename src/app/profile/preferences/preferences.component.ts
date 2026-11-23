@@ -1,15 +1,31 @@
-import { Component, OnInit } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  effect,
+  inject,
+  signal,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import {
   AbstractControl,
   FormControl,
   FormGroup,
   ValidatorFn,
   Validators,
+  ReactiveFormsModule,
 } from "@angular/forms";
-import { filter, map, Observable, startWith, take } from "rxjs";
 import { SettingsService } from "src/app/api/settings.service";
 import { UserService } from "src/app/api/user/user.service";
-import { LessAnnoyingErrorStateMatcher } from "src/app/shared/less-annoying-error-state-matcher";
+import { LoadingButtonComponent } from "../../shared/loading-button/loading-button.component";
+import { MatOptionModule } from "@angular/material/core";
+import { MatIconModule } from "@angular/material/icon";
+import { MatButtonModule } from "@angular/material/button";
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { MatInputModule } from "@angular/material/input";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatButtonToggleModule } from "@angular/material/button-toggle";
+import { SettingsSectionComponent } from "src/app/shared/settings-section/settings-section.component";
+import { FormErrorComponent } from "src/app/shared/forms/form-error/form-error.component";
 
 function autocompleteStringValidator(validOptions: Array<string>): ValidatorFn {
   return (control: AbstractControl): { [key: string]: any } | null => {
@@ -24,66 +40,97 @@ function autocompleteStringValidator(validOptions: Array<string>): ValidatorFn {
   selector: "gt-preferences",
   templateUrl: "./preferences.component.html",
   styleUrls: ["./preferences.component.scss"],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: [
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatAutocompleteModule,
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatIconModule,
+    MatOptionModule,
+    LoadingButtonComponent,
+    SettingsSectionComponent,
+    FormErrorComponent,
+  ],
 })
 export class PreferencesComponent implements OnInit {
+  private service = inject(UserService);
+  private settings = inject(SettingsService);
+
   defaultTimeZone: string = "Default";
   timeZones: string[] = (Intl as any).supportedValuesOf("timeZone");
-  currentTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  currentTimeZone = Intl.DateTimeFormat()
+    .resolvedOptions()
+    .timeZone.replace(/_/g, " ");
   form = new FormGroup({
     name: new FormControl("", Validators.maxLength(255)),
     timeZone: new FormControl("", {
       validators: [autocompleteStringValidator(this.timeZones)],
     }),
+    theme: new FormControl(
+      "",
+      autocompleteStringValidator(["system", "light", "dark"]),
+    ),
   });
-  filteredOptions?: Observable<string[]>;
-  userDetails$ = this.service.userDetails$;
-  serverTimeZone$ = this.settings.serverTimeZone$;
+  filteredOptions = signal<string[]>([]);
+  saving = signal<{ name?: boolean; timeZone?: boolean }>({});
+  themeError = signal<string | null>(null);
+  userDetails = this.service.user;
+  serverTimeZone = this.settings.serverTimeZone;
 
-  formName = this.form.get("name") as FormControl;
   formTimeZone = this.form.get("timeZone") as FormControl;
 
-  matcher = new LessAnnoyingErrorStateMatcher();
-
-  constructor(
-    private service: UserService,
-    private settings: SettingsService
-  ) {}
-
-  ngOnInit() {
-    this.serverTimeZone$
-      .pipe(
-        filter((serverTimeZone) => !!serverTimeZone),
-        take(1)
-      )
-      .subscribe((serverTimeZone) => {
-        this.defaultTimeZone = this.defaultTimeZone + ` \(${serverTimeZone}\)`;
-        this.timeZones.unshift(this.defaultTimeZone);
+  constructor() {
+    effect(() => {
+      const serverTimeZone = this.serverTimeZone();
+      if (serverTimeZone) {
+        this.defaultTimeZone = "Default" + ` \(${serverTimeZone}\)`;
+        if (!this.timeZones.includes(this.defaultTimeZone)) {
+          this.timeZones.unshift(this.defaultTimeZone);
+        }
         if (this.form.controls.timeZone.value === "") {
           this.form.controls.timeZone.setValue(this.defaultTimeZone);
         }
-      });
-    this.userDetails$.subscribe((user) => {
-      if (user) {
-        this.form.controls.name.setValue(user.name);
-      }
-      if (user?.options.timezone) {
-        if (!this.timeZones.includes(user.options.timezone)) {
-          this.timeZones.unshift(user.options.timezone); // Existing TZ always valid
-        }
-        this.form.controls.timeZone.setValue(user.options.timezone);
       }
     });
-    this.filteredOptions = this.form.controls["timeZone"].valueChanges.pipe(
-      startWith(""),
-      map((value) => this._filter(value || ""))
-    );
+
+    const userDetailsInit = effect(() => {
+      const user = this.userDetails();
+      if (user) {
+        this.form.controls.name.setValue(user.name!);
+        if (user.options!.timezone) {
+          if (!this.timeZones.includes(user.options.timezone)) {
+            this.timeZones.unshift(user.options.timezone); // Existing TZ always valid
+          }
+          this.form.controls.timeZone.setValue(user.options.timezone);
+        }
+        // No event: only a click on the toggle should save the theme.
+        this.form.controls.theme.setValue(
+          user.options!.preferredTheme || "system",
+          { emitEvent: false },
+        );
+        // Ensure effect only runs once after user details are loaded
+        userDetailsInit.destroy();
+      }
+    });
+  }
+
+  ngOnInit() {
+    this.filteredOptions.set(this._filter(""));
+
+    this.form.controls["timeZone"].valueChanges.subscribe((value) => {
+      this.filteredOptions.set(this._filter(value || ""));
+    });
+    this.form.controls.theme.valueChanges.subscribe(() => this.save("theme"));
   }
 
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase().replace(/\s/g, "_");
 
     return this.timeZones.filter((option) =>
-      option.toLowerCase().includes(filterValue)
+      option.toLowerCase().includes(filterValue),
     );
   }
 
@@ -91,17 +138,56 @@ export class PreferencesComponent implements OnInit {
     this.formTimeZone.setValue("");
   }
 
-  onSubmit() {
-    if (this.form.valid) {
-      const name = this.form.value.name!;
-      let timeZone = this.form.value.timeZone;
-      if (timeZone === this.defaultTimeZone) {
-        timeZone = "";
+  /**
+   * Saves one setting. The other two go back as they are saved, not as they
+   * sit in the form, so an unsaved edit in another section is not sent.
+   */
+  async save(field: "name" | "timeZone" | "theme") {
+    const control = this.form.controls[field];
+    control.markAsTouched();
+    const user = this.userDetails();
+    if (control.invalid || !user) return;
+
+    let name = user.name ?? "";
+    let timezone = user.options?.timezone;
+    let preferredTheme = user.options?.preferredTheme;
+    if (field === "name") name = control.value ?? "";
+    if (field === "timeZone") {
+      timezone =
+        control.value === this.defaultTimeZone ? "" : (control.value ?? "");
+    }
+    if (field === "theme") preferredTheme = control.value ?? undefined;
+
+    const options = {
+      ...(timezone !== undefined && timezone !== null && { timezone }),
+      ...(preferredTheme && { preferredTheme }),
+    };
+    if (field === "theme") {
+      // Save-on-change: lock the toggle, stay quiet on success, roll back on failure.
+      this.themeError.set(null);
+      control.disable({ emitEvent: false });
+      try {
+        const saved = await this.service.updateUser(name, options, {
+          silent: true,
+        });
+        if (!saved) {
+          control.setValue(user.options?.preferredTheme || "system", {
+            emitEvent: false,
+          });
+          this.themeError.set(
+            $localize`Error attempting to update preferences`,
+          );
+        }
+      } finally {
+        control.enable({ emitEvent: false });
       }
-      const options = {
-        ...(timeZone !== null && { timezone: timeZone }),
-      };
-      this.service.updateUserOptions(name, options);
+      return;
+    }
+    this.saving.update((saving) => ({ ...saving, [field]: true }));
+    try {
+      await this.service.updateUser(name, options);
+    } finally {
+      this.saving.update((saving) => ({ ...saving, [field]: false }));
     }
   }
 }

@@ -1,0 +1,30 @@
+<mat-card appearance="outlined" class="support-banner">
+  <mat-card-content>
+    <div class="banner-content">
+      <h2 class="banner-headline" i18n
+        >Get priority support for your GlitchTip deployment</h2
+      >
+      <p class="banner-description" i18n>
+        Priority email and live chat support direct from the engineers who build
+        GlitchTip.
+      </p>
+      @if (isSuperuser()) {
+        <p class="banner-description" i18n>
+          Add your license key in Django admin once subscribed.
+        </p>
+      }
+      <div class="banner-actions">
+        <a
+          mat-flat-button
+          color="primary"
+          href="https://glitchtip.com/pricing?plan=self-hosted"
+          target="_blank"
+          rel="noopener"
+        >
+          <span i18n>Get a support plan</span>
+          <mat-icon>open_in_new</mat-icon>
+        </a>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

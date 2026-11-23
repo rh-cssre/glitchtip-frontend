@@ -1,0 +1,102 @@
+<gt-top-app-bar>
+  <ng-container slot="left">
+    <gt-back-link i18n-backLinkText backLinkText="Projects" />
+  </ng-container>
+</gt-top-app-bar>
+<section class="l-body">
+  <gt-page-header i18n-title title="New project" />
+  <form
+    [formGroup]="form"
+    (ngSubmit)="onSubmit()"
+    data-cy="create-project-form"
+  >
+    <gt-panel class="gt-form-panel">
+      <gt-settings-section #nameSection i18n-title title="Name">
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <input
+            matInput
+            formControlName="name"
+            [attr.aria-labelledby]="nameSection.titleId"
+          />
+          <mat-error>
+            @if (name?.errors?.required) {
+              <span i18n data-cy="project-name-error-required"
+                >Enter a project name</span
+              >
+            }
+            @if (name?.errors?.maxlength) {
+              <span i18n data-cy="project-name-error-length"
+                >Name must be 64 characters or less</span
+              >
+            }
+          </mat-error>
+        </mat-form-field>
+      </gt-settings-section>
+
+      <gt-settings-section #teamSection i18n-title title="Team">
+        <span slot="description" i18n
+          >Members of the team get email alerts for this project.</span
+        >
+        @if (teams(); as teams) {
+          <div class="team-row">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+              <mat-select
+                (click)="
+                  teams.length || !canWriteTeam()
+                    ? undefined
+                    : openCreateTeamDialog()
+                "
+                [placeholder]="
+                  teams.length || !canWriteTeam()
+                    ? assignTeamText
+                    : createTeamText
+                "
+                formControlName="team"
+                [aria-labelledby]="teamSection.titleId"
+              >
+                @for (team of teams; track team) {
+                  <mat-option [value]="team.slug">
+                    #{{ team.slug }}
+                  </mat-option>
+                }
+              </mat-select>
+              <mat-error>
+                @if (team?.errors?.required) {
+                  <span i18n>Add a team to this project</span>
+                }
+              </mat-error>
+            </mat-form-field>
+            @if (canWriteTeam()) {
+              <button
+                mat-button
+                type="button"
+                id="create-team-from-projects"
+                (click)="openCreateTeamDialog()"
+              >
+                <mat-icon>add</mat-icon>
+                <ng-container i18n>New team</ng-container>
+              </button>
+            }
+          </div>
+        }
+      </gt-settings-section>
+
+      <gt-settings-section i18n-title title="Platform">
+        <span slot="description" i18n
+          >Optional. Picks the setup guide and icon for this project.</span
+        >
+        <gt-platform-picker formControlName="platform" />
+      </gt-settings-section>
+
+      <gt-form-error [errors]="error()" />
+      <a slot="footer" mat-button [routerLink]="['..']" i18n>Cancel</a>
+      <gt-loading-button
+        slot="footer"
+        i18n-buttonText
+        data-cy="create-project-submit"
+        buttonText="Create project"
+        [loading]="loading()"
+      />
+    </gt-panel>
+  </form>
+</section>

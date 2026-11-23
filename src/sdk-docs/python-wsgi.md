@@ -1,14 +1,26 @@
-It is recommended to use an integration for your particular WSGI framework if available, as those are easier to use and capture more useful information.
+If you use a WSGI framework with a dedicated integration (Django, Flask, etc.), prefer that instead — it provides richer context automatically.
 
-If you use a WSGI framework not directly supported by the SDK, or wrote a raw WSGI app, you can use this generic WSGI middleware. It captures errors and attaches a basic amount of information for incoming requests.
+For raw WSGI apps or unsupported frameworks, use the generic WSGI middleware:
+
+```bash
+pip install sentry-sdk
+```
 
 ```python
 import sentry_sdk
 from sentry_sdk.integrations.wsgi import SentryWsgiMiddleware
 
-from myapp import wsgi_app
+sentry_sdk.init(
+    dsn="YOUR_DSN",
+    traces_sample_rate=0.01,
+    auto_session_tracking=False,
+)
 
-sentry_sdk.init(dsn="your DSN here")
+def app(environ, start_response):
+    start_response("200 OK", [("Content-Type", "text/plain")])
+    return [b"Hello, world"]
 
-wsgi_app = SentryWsgiMiddleware(wsgi_app)
+app = SentryWsgiMiddleware(app)
 ```
+
+The middleware captures unhandled exceptions and attaches request information to events.

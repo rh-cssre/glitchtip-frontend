@@ -1,0 +1,24 @@
+:host {
+  display: block;
+}
+
+.merged__count {
+  font: var(--mat-sys-body-medium);
+  color: var(--mat-sys-on-surface-variant);
+}
+
+// The touch target overlaps the row padding instead of pushing the title in.
+.merged__check {
+  margin-inline: calc(var(--gt-space-2, 8px) * -1) 0;
+}
+
+.merged__title {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+// Indented to line up with the title after the checkbox.
+.merged__hash {
+  display: block;
+  padding-inline-start: 40px;
+}

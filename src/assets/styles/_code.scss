@@ -1,0 +1,168 @@
+@use "controls";
+@use "row-mixins" as rows;
+@use "variables" as vars;
+
+// Code blocks and the Prism token theme. Token colours come from the log
+// palette and keep 4.5:1 on the code background and the crash line.
+
+:root {
+  --gt-code-bg: var(--mat-sys-surface-container-high);
+  --gt-code-text: var(--mat-sys-on-surface);
+  // on-surface-variant equals on-surface in dark, so dark mutes it further.
+  --gt-code-muted: light-dark(
+    var(--mat-sys-on-surface-variant),
+    color-mix(in srgb, var(--mat-sys-on-surface-variant) 65%, var(--gt-code-bg))
+  );
+  --gt-code-keyword: var(--log-debug-color);
+  --gt-code-string: color-mix(
+    in srgb,
+    var(--log-service-color) 85%,
+    var(--mat-sys-on-surface)
+  );
+  --gt-code-function: color-mix(
+    in srgb,
+    var(--log-info-color) 70%,
+    var(--mat-sys-on-surface)
+  );
+  --gt-code-number: color-mix(
+    in srgb,
+    var(--log-warn-color) 75%,
+    var(--mat-sys-on-surface)
+  );
+  --gt-code-crash: color-mix(
+    in srgb,
+    var(--mat-sys-error) 10%,
+    var(--gt-code-bg)
+  );
+}
+
+// Source context: numbered lines, crash line tinted with a 2px error bar.
+.gt-code {
+  overflow-x: auto;
+  border-radius: vars.$shape-radius;
+  background: var(--gt-code-bg);
+
+  &:focus-visible {
+    @include controls.focus-ring;
+  }
+}
+
+.gt-code__lines {
+  width: max-content;
+  min-width: 100%;
+  box-sizing: border-box;
+  padding-block: var(--gt-space-2, 8px);
+  padding-inline-end: var(--gt-space-4, 16px);
+  font-family: rows.$mono;
+  font-size: rows.$mono-size;
+  line-height: 20px;
+}
+
+.gt-code__line {
+  display: grid;
+  grid-template-columns: 48px auto;
+  white-space: pre;
+  color: var(--gt-code-text);
+
+  &--hl {
+    background: var(--gt-code-crash);
+    box-shadow: inset 2px 0 0 var(--mat-sys-error);
+  }
+}
+
+.gt-code__n {
+  padding-inline-end: var(--gt-space-3, 12px);
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+  color: var(--gt-code-muted);
+  user-select: none;
+}
+
+// Markdown and gtPrism code blocks (pre > code.language-*).
+pre[class*="language-"],
+pre:has(> code[class*="language-"]) {
+  margin: 0 0 var(--gt-space-4, 16px);
+  padding: var(--gt-space-3, 12px) var(--gt-space-4, 16px);
+  overflow-x: auto;
+  border-radius: vars.$shape-radius;
+  background: var(--gt-code-bg);
+  color: var(--gt-code-text);
+  font-family: rows.$mono;
+  font-size: rows.$mono-size;
+  line-height: 20px;
+  tab-size: 4;
+}
+
+code[class*="language-"] {
+  font-family: rows.$mono;
+  color: var(--gt-code-text);
+  white-space: pre;
+}
+
+.gt-code,
+pre[class*="language-"],
+code[class*="language-"] {
+  .token.comment,
+  .token.prolog,
+  .token.doctype,
+  .token.cdata {
+    color: var(--gt-code-muted);
+    font-style: italic;
+  }
+
+  .token.punctuation,
+  .token.operator {
+    color: var(--gt-code-muted);
+  }
+
+  .token.keyword,
+  .token.atrule,
+  .token.tag,
+  .token.selector,
+  .token.rule,
+  .token.important {
+    color: var(--gt-code-keyword);
+  }
+
+  .token.string,
+  .token.char,
+  .token.template-string,
+  .token.attr-value,
+  .token.regex,
+  .token.url,
+  .token.inserted {
+    color: var(--gt-code-string);
+  }
+
+  .token.function,
+  .token.function-name,
+  .token.class-name,
+  .token.builtin,
+  .token.property,
+  .token.attr-name,
+  .token.decorator,
+  .token.annotation {
+    color: var(--gt-code-function);
+  }
+
+  .token.number,
+  .token.boolean,
+  .token.constant,
+  .token.symbol,
+  .token.entity {
+    color: var(--gt-code-number);
+  }
+
+  .token.deleted {
+    color: var(--mat-sys-error);
+  }
+
+  .token.important,
+  .token.bold {
+    font-weight: 600;
+  }
+
+  .token.italic {
+    font-style: italic;
+  }
+}

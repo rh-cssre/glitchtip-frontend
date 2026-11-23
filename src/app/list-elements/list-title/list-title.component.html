@@ -1,6 +1,8 @@
-<ng-container *ngIf="title">
-  <h1 class="mat-display-1">
-    {{ title }}
-    <ng-container *ngIf="searchHits"> ({{ searchHits }}) </ng-container>
+@if (title) {
+  <h1 class="gt-bar-title" data-cy="list-title">
+    <span class="gt-bar-title__text">{{ title }}</span>
+    @if (searchHits) {
+      <span class="tab-count">{{ searchHits }}</span>
+    }
   </h1>
-</ng-container>
+}

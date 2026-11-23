@@ -1,0 +1,77 @@
+@use "controls";
+@use "variables" as vars;
+
+:host {
+  display: block;
+}
+
+.picker-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gt-space-3, 12px);
+  margin-bottom: var(--gt-space-3, 12px);
+
+  mat-form-field {
+    flex: 1 1 240px;
+    max-width: 320px;
+  }
+
+  // Scrolls sideways on a phone instead of running off the panel.
+  mat-button-toggle-group {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+}
+
+.platform-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: var(--gt-space-2, 8px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+// Neutral like the other choices; the selected tile is a tint with a check.
+.platform-tile {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gt-space-2, 8px);
+  width: 100%;
+  height: 40px;
+  padding: 0 var(--gt-space-3, 12px);
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: vars.$shape-radius;
+  background: none;
+  color: var(--mat-sys-on-surface);
+  font: var(--mat-sys-label-large);
+  text-align: start;
+  cursor: pointer;
+
+  &:hover {
+    @include controls.state-layer(hover);
+  }
+
+  &:focus-visible {
+    @include controls.focus-ring;
+  }
+
+  &--active,
+  &--active:hover {
+    @include controls.state-layer(focus);
+    border-color: var(--mat-sys-on-surface);
+  }
+}
+
+.platform-tile__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.platform-tile__check {
+  @include controls.icon-size(18px);
+  flex: none;
+}

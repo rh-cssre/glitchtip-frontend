@@ -1,0 +1,9 @@
+@use "@angular/material" as mat;
+
+@include mat.button-overrides(
+  (
+    filled-container-shape: var(--mat-sys-corner-full),
+    outlined-container-shape: var(--mat-sys-corner-full),
+    text-container-shape: var(--mat-sys-corner-full),
+  )
+);

@@ -1,0 +1,102 @@
+<div class="docs">
+  <div
+    class="docs__backdrop"
+    [class.is-open]="navOpen()"
+    (click)="navOpen.set(false)"
+  ></div>
+
+  <aside class="docs__sidebar" [class.is-open]="navOpen()">
+    <nav class="docs-nav" aria-label="Documentation">
+      <a
+        class="docs-nav__home"
+        routerLink="/documentation"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        (click)="navOpen.set(false)"
+        >Overview</a
+      >
+      <mat-divider class="docs-nav__divider" />
+      @for (group of nav; track group.title; let first = $first) {
+        @if (!first) {
+          <mat-divider class="docs-nav__divider" />
+        }
+        <div class="docs-nav__group">
+          <button
+            type="button"
+            class="docs-nav__group-title"
+            [attr.aria-expanded]="isGroupOpen(group.title)"
+            (click)="toggleGroup(group.title)"
+          >
+            <span class="docs-nav__group-label">{{ group.title }}</span>
+            <mat-icon
+              class="docs-nav__chevron"
+              [class.is-collapsed]="!isGroupOpen(group.title)"
+              >expand_more</mat-icon
+            >
+          </button>
+          @if (isGroupOpen(group.title)) {
+            <mat-nav-list>
+              @for (item of group.items; track item.title) {
+                @if (item.slug) {
+                  <a
+                    mat-list-item
+                    [routerLink]="['/documentation', item.slug]"
+                    routerLinkActive="is-active"
+                    (click)="navOpen.set(false)"
+                    >{{ item.title }}</a
+                  >
+                } @else {
+                  <!-- Anything without a slug lives outside the docs shell (the
+                       separate /sdkdocs section, /hipaa, or an external URL), so
+                       it opens in a new tab: the docs stay put as the way back,
+                       and the open_in_new marker sets that expectation. -->
+                  <a
+                    mat-list-item
+                    [href]="item.href"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    {{ item.title }}
+                    <mat-icon matListItemMeta class="docs-nav__ext"
+                      >open_in_new</mat-icon
+                    >
+                  </a>
+                }
+              }
+            </mat-nav-list>
+          }
+        </div>
+      }
+    </nav>
+  </aside>
+
+  <main class="docs__main">
+    <!-- Sub top-app-bar: on small screens the menu trigger and the current
+         breadcrumb share one sticky row under the toolbar; on desktop the menu
+         button is hidden and only the breadcrumb shows above the content. -->
+    <div class="docs__subbar">
+      <button
+        type="button"
+        class="docs__menu-btn"
+        mat-stroked-button
+        (click)="navOpen.set(true)"
+        aria-label="Open documentation menu"
+      >
+        <mat-icon>menu</mat-icon>
+        <span class="docs__menu-label">Menu</span>
+      </button>
+
+      @if (crumb(); as c) {
+        <nav class="doc-crumbs" aria-label="Breadcrumb">
+          <a routerLink="/documentation">Docs</a>
+          <span class="doc-crumbs__sep">/</span>
+          <span>{{ c.group }}</span>
+          <span class="doc-crumbs__sep">/</span>
+          <span class="doc-crumbs__current">{{ c.title }}</span>
+        </nav>
+      }
+    </div>
+
+    <router-outlet></router-outlet>
+  </main>
+</div>

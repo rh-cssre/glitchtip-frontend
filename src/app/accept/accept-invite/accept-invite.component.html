@@ -1,66 +1,69 @@
-<div *ngIf="(isLoggedIn$ | async) === false" class="logo-container">
-  <img src="static/assets/images/glitchtip-logo-v1.svg" alt="GlitchTip" />
+<div class="auth-split">
+  <gt-auth-brand>
+    <span slot="lead" i18n>You're invited.</span>
+    <span slot="rest" i18n>
+      Join your team to track errors, uptime monitors and logs together.</span
+    >
+  </gt-auth-brand>
+  <main class="auth-page">
+    <div class="auth-column">
+      <img
+        class="auth-logo"
+        src="static/assets/images/glitchtip-logo-v1.svg"
+        alt="GlitchTip"
+      />
+      @if (acceptInfo(); as acceptInfo) {
+        <h1 class="auth-title" i18n
+          >Join {{ acceptInfo.orgUser.organization.name }}</h1
+        >
+        <gt-panel>
+          <div class="auth-fields">
+            <p class="auth-intro" i18n
+              >You have been invited to join
+              <strong>{{ acceptInfo.orgUser.organization.name }}</strong> on
+              GlitchTip.</p
+            >
+            @if (isLoggedIn()) {
+              @if (alreadyInOrg()) {
+                <p class="auth-intro gt-prose" i18n
+                  >The account you're logged into is already part of this
+                  organization. You might want to
+                  <button
+                    type="button"
+                    class="auth-link-button"
+                    (click)="logout()"
+                  >
+                    log out</button
+                  >, then log into or create the account this invite was meant
+                  for.</p
+                >
+              } @else {
+                <button mat-flat-button (click)="onSubmit()" i18n
+                  >Accept invitation</button
+                >
+              }
+            } @else {
+              <p class="auth-intro" i18n
+                >Log in or create an account to accept it.</p
+              >
+              <a
+                mat-flat-button
+                [routerLink]="['/register']"
+                [queryParams]="{ next: nextUrl() }"
+                i18n
+                >Create account</a
+              >
+              <a
+                mat-stroked-button
+                [routerLink]="['/login']"
+                [queryParams]="{ next: nextUrl() }"
+                i18n
+                >Log in with an existing account</a
+              >
+            }
+          </div>
+        </gt-panel>
+      }
+    </div>
+  </main>
 </div>
-
-<mat-card
-  [class.skinnier]="(isLoggedIn$ | async) === false"
-  [class.not-skinny]="isLoggedIn$ | async"
->
-  <mat-card-content *ngIf="acceptInfo$ | async as acceptInfo">
-    <mat-card-title i18n>Organization Invite</mat-card-title>
-    <p>
-      <ng-container i18n>You have been invited to join</ng-container>
-      <strong>{{ acceptInfo.org_user.organization.name }}</strong>
-      <ng-container i18n>so you can keep track of errors</ng-container>.
-    </p>
-
-    <p *ngIf="alreadyInOrg$ | async">
-      <ng-container i18n
-        >The account you're logged into is already a part of this organization.
-        You might want to</ng-container
-      >
-      <a (click)="logout()" href="javascript:void(0)" i18n>log out</a>,
-      <ng-container i18n
-        >then create an account for or log into the account that this invite
-        link was intended for</ng-container
-      >.
-    </p>
-
-    <ng-container *ngIf="isLoggedIn$ | async; else notLoggedIn">
-      <button
-        *ngIf="(alreadyInOrg$ | async) === false"
-        mat-flat-button
-        color="primary"
-        (click)="onSubmit()"
-        i18n
-        >Accept invitation</button
-      >
-    </ng-container>
-
-    <ng-template #notLoggedIn>
-      <p i18n
-        >To continue, you must either log in to your existing account, or create
-        a new one.</p
-      >
-
-      <div class="button-container">
-        <a
-          mat-flat-button
-          color="primary"
-          [routerLink]="['/register']"
-          [queryParams]="{ next: nextUrl$ | async }"
-          i18n
-          >Create new account</a
-        >
-        <a
-          mat-stroked-button
-          color="primary"
-          [routerLink]="['/login']"
-          [queryParams]="{ next: nextUrl$ | async }"
-          i18n
-          >Log in with existing account</a
-        >
-      </div>
-    </ng-template>
-  </mat-card-content>
-</mat-card>

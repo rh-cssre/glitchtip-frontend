@@ -1,0 +1,25 @@
+<div
+  class="screenshots"
+  [class.left-right-row]="direction() === 'left'"
+  [class.right-left-row]="direction() === 'right'"
+>
+  <mkt-responsive-image
+    [src1x]="imageSrc()"
+    [alt]="imageAlt()"
+    class="screenshot"
+    [class.main-promo]="promo()"
+  ></mkt-responsive-image>
+  <div
+    class="description-card"
+    [class.pad-left]="direction() === 'left'"
+    [class.pad-right]="direction() === 'right'"
+  >
+    @if (icon() && heading()) {
+      <div class="feature-header">
+        <mat-icon class="feature-icon">{{ icon() }}</mat-icon>
+        <h2 class="fancy marketing-subheading">{{ heading() }}</h2>
+      </div>
+    }
+    <ng-content></ng-content>
+  </div>
+</div>

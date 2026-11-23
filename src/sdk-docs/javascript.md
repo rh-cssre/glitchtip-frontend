@@ -1,30 +1,37 @@
-The simplest way to send an event to GlitchTip is to paste this into your HTML file somewhere:
+Install the sentry browser SDK:
 
-```html
-<script
-  src="https://unpkg.com/@sentry/browser@latest/build/bundle.min.js"
-  crossorigin="anonymous"
-></script>
-
-<script>
-  Sentry.init({ dsn: "your DSN here" });
-
-  undefinedFunction();
-</script>
+```bash
+npm install @sentry/browser
 ```
 
-First, install the SDK. This code sample uses [unpkg](https://unpkg.com), but you can save that file and use it locally, or install with NPM by running `npm i @sentry/browser`.
-
-Then, initialize the SDK as shown above, using your DSN. Do this as early as possible in your loading sequence so it can capture errors from the start.
-
-If you've properly added and initialized the SDK, it should capture all of your errors without any further configuration.
-
-If you want to throw errors more manually, you can do that as well. Here's an example:
+Initialize the SDK as early as possible during page load:
 
 ```javascript
-try {
-  someFunction();
-} catch (error) {
-  Sentry.captureException(error);
-}
+import * as Sentry from "@sentry/browser";
+
+Sentry.init({
+  dsn: "YOUR_DSN",
+  tracesSampleRate: 0.01, // 1% of transactions — adjust to your needs
+  autoSessionTracking: false, // GlitchTip does not support sessions
+});
 ```
+
+Verify your setup by triggering a test error:
+
+```javascript
+myUndefinedFunction();
+```
+
+## Source Maps
+
+Upload source maps for readable stack traces in production. Use the [GlitchTip CLI](/documentation/cli):
+
+```bash
+glitchtip-cli sourcemaps inject ./dist
+glitchtip-cli sourcemaps upload ./dist --org my-org --project my-project
+```
+
+## Tips
+
+- Set `tracesSampleRate` to a low value in production to save disk space. Most teams find 1–10% sufficient for useful [performance data](/documentation/performance).
+- Use `release` and `environment` options to track which deployments introduce errors.

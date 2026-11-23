@@ -3,7 +3,7 @@ import { EventDetail } from "src/app/issues/interfaces";
 export const stacktraceUndefined: EventDetail = {
   eventID: "c5974fd9b97d4fcbb9ecc011f9a18144",
   id: "c5974fd9b97d4fcbb9ecc011f9a18144",
-  issue: 111,
+  groupID: "111",
   context: {
     error: {
       Op: "Post",

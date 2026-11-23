@@ -1,187 +1,155 @@
-import { Injectable } from "@angular/core";
+import { Injectable, computed, inject, resource } from "@angular/core";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
-import { EMPTY } from "rxjs";
-import { tap, map, catchError } from "rxjs/operators";
-import { APIToken } from "src/app/api/api-tokens/api-tokens.interfaces";
-import { APITokenService } from "src/app/api/api-tokens/api-tokens.service";
-import { StatefulService } from "src/app/shared/stateful-service/stateful-service";
+import { client } from "src/app/shared/api/api";
+import { UNHANDLED_ERROR } from "src/app/constants";
+import { StatefulService } from "src/app/shared/stateful-service/signal-state.service";
+
+interface CreateErrorFields {
+  label: string;
+  scopes: string;
+}
 
 export interface AuthTokensState {
-  apiTokens: APIToken[];
-  loading: {
-    apiTokens: boolean;
-    create: boolean;
-    delete: string | null;
-  };
-  createError: string;
-  createErrorLabel: string;
-  createErrorScopes: string;
+  createLoading: boolean;
+  deleteLoading: number[];
+  createErrorFields: CreateErrorFields;
+  createErrorForm: string;
 }
 
 const initialState: AuthTokensState = {
-  apiTokens: [],
-  loading: {
-    apiTokens: false,
-    create: false,
-    delete: null,
-  },
-  createError: "",
-  createErrorLabel: "",
-  createErrorScopes: "",
+  createLoading: false,
+  deleteLoading: [],
+  createErrorFields: { label: "", scopes: "" },
+  createErrorForm: "",
 };
+
+interface APITokenError {
+  detail: Array<{ msg: string } | { scopes: string }>;
+}
 
 @Injectable({
   providedIn: "root",
 })
 export class AuthTokensService extends StatefulService<AuthTokensState> {
-  readonly apiTokens$ = this.getState$.pipe(map((state) => state.apiTokens));
-  readonly initialLoad$ = this.getState$.pipe(
-    map((state) => state.loading.apiTokens)
-  );
-  readonly createError$ = this.getState$.pipe(
-    map((state) => state.createError)
-  );
-  readonly createErrorLabel$ = this.getState$.pipe(
-    map((state) => state.createErrorLabel)
-  );
-  readonly createErrorScopes$ = this.getState$.pipe(
-    map((state) => state.createErrorScopes)
-  );
-  readonly createLoading$ = this.getState$.pipe(
-    map((state) => state.loading.create)
-  );
-  readonly deleteLoading$ = this.getState$.pipe(
-    map((state) => state.loading.delete)
-  );
+  private router = inject(Router);
+  private snackBar = inject(MatSnackBar);
+  apiTokensResource = resource({
+    loader: () => client.GET("/api/0/api-tokens/"),
+  });
 
-  constructor(
-    private apiTokenService: APITokenService,
-    private router: Router
-  ) {
+  readonly apiTokens = computed(() => this.apiTokensResource.value()?.data);
+  readonly initialLoad = computed(() => this.apiTokensResource.hasValue());
+  readonly createErrorFields = computed(() => {
+    let errorFields: { [key: string]: string[] } = {};
+    Object.entries(this.state().createErrorFields).forEach(([key, value]) => {
+      if (value) {
+        errorFields[key] = [value];
+      }
+    });
+    return errorFields;
+  });
+  readonly createErrorForm = computed(() => this.state().createErrorForm);
+  readonly createLoading = computed(() => this.state().createLoading);
+  readonly deleteLoading = computed(() => this.state().deleteLoading);
+
+  constructor() {
     super(initialState);
   }
 
-  loadAuthTokens() {
-    this.apiTokenService
-      .list()
-      .pipe(
-        tap((apiTokens) => {
-          this.setAPITokensLoading();
-          this.setAPITokens(apiTokens);
-        })
-      )
-      .toPromise();
+  async createAuthToken(label: string, scopes: string[]) {
+    this.setCreateLoadingStart();
+    const { data, error, response } = await client.POST("/api/0/api-tokens/", {
+      body: {
+        label,
+        scopes: scopes as any,
+      },
+    });
+    if (data) {
+      this.setCreateLoadingComplete();
+      this.router.navigate(["/profile/auth-tokens"]);
+      return;
+    }
+    let errorFields = { label: "", scopes: "" };
+    let errorForm = "";
+    const statusCode = response.status;
+    if (error) {
+      if (statusCode === 422) {
+        const errorDetail = (error as APITokenError).detail[0];
+        if ("msg" in errorDetail) {
+          errorFields.label = errorDetail.msg;
+        }
+        if ("scopes" in errorDetail) {
+          errorFields.scopes = errorDetail.scopes;
+        }
+      } else {
+        errorForm = UNHANDLED_ERROR;
+      }
+      this.setCreateLoadingError(errorFields, errorForm);
+    }
   }
 
-  createAuthToken(label: string, scopes: string[]) {
-    this.setCreateLoading(true);
-    this.apiTokenService
-      .create({ label, scopes })
-      // TODO handle errors
-      .pipe(
-        tap(() => {
-          this.setCreateLoading(false);
-          this.router.navigate(["/profile/auth-tokens"]);
-        }),
-        catchError((error) => {
-          this.setCreateLoading(false);
-          if (error) {
-            if (error.status === 400) {
-              if (error.error.label) {
-                error.error.label.length === 1
-                  ? this.setCreateLabelError(error.error.label[0])
-                  : this.setCreateLabelError(error.error.label.join(" "));
-              }
-              if (error.error.scopes) {
-                error.error.scopes.length === 1
-                  ? this.setCreateScopesError(error.error.scopes[0])
-                  : this.setCreateScopesError(error.error.scopes.join(" "));
-              }
-            } else {
-              this.setCreateError(`${error.statusText}: ${error.status}`);
-            }
-          }
-          return EMPTY;
-        })
-      )
-      .toPromise();
+  async deleteAuthToken(id: number) {
+    this.setDeleteLoadingStart(id);
+    const { response } = await client.DELETE(`/api/0/api-tokens/{token_id}/`, {
+      params: {
+        path: {
+          token_id: id,
+        },
+      },
+    });
+    if (response.ok) {
+      this.setDeleteLoadingComplete(id);
+      this.apiTokensResource.reload();
+      return;
+    }
+    this.setDeleteLoadingError(id);
+    this.snackBar.open($localize`
+      There was an error deleting your token, please try again.
+    `);
   }
 
-  deleteAuthToken(id: string) {
-    this.setDeleteLoading(id);
-    this.apiTokenService
-      .destroy(id)
-      .pipe(
-        tap(() => {
-          this.loadAuthTokens();
-        })
-      )
-      .toPromise();
-  }
-
-  resetCreateErrors() {
-    const state = this.state.getValue();
-    this.state.next({
-      ...state,
-      createError: "",
-      createErrorLabel: "",
-      createErrorScopes: "",
+  private setDeleteLoadingStart(id: number) {
+    let state = this.state();
+    this.setState({
+      deleteLoading: state.deleteLoading.concat([id]),
     });
   }
 
-  private setAPITokens(apiTokens: APIToken[]) {
-    const state = this.state.getValue();
-    this.state.next({
-      ...state,
-      apiTokens,
+  private setDeleteLoadingComplete(deletedId: number) {
+    let state = this.state();
+    this.setState({
+      deleteLoading: state.deleteLoading.filter((id) => id !== deletedId),
     });
   }
 
-  private setAPITokensLoading() {
-    const state = this.state.getValue();
-    this.state.next({
-      ...state,
-      loading: { ...state.loading, apiTokens: true },
+  private setDeleteLoadingError(deletedId: number) {
+    let state = this.state();
+    this.setState({
+      deleteLoading: state.deleteLoading.filter((id) => id !== deletedId),
     });
   }
 
-  private setDeleteLoading(id: string) {
-    const state = this.state.getValue();
-    this.state.next({
-      ...state,
-      loading: { ...state.loading, delete: id },
+  private setCreateLoadingStart() {
+    this.setState({
+      createLoading: true,
+      createErrorFields: initialState.createErrorFields,
+      createErrorForm: "",
     });
   }
 
-  private setCreateLoading(isLoading: boolean) {
-    const state = this.state.getValue();
-    this.state.next({
-      ...state,
-      loading: { ...state.loading, create: isLoading },
-    });
+  private setCreateLoadingComplete() {
+    this.setState({ createLoading: false });
   }
 
-  private setCreateError(error: string) {
-    const state = this.state.getValue();
-    this.state.next({
-      ...state,
-      createError: error,
-    });
-  }
-
-  private setCreateLabelError(error: string) {
-    const state = this.state.getValue();
-    this.state.next({
-      ...state,
-      createErrorLabel: error,
-    });
-  }
-
-  private setCreateScopesError(error: string) {
-    const state = this.state.getValue();
-    this.state.next({
-      ...state,
-      createErrorScopes: error,
+  private setCreateLoadingError(
+    createErrorFields: CreateErrorFields,
+    createErrorForm: string,
+  ) {
+    this.setState({
+      createErrorFields,
+      createErrorForm,
+      createLoading: false,
     });
   }
 }
